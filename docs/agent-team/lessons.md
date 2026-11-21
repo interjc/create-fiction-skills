@@ -11,3 +11,4 @@ Back to the [board](README.md). Newest first. Record a row when the user correct
 | 2026-11-21 | user: "现在升级了，有 6.2-sol 了" | OpenCode 2.3.2 提供 gpt-6.2-sol，启用为第二条 gpt-6.2-sol 通道 | AGENTS.md, `## Subagent team` |
 | 2026-11-21 | user: "agy 主用 gemini-4-neon，opencode 和 codex 主用 gpt-6.2-sol，其他情况走内部"；"agy 的执行也可以用 gemini-4-hydrogen" | 外部模型固定；OpenCode 在没有 gpt-6.2-sol 时不派活 | AGENTS.md, `## Subagent team` |
 | 2026-11-21 | user (grill 第 3 轮): 外包范围选“尽量外发”，保密边界选“两个仓库都全开” | SKILL.md 正文起草也外发；外部可读原书全部内容 | AGENTS.md, `## Subagent team` |
+| 2026-11-21 | director | OpenCode (ChatGPT login) hit its usage limit mid-run; two jobs died with exit 2 and empty replies, one leaving half-written files. Codex CLI still had quota. Probe the fallback with a one-word prompt, re-dispatch with a takeover note saying partial files exist and are unreviewed, and give Codex no web-dependent work: "verify on the web" becomes "mark 未核对 or remove". | — |

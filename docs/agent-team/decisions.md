@@ -58,3 +58,10 @@ Back to the [board](README.md). Append new decisions at the end. Never rewrite o
 - Motivation and evidence: 设计方的默认做法是把 `first_at` 设成 `[总集数+1, 总集数+1]` 绕过检查，可用但难懂；`null` 是纯新增配置。伏笔表是小说的唯一主写入口（SB §9.2 禁止短剧改它的状态），短剧另开表会形成双头。
 - Rejected options: 新增 `drama.paywall.enabled` 开关（多一个键，与 `first_at` 语义重叠）；允许 `foreshadows.md` 写 `范围：短剧` 行。
 - Status: spec landed（本次提交）；`drama-check.mjs` 与 `config.mjs` 的改动排进 T2.c 返工轮
+
+### D-08: 手部特写的缺锁建议照留；地点不加锁定词；收尾转场由末镜认领 (2026-11-21)
+- Decision: (1) 只露手的特写照常写 `人物`；连戏解析到服装变体后 `pr-lock` 给的建议是预期结果，在汇报里写明保留理由，不删 `人物`、不加 `备注` 躲建议。(2) 地点靠 `锚点` 与参考图保持一致，不加锁定词。(3) `【黑屏切出】` 这类收尾镜头行由本集末镜的 `依据` 认领。三条都是方法，不改契约与脚本。
+- Decided by: director（T5.b 作者反馈的三点，经内部内容审查评估）
+- Motivation and evidence: T1.b 草案 H.3 已预见特写的外套不入画，故 `pr-lock` 定为 suggest；`备注` 会连带关掉 `sb-people` 与 `sb-continuity`；§9.7 按段派生地点，给地点加锁会让每个特写都报。
+- Rejected options: 允许 `X@本体` 键（以后若作者反馈频繁再议）；给特写 / 大特写免检地点锁（多一条例外，收益小）。
+- Status: fiction-storyboard references 已改（本次提交）；fiction-visual-prompts 待其返工完成后补同样两句
