@@ -1,0 +1,7 @@
+{
+  "version": 2,
+  "length": { "min": "十二" },
+  "hook": null,
+  "frozen": { "ranges": ["8-2"] },
+  "drama": { "chars_per_minute": 0 }
+}
