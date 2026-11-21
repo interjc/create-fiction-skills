@@ -22,3 +22,9 @@
 | drafts | 讨论稿 | bible/drafts/ | - | 讨论方向 | 不作依据 | draft_only | - |
 | drama_series | 短剧总设定 | drama/{series}/series.md | - | 写短剧 | 设定变化 | owner_only | - |
 | drama_map | 章→集映射 | drama/{series}/adaptation-map.md | - | 改编 | 每集写完 | owner_only | - |
+| drama_visual_assets | 视觉资产与锁定词 | drama/{series}/visual/assets.md | - | 画分镜、写提示词 | 新资产入画、外观改动 | owner_only | - |
+| drama_continuity | 跨集连戏状态 | drama/{series}/visual/continuity.md | - | 画分镜 | 分镜写完一集且有状态变化 | owner_only | - |
+| drama_storyboard | 分镜 | drama/{series}/storyboards/ | - | 写提示词 | 剧本定稿或改动后 | owner_only | - |
+| drama_ref_images | 资产参考图 | drama/{series}/prompts/assets-image.md | - | 写提示词 | 出图、选定、作废 | owner_only | - |
+| drama_image_prompts | 分镜帧图提示词 | drama/{series}/prompts/ | - | 写视频提示词 | 分镜改动后、确认或出图后 | owner_only | - |
+| drama_video_prompts | 视频提示词 | drama/{series}/prompts/ | - | 生成前确认 | 分镜改动后、确认或出片后 | owner_only | - |
