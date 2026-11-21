@@ -1,0 +1,6 @@
+{
+  "book": {
+    "title": "{{confirmed_title}}",
+    "genres": ["{{genre_id}}"]
+  }
+}
