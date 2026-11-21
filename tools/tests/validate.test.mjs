@@ -2,7 +2,7 @@ import assert from 'node:assert/strict';
 import { mkdirSync, unlinkSync } from 'node:fs';
 import path from 'node:path';
 import { test } from 'node:test';
-import { exactKeys, fixture, get, git, json, notes, put, run, scripts, termFile } from './fixture.mjs';
+import { exactKeys, fixture, fixtureFormats, formatFile, get, git, json, notes, put, run, scripts, termFile } from './fixture.mjs';
 
 const skill = `${notes}/SKILL.md`;
 const reference = `${notes}/references/nested/cards.md`;
@@ -98,6 +98,28 @@ test('frontmatter folds YAML paragraphs but preserves literal and more-indented 
   for (const [indicator, expected] of [['>', folded], ['>-', folded], ['|', literal], ['|-', literal]]) {
     put(root, skill, skillText(indicator + rows));
     assert.equal(only(root, 'frontmatter,description').skills.at(-1).description_chars, [...expected].length);
+  }
+});
+
+test('frontmatter rejects colon-space and space-hash in plain values but permits quoting and blocks', t => {
+  const root = fixture(t);
+  for (const [description, extra] of [
+    [`'中文：场景。Sort loose notes: use # labels.'`, ''],
+    [`"中文：场景。Sort loose notes: use # labels."`, ''],
+    ['>-\n  中文：场景。Sort loose notes: use # labels.', ''],
+    ['中文。Sort loose writing notes.', 'metadata:\n  ref: https://example.invalid/a#label\n'],
+  ]) {
+    put(root, skill, skillText(description, extra));
+    only(root, 'frontmatter,description');
+  }
+  for (const [text, line] of [
+    [skillText('中文。Sort notes: begin here.'), 3],
+    [skillText('中文。Sort loose writing notes. # comment'), 3],
+    [skillText(baseDescription, 'metadata:\n  ref: note: shelf\n'), 5],
+    [skillText(baseDescription, 'metadata:\n  ref: note # shelf\n'), 5],
+  ]) {
+    put(root, skill, text);
+    assert.equal(only(root, 'frontmatter', 1).findings[0].line, line);
   }
 });
 
@@ -315,4 +337,70 @@ test('marketplace permits missing file, checks nested paths and requires directo
   assert.match(only(root, 'marketplace', 1).findings[0].message, /JSON/);
   unlinkSync(path.join(root, market));
   only(root, 'marketplace');
+});
+
+test('spec-ref ① scans all skill Markdown literally except the generated subtree', t => {
+  const root = fixture(t);
+  put(root, reference, '读 [纸页](../formats/note.md)，示例用 `SB §99.1`。\n');
+  put(root, `${notes}/references/formats/nested/generated.md`, 'docs/spec story-bible.md scripts.md skill-authoring.md SB §99.1\n');
+  put(root, 'docs/guide.md', 'docs/spec story-bible.md scripts.md skill-authoring.md\n');
+  put(root, `${notes}/references/nested/note.txt`, 'docs/spec story-bible.md\n');
+  only(root, 'spec-ref'); // No format manifest: the reference to §99.1 is not checked.
+  put(root, reference, '```md\n`docs/spec/story-bible.md` `scripts.md` `skill-authoring.md`\n```\n');
+  const findings = only(root, 'spec-ref', 1).findings;
+  assert.deepEqual(findings.map(f => [f.file, f.line, f.message.split('：').at(-1)]),
+    ['docs/spec', 'story-bible.md', 'scripts.md', 'skill-authoring.md'].map(term => [reference, 2, term]));
+});
+
+test('spec-ref ② checks full chapters, exact subsections, introductions and unassigned skills', t => {
+  const root = fixture(t);
+  fixtureFormats(root);
+  const card = 'skills/fiction-card/references/card.md';
+  const archive = 'skills/fiction-archive/SKILL.md';
+  const archiveFrontmatter = skillText().replace('fiction-notes', 'fiction-archive');
+  const margin = 'skills/fiction-margin/references/note.md';
+  put(root, reference, 'SB §1 SB §1.2 SB §2\n');
+  put(root, card, 'SB §1\n');
+  put(root, archive, archiveFrontmatter + 'SB §2 SB §1.1\n');
+  put(root, `${notes}/references/formats/whole.md`, 'story-bible.md SB §99\n');
+  only(root, 'spec-ref');
+
+  put(root, reference, 'SB §9 SB §9\n');
+  put(root, card, 'SB §1.1 SB §1.0\n');
+  put(root, archive, archiveFrontmatter + 'SB §1 SB §1.2\n');
+  put(root, margin, 'SB §1\n');
+  const expected = [
+    [archive, 'SB §1'], [archive, 'SB §1.2'],
+    [card, 'SB §1.1'], [card, 'SB §1.0'],
+    [margin, 'SB §1'], [reference, 'SB §9'], [reference, 'SB §9'],
+  ];
+  assert.deepEqual(only(root, 'spec-ref', 1).findings.map(f => [f.file, f.message.split('：').at(-1)]), expected);
+  const drift = only(root, 'shared-drift', 1).findings;
+  assert.ok(drift.some(f => f.file === `${notes}/references/formats/whole.md` && f.message.endsWith('drift')));
+  put(root, formatFile, '{');
+  only(root, 'spec-ref', 2);
+  only(root, 'frontmatter'); // Other checks do not read the format manifest.
+});
+
+test('dialect-card validates the leading fields, filename, date format and generic URL exception', t => {
+  const root = fixture(t);
+  const dir = `${notes}/references/dialects`;
+  const card = `${dir}/paper.md`;
+  const text = (id, medium, date, url) => [
+    '# 纸片方言卡', '',
+    `- **方言**：${id}`, `- 适用: ${medium}`, `- **核对日期**: ${date}`, `- 官方文档：${url}`,
+    '', '以下限制以官方当前文档为准。', '',
+  ].join('\n');
+  put(root, card, text('paper', '图片', '2026-01-02', 'https://example.invalid/paper'));
+  put(root, `${dir}/generic.md`, text('generic', '视频', '2026-01-02', '-'));
+  put(root, `${dir}/nested/ignore.md`, '不是直接子文件。\n');
+  only(root, 'dialect-card');
+
+  put(root, card, text('other', '动图', '2026-1-02', '-'));
+  assert.deepEqual(only(root, 'dialect-card', 1).findings.map(f => [f.file, f.line]),
+    [3, 4, 5, 6].map(line => [card, line]));
+  put(root, card, '# 夹页\n\n## 太晚了\n' + text('paper', '图片', '2026-01-02', 'https://example.invalid/paper'));
+  const result = only(root, 'dialect-card', 1);
+  assert.equal(result.findings.length, 4);
+  assert.ok(result.findings.every(f => f.file === card && f.line === null && f.message.includes('缺少')));
 });

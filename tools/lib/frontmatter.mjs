@@ -110,7 +110,8 @@ export function parseFrontmatter(text) {
         if (!nested && key === 'metadata') fail('metadata 必须是单层映射');
         value = quoted(clean, fail);
       } else {
-        const plain = clean.replace(/(?:^|[ \t]+)#.*$/u, '').trimEnd();
+        const uncommented = clean.replace(/(?:^|[ \t]+)#.*$/u, '');
+        const plain = uncommented.trimEnd();
         if (!nested && key === 'metadata') {
           if (plain) fail('metadata 必须是单层映射');
           while (cursor < end && comment(lines[cursor])) cursor++;
@@ -120,6 +121,9 @@ export function parseFrontmatter(text) {
           blockScalar = true;
           [value, cursor] = block(lines, cursor, end, base, plain, fail);
         } else {
+          if (uncommented.includes(': ') || (plain && clean.includes(' #'))) {
+            fail('不带引号的纯量不能含冒号空格或空格井号，请使用引号或块标量');
+          }
           if (/^(?:[[\]{}&*!>|%@`]|-(?:[ \t]|$)|\?(?:[ \t]|$)|:(?:[ \t]|$))/u.test(plain)) {
             fail('不支持此 YAML 值，请使用引号或块标量');
           }

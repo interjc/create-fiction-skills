@@ -9,6 +9,8 @@ const tools = fileURLToPath(new URL('../', import.meta.url));
 export const notes = 'skills/fiction-notes';
 export const scripts = `${notes}/scripts`;
 export const termFile = 'docs/spec/debook-terms.txt';
+export const formatFile = 'shared/formats.json';
+export const formatSource = 'docs/spec/story-bible.md';
 
 export function fixture(t) {
   const root = mkdtempSync(path.join(fixtures, '.case-'));
@@ -21,6 +23,24 @@ export function put(root, file, contents) {
   const target = path.join(root, file);
   mkdirSync(path.dirname(target), { recursive: true });
   writeFileSync(target, contents);
+}
+
+export function fixtureFormats(root) {
+  const formats = {
+    source: formatSource,
+    topics: {
+      whole: { title: '完整夹页', sections: ['1'] },
+      lead: { title: '开场', sections: ['1.0'] },
+      note: { title: '手记与存档', sections: ['2', '1.1'] },
+    },
+    skills: {
+      'fiction-notes': ['note', 'whole', 'lead'],
+      'fiction-card': ['lead'],
+      'fiction-archive': ['note'],
+    },
+  };
+  put(root, formatFile, JSON.stringify(formats));
+  return formats;
 }
 
 export const get = (root, file) => readFileSync(path.join(root, file), 'utf8');

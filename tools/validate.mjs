@@ -2,15 +2,18 @@
 import { readdirSync, readFileSync } from 'node:fs';
 import path from 'node:path';
 import { loadDebook } from './lib/debook.mjs';
+import { loadFormats } from './lib/formats.mjs';
 import { parseFrontmatter } from './lib/frontmatter.mjs';
 import { importSpecifiers } from './lib/javascript.mjs';
 import { markdownLinks } from './lib/markdown.mjs';
 import { codePoints, compare, countLines, isObject, repoFiles, runCli, stat } from './lib/repo.mjs';
 import { syncShared } from './lib/shared-sync.mjs';
+import { checkDialectCard, checkSpecRefs } from './lib/skill-references.mjs';
 
 const checks = new Set([
   'skill-md', 'frontmatter', 'description', 'compatibility', 'skill-lines',
   'reference-lines', 'links', 'imports', 'debook', 'shared-drift', 'marketplace',
+  'dialect-card', 'spec-ref',
 ]);
 const keys = new Set(['name', 'description', 'license', 'compatibility', 'metadata', 'allowed-tools']);
 const marketplace = '.claude-plugin/marketplace.json';
@@ -140,6 +143,10 @@ function validate(root, { only }) {
   for (const check of selected) if (!checks.has(check)) throw new Error(`未知检查：${check || '（空）'}`);
   const includes = check => selected.has(check);
   const debook = includes('debook') ? loadDebook(root) : undefined;
+  const formats = includes('spec-ref') ? loadFormats(root) : undefined;
+  const sections = new Map(Object.entries(formats?.skills ?? {}).map(([name, topics]) =>
+    [name, new Set(topics.flatMap(topic => formats.topics[topic].sections))]));
+  const noSections = new Set();
   const findings = [];
   const add = (check, file, line, message, column = null) => {
     if (includes(check)) findings.push({ check, file, line, message, column });
@@ -171,7 +178,9 @@ function validate(root, { only }) {
     const pkg = includes('imports') && path.posix.basename(file) === 'package.json';
     const scan = debook && !debook.skips(file);
     const market = includes('marketplace') && file === marketplace;
-    if (!(refs || links || js || pkg || scan || market)) continue;
+    const dialect = includes('dialect-card') && /^skills\/[^/]+\/references\/dialects\/([^/]+)\.md$/.exec(file);
+    const spec = includes('spec-ref') && md && /^skills\/([^/]+)\/(?!references\/formats\/)/.exec(file);
+    if (!(refs || links || js || pkg || scan || market || dialect || spec)) continue;
     const absolute = path.join(root, file);
     if (!stat(absolute)?.isFile()) continue;
     const text = readText(absolute);
@@ -187,6 +196,9 @@ function validate(root, { only }) {
     if (js) imports(root, file, text, add);
     if (pkg) checkPackage(file, text, add);
     if (market) checkMarketplace(root, text, add);
+    if (dialect) checkDialectCard(text, dialect[1], (line, message) => add('dialect-card', file, line, message));
+    if (spec) checkSpecRefs(text, formats && (sections.get(spec[1]) ?? noSections),
+      (line, message, column) => add('spec-ref', file, line, message, column));
     if (scan) for (const { line, message, column } of debook.find(text)) add('debook', file, line, message, column);
   }
   if (includes('shared-drift')) for (const { file, action } of syncShared(root, { check: true }).changes) {

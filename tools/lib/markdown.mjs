@@ -36,6 +36,10 @@ function maskCode(rows) {
       fence = { mark: match[1], depth, indent };
     }
   }
+  return maskInlineCode(rows, ignored);
+}
+
+function maskInlineCode(rows, ignored) {
   // Preserve columns and prevent code punctuation from becoming Markdown syntax.
   const joined = rows.map((row, i) => ignored.has(i) || !row.trim() ? '\0'.repeat(row.length) : row).join('\n');
   const masked = joined.split('');
@@ -105,10 +109,7 @@ function destination(text, start, inline) {
   return { target: target.replace(/\\([!-/:-@[-`{-~])/g, '$1'), end: i };
 }
 
-export function* markdownLinks(source) {
-  const rows = splitLines(source);
-  const original = rows.join('\n');
-  const text = maskCode(rows);
+function* links(original, text) {
   let line = 1;
   let lineStart = 0;
   const labels = [];
@@ -119,14 +120,14 @@ export function* markdownLinks(source) {
       lineStart = i + 1;
     } else if (text[i] === '[' && !escaped(text, i)) {
       const prefix = text.slice(lineStart, i).replace(/^(?: {0,3}>[ \t]?)+/, '');
-      labels.push({ line, column: i - lineStart + 1, definition: /^ {0,3}$/.test(prefix) });
+      labels.push({ start: i, line, column: i - lineStart + 1, definition: /^ {0,3}$/.test(prefix) });
     } else if (text[i] === ']' && labels.length && !escaped(text, i)) {
       const label = labels.pop();
       const inline = text[i + 1] === '(';
       if (!inline && !(label.definition && text[i + 1] === ':')) continue;
       const link = destination(original, i + 2, inline);
       if (link) {
-        yield { target: link.target, line: label.line, column: label.column };
+        yield { ...link, inline, labelEnd: i, ...label };
         // Skip parsed destination/title punctuation without losing line positions.
         for (let j = i + 1; j < link.end; j++) if (text[j] === '\n') {
           line++;
@@ -136,4 +137,30 @@ export function* markdownLinks(source) {
       }
     }
   }
+}
+
+export function* markdownLinks(source) {
+  const rows = splitLines(source);
+  for (const { target, line, column } of links(rows.join('\n'), maskCode(rows))) {
+    yield { target, line, column };
+  }
+}
+
+export function stripLocalLinks(rows, fenced = new Set()) {
+  const original = rows.join('\n');
+  const edits = [];
+  const mask = maskInlineCode(rows, fenced);
+  for (const { inline, target, start, labelEnd, end, line } of links(original, mask)) {
+    if (!inline || /^[A-Za-z][A-Za-z0-9+.-]*:/.test(target) ||
+        (original[start - 1] === '!' && !escaped(original, start - 1))) continue;
+    // Do not rewrite link-like text crossing a fence boundary.
+    const spanLines = original.slice(start, end + 1).split('\n').length;
+    if (Array.from({ length: spanLines }, (_, i) => i + line - 1).some(i => fenced.has(i))) continue;
+    edits.push([start, start + 1], [labelEnd, end + 1]);
+  }
+  let result = original;
+  for (const [start, end] of edits.sort((a, b) => b[0] - a[0])) {
+    result = result.slice(0, start) + result.slice(end);
+  }
+  return result;
 }

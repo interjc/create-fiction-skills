@@ -2,6 +2,7 @@ import {
   mkdirSync, mkdtempSync, readdirSync, readFileSync, renameSync, rmdirSync, unlinkSync, writeFileSync,
 } from 'node:fs';
 import path from 'node:path';
+import { formatTrees, loadFormats } from './formats.mjs';
 import { namedExport } from './javascript.mjs';
 import { compare, isObject, splitLines, stat } from './repo.mjs';
 
@@ -110,7 +111,18 @@ function hasMarker(bytes, owner) {
 export function syncShared(root, { check = false, skill } = {}) {
   assertDir(root, 'shared');
   const skills = manifest(root);
-  if (skill !== undefined && !Object.hasOwn(skills, skill)) throw new Error(`清单没有此 skill：${skill}`);
+  const formats = loadFormats(root);
+  const names = new Set(Object.keys(skills));
+  if (formats) {
+    for (const name of Object.keys(formats.skills)) names.add(name);
+    // Also visit existing directories whose format assignment was removed.
+    for (const entry of readdirSync(path.join(root, 'skills'), { withFileTypes: true })) {
+      if (entry.isDirectory()) names.add(entry.name);
+    }
+  }
+  if (skill !== undefined && !names.has(skill)) throw new Error(`清单没有此 skill：${skill}`);
+  const selected = skill === undefined ? [...names].sort(compare) : [skill];
+  const excerpts = formats && formatTrees(root, formats, selected);
 
   assertDir(root, 'shared/lib');
   const lib = new Map();
@@ -130,11 +142,9 @@ export function syncShared(root, { check = false, skill } = {}) {
   const operations = [];
   const actions = check ? ['missing', 'drift', 'stale'] : ['create', 'update', 'delete'];
 
-  for (const name of skill === undefined ? Object.keys(skills).sort(compare) : [skill]) {
+  for (const name of selected) {
     const scripts = `skills/${name}/scripts`;
     const testDir = `${scripts}/tests`;
-    const entries = skills[name];
-    for (const dir of [`skills/${name}`, scripts, testDir]) assertDir(root, dir, true);
     const record = (kind, file, operation) => {
       changes.push({ skill: name, action: actions[kind], file });
       operations.push(operation);
@@ -198,16 +208,37 @@ export function syncShared(root, { check = false, skill } = {}) {
       }
     }
 
-    mirror(`${scripts}/lib`, lib);
-    for (const entry of entries) {
-      copy(`${scripts}/${entry}.mjs`, wrapper(entry), marker(`shared/lib/${entry}.mjs`));
-      const test = `${entry}.test.mjs`;
-      const source = `shared/tests/${test}`;
-      const bytes = tests && read(root, source, true);
-      // The exact marker is opt-in for an otherwise byte-for-byte test copy.
-      if (bytes) copy(`${testDir}/${test}`, bytes, marker(source));
+    if (Object.hasOwn(skills, name)) {
+      const entries = skills[name];
+      for (const dir of [`skills/${name}`, scripts, testDir]) assertDir(root, dir, true);
+      mirror(`${scripts}/lib`, lib);
+      for (const entry of entries) {
+        copy(`${scripts}/${entry}.mjs`, wrapper(entry), marker(`shared/lib/${entry}.mjs`));
+        const test = `${entry}.test.mjs`;
+        const source = `shared/tests/${test}`;
+        const bytes = tests && read(root, source, true);
+        // The exact marker is opt-in for an otherwise byte-for-byte test copy.
+        if (bytes) copy(`${testDir}/${test}`, bytes, marker(source));
+      }
+      mirror(`${testDir}/fixtures-shared`, entries.length ? fixtures : undefined);
     }
-    mirror(`${testDir}/fixtures-shared`, entries.length ? fixtures : undefined);
+
+    if (excerpts) {
+      const references = `skills/${name}/references`;
+      const dir = `${references}/formats`;
+      const tree = excerpts.get(name);
+      if (tree) {
+        for (const parent of [`skills/${name}`, references, dir]) assertDir(root, parent, true);
+        for (const child of tree.keys()) {
+          const target = stat(path.join(root, dir, child));
+          if (target && !target.isFile()) throw new Error(`拒绝覆盖非普通文件：${dir}/${child}`);
+        }
+        mirror(dir, tree);
+      } else if (stat(path.join(root, `skills/${name}`))?.isDirectory() &&
+                 stat(path.join(root, references))?.isDirectory() && assertDir(root, dir, true)) {
+        mirror(dir);
+      }
+    }
   }
 
   // Preflight every selected skill before changing any of them.

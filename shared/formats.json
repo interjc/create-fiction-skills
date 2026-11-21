@@ -1,0 +1,23 @@
+{ "source": "docs/spec/story-bible.md",
+  "topics": {
+    "project":    { "title": "项目结构与读写规则", "sections": ["1", "2", "3", "4", "5"] },
+    "bible":      { "title": "bible 机读格式",     "sections": ["6"] },
+    "chapter":    { "title": "章节文件",           "sections": ["6.1", "7"] },
+    "config":     { "title": "config.json",        "sections": ["8"] },
+    "drama":      { "title": "短剧剧本",           "sections": ["6.1", "9.0", "9.1", "9.2", "9.3"] },
+    "storyboard": { "title": "视觉资产与分镜",     "sections": ["6.1", "9.4", "9.5", "9.6", "9.9"] },
+    "prompts":    { "title": "提示词文件与方言",   "sections": ["6.1", "9.7", "9.8"] },
+    "story-db":   { "title": "story-db 映射",      "sections": ["10"] } },
+  "skills": {
+    "fiction-init":           ["project", "bible", "chapter", "config"],
+    "fiction-planner":        ["project", "bible", "chapter", "config"],
+    "fiction-chapter":        ["project", "bible", "chapter", "config"],
+    "fiction-review":         ["project", "bible", "chapter", "config"],
+    "fiction-continuity":     ["project", "bible", "chapter", "config"],
+    "fiction-craft":          ["project"],
+    "fiction-workflow":       ["project", "config"],
+    "fiction-short-drama":    ["project", "bible", "drama", "config"],
+    "fiction-storyboard":     ["project", "drama", "storyboard", "config"],
+    "fiction-visual-prompts": ["project", "drama", "storyboard", "prompts", "config"],
+    "fiction-story-db":       ["project", "bible", "chapter", "drama", "story-db"],
+    "fiction-publish":        ["project", "chapter", "config"] } }
