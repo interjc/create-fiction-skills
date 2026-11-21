@@ -1,0 +1,9 @@
+# 只用于这本演示书
+[custom:block]
+准时报喜 => 改成修表匠自己的说法
+[summary:suggest]
+一句顶两句
+[ai-tone:block:all]
+re:满屋都是赞叹 => 换成具体声音
+[disable]
+AT23
