@@ -1,0 +1,52 @@
+{
+  "skill_name": "fiction-short-drama",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "短剧第1–3集写完了，接下来把第4到10集的章集映射规划行先补进 adaptation-map，对应小说卷纲第4–10章，付费卡点还是放第10集末尾。剧本先别写。",
+      "expected_output": "模式 A 分集规划：从卷规划表与 bible 拉节点，在 adaptation-map.md 追加第4–10集规划行（来源章、剧情点、人物、伏笔、改动）；机检零阻断；不写剧本、不动小说与伏笔表；列出待作者确认的砍线、并人与卡点。",
+      "files": [],
+      "expectations": [
+        "[硬] drama/stopped-clock/adaptation-map.md 表中新增集号 4–10 共 7 行，第1–3集原有行逐字未变",
+        "[硬] 新增 7 行的「来源章」都是 4–15 之间的章号",
+        "[硬] 从书根运行 `node <repo>/skills/fiction-short-drama/scripts/drama-check.mjs stopped-clock`：退出码 0，阻断 0（map-source 等建议项允许出现）",
+        "[硬] 没有新建 drama/stopped-clock/episodes/ep004.md 或之后的剧本；diff.mjs 显示 bible/、chapters/、drama/stopped-clock/storyboards/、prompts/、visual/ 均无变化",
+        "[硬] drama/stopped-clock/series.md 仍有「- 免费集数：10」一行",
+        "[报告] 第10集行的剧情点对应傅沉带勘测队进驻、宣布冬至前封堵旧闸房（卷纲第10章）",
+        "[报告] 伏笔列只用「埋 / 触 / 收 / 弃」加已登记的 F-ID",
+        "[报告] 汇报列出待作者确认的砍线、并人与卡点落点"
+      ]
+    },
+    {
+      "id": 2,
+      "prompt": "另开一部原创竖屏短剧，不改编小说。剧名《夜渡》，目录用 night-ferry。主角梁满是江边夜班摆渡人，某晚渡了一个浑身湿透、却说自己十年前就淹死了的乘客。60集，每集90到120秒，第10集末尾进付费，平台抖音，实拍。先立项，再写第1、2集剧本，砍线并人这些不用问我，直接写。",
+      "expected_output": "模式 B 原创：建 drama/night-ferry/series.md（来源：原创，含悬念账）、adaptation-map.md（来源章为原创），写第1–2集初稿；在 bible/characters.md 只追加带「范围：短剧:night-ferry」的人物块；机检零阻断；不动 stopped-clock 与小说文件。",
+      "files": [],
+      "expectations": [
+        "[硬] 新建 drama/night-ferry/series.md，含「- 来源：原创」「- 总集数：60」与「- 单集时长：90-120」",
+        "[硬] 新建 drama/night-ferry/adaptation-map.md，第1、2集行的「来源章」为「原创」，伏笔列为空",
+        "[硬] 新建 drama/night-ferry/episodes/ep001.md 与 ep002.md，元数据均为「- 状态：初稿」",
+        "[硬] 从书根运行 `node <repo>/skills/fiction-short-drama/scripts/drama-check.mjs night-ferry`：退出码 0，阻断 0",
+        "[硬] 从书根运行 `node <repo>/skills/fiction-short-drama/scripts/lint.mjs --series night-ferry`：退出码 0",
+        "[硬] diff.mjs 显示 drama/stopped-clock/、chapters/、bible/foreshadows.md 均未修改；bible/characters.md 若有改动，只是追加了带「- 范围：短剧:night-ferry」的人物块（含梁满）",
+        "[报告] series.md 有 `## 悬念账` 小节",
+        "[报告] ep001 场景1 的第一条内容行是带运动的可见动作，不是 OS 或 VO"
+      ]
+    },
+    {
+      "id": 3,
+      "prompt": "第2集我改了一版还没定稿，帮我过一下格式和时长，有问题直接在剧本里修。",
+      "expected_output": "对第2集跑 drama-check 与 lint --series，报出三处埋入问题（OS 开场、钩子后仍有内容、动作行写心理），修到零阻断并处理建议项；状态保持初稿；不碰分镜与提示词，提醒定稿后交 fiction-storyboard 同步。",
+      "files": [],
+      "expectations": [
+        "[硬] 从书根运行 `node <repo>/skills/fiction-short-drama/scripts/drama-check.mjs stopped-clock --ep 2`：退出码 0，阻断 0，输出中没有 voiceover-open 和 unshootable",
+        "[硬] drama/stopped-clock/episodes/ep002.md 中只有一个 `<!-- hook: X -->`，且它是最后一个非空行",
+        "[硬] ep002.md 的元数据仍为「- 状态：初稿」（定稿留给作者）",
+        "[硬] diff.mjs 显示 drama/stopped-clock/storyboards/、prompts/、visual/ 以及 chapters/、bible/ 均无变化",
+        "[报告] 汇报列出初检的三处发现：第8行 voiceover-open、钩子之后仍有剧本内容（阻断）、「心里一沉」不可拍（unshootable/UA12）",
+        "[报告] 汇报给出第2集的估算时长与档位",
+        "[报告] 提醒第2集已有分镜，剧本定稿后要先交 fiction-storyboard 同步分镜，再到提示词"
+      ]
+    }
+  ]
+}

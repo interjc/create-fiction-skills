@@ -1,0 +1,48 @@
+{
+  "skill_name": "fiction-storyboard",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "第3集剧本已经定稿了，帮我把第3集拆成分镜，竖屏，连戏表也顺手更新。",
+      "expected_output": "过三道入口门槛后跑 --brief，按段 → 镜写 storyboards/ep003.md，原文认领全部台词与动作；守住防剧透（打火机本体不可用、不画押物编码等真相）；在 continuity.md 记下钥匙显字的净变化；storyboard-check 零阻断且确实检查了第3集；不写锁定词与提示词，不动剧本。",
+      "files": [],
+      "expectations": [
+        "[硬] 新建 drama/stopped-clock/storyboards/ep003.md",
+        "[硬] 从书根运行 `node <repo>/skills/fiction-storyboard/scripts/storyboard-check.mjs stopped-clock --ep 3`：退出码 0，阻断 0，输出含「台词 4/4，动作 9/9」",
+        "[硬] 同一命令加 --json：assets.exists 为 true，episodes[] 中有 episode 3",
+        "[硬] drama/stopped-clock/visual/continuity.md 新增一行以「| 3 | 旧钥匙」开头、变体列为「显字」",
+        "[硬] storyboards/ep003.md 不含「押物编码」「旧货行」「远房表哥」「八万」",
+        "[硬] diff.mjs 显示 episodes/ep003.md、adaptation-map.md、bible/ 均未修改，prompts/ 下没有新增文件",
+        "[硬] drama/stopped-clock/visual/assets.md 中「- 锁定词：」行数与 <repo>/examples/demo-book 同名文件相同（没有代写锁定词）",
+        "[报告] 记录中开工前运行过 `drama-check.mjs stopped-clock --ep 3` 与 `storyboard-check.mjs stopped-clock --ep 3 --brief`",
+        "[报告] 汇报给出段数、镜数与总秒数，并说明旧铜打火机本体不可用，改用 @合盖外壳 变体或遮挡处理"
+      ]
+    },
+    {
+      "id": 2,
+      "prompt": "第2集剧本我改了一句江澜的台词（“介意我看一眼背号吗？”），已经重新定稿了，帮我把分镜同步一下。",
+      "expected_output": "按剧本返修同步流程：drama-check 确认剧本零阻断 → storyboard-check 定位过期台词 → 只改受影响镜头并保持镜号稳定 → 复检零阻断 → 列出变动的 SEG/SH 交接 fiction-visual-prompts；不改剧本、不改提示词。",
+      "files": [],
+      "expectations": [
+        "[硬] 从书根运行 `node <repo>/skills/fiction-storyboard/scripts/storyboard-check.mjs stopped-clock --ep 2`：退出码 0，阻断 0（准备时为阻断 2）",
+        "[硬] storyboards/ep002.md 含「介意我看一眼背号吗？」，不再含「不介意我看看背号吧？」",
+        "[硬] storyboards/ep002.md 仍保留 SH001 到 SH021 的全部原镜号，没有整体重新编号",
+        "[硬] diff.mjs 显示 episodes/ep002.md 与 prompts/ 下文件均未修改",
+        "[报告] 记录中先运行过 `drama-check.mjs stopped-clock --ep 2`，确认剧本退出码 0、零阻断",
+        "[报告] 汇报列出变动的段镜编号（SEG04 / SH010），并交接 fiction-visual-prompts 同步第2集提示词"
+      ]
+    },
+    {
+      "id": 3,
+      "prompt": "第3集剧本还在改，不过我想先看看效果，帮我把第3集拆一下镜头。",
+      "expected_output": "入口门槛不满足（剧本状态为初稿）：停下，不拆镜、不替作者改定稿状态，退回 fiction-short-drama 定稿后再来。",
+      "files": [],
+      "expectations": [
+        "[硬] 没有新建 drama/stopped-clock/storyboards/ep003.md",
+        "[硬] diff.mjs 的 unchanged 为 true（episodes/ep003.md 的状态仍是初稿，visual/ 未改）",
+        "[报告] 回复指出第3集剧本状态为初稿，不满足「已定稿」入口门槛",
+        "[报告] 回复建议先交 fiction-short-drama 完成定稿，再回来拆镜"
+      ]
+    }
+  ]
+}

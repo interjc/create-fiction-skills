@@ -1,0 +1,20 @@
+[
+  {"query": "按第3集分镜写生图词，厂商还没定，先用通用写法", "should_trigger": true},
+  {"query": "出第1集首帧提示词，每个镜头一条", "should_trigger": true},
+  {"query": "写第2集的图生视频 prompt，每段一条，人声环境音配乐都要", "should_trigger": true},
+  {"query": "换提示词方言，第1集改成 Seedance 2.5 首尾帧的写法", "should_trigger": true},
+  {"query": "确认这一批出图出片之前，先列清单给我看多少张图、几段视频、多少秒", "should_trigger": true},
+  {"query": "林砚的锁定词和参考图槽位补一下，先出正面全身锚图", "should_trigger": true},
+  {"query": "prompt-check 报 pr-lock，说缺林砚@深灰工装的锁定词，帮我处理", "should_trigger": true},
+  {"query": "第1集参考图我已经自己生成好了，放在 refs/ 下，帮我回填文件路径和状态", "should_trigger": true},
+  {"query": "视频提示词里谁开口、口型、环境音这些怎么写才不让模型乱加人", "should_trigger": true},
+  {"query": "第3集镜头太少了，加两个反应镜", "should_trigger": false},
+  {"query": "第3集剧本定稿了，画分镜", "should_trigger": false},
+  {"query": "第2集剧本台词改一下，江澜那句太客气", "should_trigger": false},
+  {"query": "整体进度到哪了，还差哪几集没做", "should_trigger": false},
+  {"query": "把第3集拆成分镜，再给入画的人物道具建最小资产条目", "should_trigger": false},
+  {"query": "短剧第4集剧本接着写", "should_trigger": false},
+  {"query": "林砚的外貌在小说人物档案里是怎么写的？我要核对一下", "should_trigger": false},
+  {"query": "竖屏分镜里前中后景怎么安排，画面字段怎么写", "should_trigger": false},
+  {"query": "小说第4章开头画面感不够，怎么写得更有镜头感", "should_trigger": false}
+]

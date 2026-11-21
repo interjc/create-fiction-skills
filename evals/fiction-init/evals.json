@@ -1,0 +1,53 @@
+{
+  "skill_name": "fiction-init",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "开新书：书名《晚潮药铺》，现代都市悬疑，主角乔禾，二十八岁，回海边老家接手外婆留下的中药铺。第三人称限知，章长、日更、平台这些全用默认，短剧暂时不做，只写网文。帮我把项目搭起来。",
+      "expected_output": "在空目录从零建书：渲染 AGENTS.md（含本书口径）、只写覆盖项的 .fiction/config.json、bible/sources.md 与其余 12 个 bible 骨架、首卷卷规划与卷摘要；不造示例数据，不写 publish.*，不建章节正文或短剧文件；交接 fiction-planner。",
+      "files": [],
+      "expectations": [
+        "[硬] 新建 AGENTS.md，含 `## 本书口径` 小节，写明第三人称限知与主角乔禾",
+        "[硬] 新建 .fiction/config.json 且 JSON 可解析；若有 book.title 则为「晚潮药铺」；没有 publish 键",
+        "[硬] 新建 bible/sources.md，以及 bible/ 下 canon、timeline、world-rules、style-guide、characters、character-dynamics、appearances、plot-outline、storylines、subplots、foreshadows、inventory 共 12 个 .md 文件",
+        "[硬] 新建 bible/volumes/1.md 与 chapters/1/vol-info.md，章节范围写成 N-M 形式（如 1-1），不是「-」或「?」",
+        "[硬] 没有生成任何 chapters/*/*/v*.md、chapters/*/*/outline.md，也没有 drama/ 或 publish/ 下的文件",
+        "[硬] 所有新建文件中不残留 `{{` 模板变量",
+        "[硬] bible/foreshadows.md 中没有以「| F」开头的数据行，bible/characters.md 中没有虚构的人物条目（只有模板说明）",
+        "[硬] 从书根运行 `node <repo>/skills/fiction-init/scripts/lint.mjs --all` 与 `node <repo>/skills/fiction-continuity/scripts/foreshadow-scan.mjs`：两者退出码都不是 2",
+        "[报告] AGENTS.md 或汇报中记明短剧终点为只写网文",
+        "[报告] 汇报分「新建 / 已有未动 / 待补齐」列出文件，并交代下一步交 fiction-planner"
+      ]
+    },
+    {
+      "id": 2,
+      "prompt": "第1到3章昨天已经在番茄公开了，用的都是 v1，帮我更新冻结清单。",
+      "expected_output": "走「更新冻结清单」模式：只把 1-3 追加进 frozen.ranges，运行 lint.mjs --freeze 生成 .fiction/frozen.json；不改正文、不补骨架、不重新访谈；报告旧范围、新增章号、最终范围与文件数。",
+      "files": [],
+      "expectations": [
+        "[硬] .fiction/config.json 的 frozen.ranges 等于 [\"1-3\"]，version、book、lint 三个键与 <repo>/examples/demo-book/.fiction/config.json 完全相同",
+        "[硬] 新建 .fiction/frozen.json，files 中正好有 chapters/1/1/v1.md、chapters/1/2/v1.md、chapters/1/3/v1.md 三条",
+        "[硬] 从书根运行 `node <repo>/skills/fiction-init/scripts/lint.mjs 1-3`：退出码 0，输出没有 frozen-unsealed 或 frozen-modified",
+        "[硬] diff.mjs 显示除 .fiction/config.json 与 .fiction/frozen.json 外没有任何文件变化",
+        "[报告] 记录中运行的是 `lint.mjs --freeze`，没有带 --force",
+        "[报告] 汇报写出旧范围（无）、新增章号 1–3、最终范围 1-3 与文件数 3"
+      ]
+    },
+    {
+      "id": 3,
+      "prompt": "我在别处写了三章旧稿，放在 manuscript/ 下面，还没发布过。帮我导成书项目，按第一卷第1–3章放，顺便把人物、时间、伏笔、支线先抽出来给我看看。",
+      "expected_output": "导入模式：原稿留在原位，按确认的映射复制到 chapters/1/{1,2,3}/v1.md；建基础骨架；跑 length 与 lint 基线；四类提取先写进 bible/drafts/import-*.md 等作者确认，不直接合入主写档案；无已发布章，不冻结。",
+      "files": [],
+      "expectations": [
+        "[硬] diff.mjs 显示 manuscript/ 下三个文件未修改、未删除",
+        "[硬] 新建 chapters/1/1/v1.md、chapters/1/2/v1.md、chapters/1/3/v1.md，内容分别与 manuscript/ 中第一、二、三章原稿逐字节相同",
+        "[硬] 新建 AGENTS.md、.fiction/config.json（可解析）与 bible/sources.md",
+        "[硬] 新建至少一个 bible/drafts/import-*.md，其中出现林砚、葛婶、唐七",
+        "[硬] bible/characters.md 中没有「### 林砚」条目（提取结果尚未经作者确认合入）",
+        "[硬] 没有 .fiction/frozen.json，config 中 frozen.ranges 为空或不存在",
+        "[报告] 记录中运行过 `length.mjs --all` 与 `lint.mjs --all` 并报告基线数字",
+        "[报告] 汇报给出人物、时间锚点、未结伏笔、支线四类的计数，以及需要作者拍板的问题"
+      ]
+    }
+  ]
+}

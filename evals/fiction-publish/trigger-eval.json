@@ -1,0 +1,20 @@
+[
+  {"query": "把审好的第4章发到番茄，定时明早八点", "should_trigger": true},
+  {"query": "排定时发布：第5到10章每天两章，从下周一开始", "should_trigger": true},
+  {"query": "查一下第3章在番茄后台有没有提交成功，只看不改", "should_trigger": true},
+  {"query": "接着上次排稿，昨天断在第7章了", "should_trigger": true},
+  {"query": "第8章改期到后天中午", "should_trigger": true},
+  {"query": "把审核过的简介发到番茄作品资料里", "should_trigger": true},
+  {"query": "第一次用番茄发布，每天字数阈值要怎么设？要确认哪些参数", "should_trigger": true},
+  {"query": "publish/log.csv 里第6章的状态跟平台对不上，帮我核对一下", "should_trigger": true},
+  {"query": "批量把11到20章发到番茄，每天三章，最后一章钩子要强", "should_trigger": true},
+  {"query": "简介还没写，帮我起草一个", "should_trigger": false},
+  {"query": "简介写好了，帮我审一下有没有现实地名", "should_trigger": false},
+  {"query": "第4章还没写，帮我写出来", "should_trigger": false},
+  {"query": "1到3章已经发布了，加进冻结清单", "should_trigger": false},
+  {"query": "下一步做什么", "should_trigger": false},
+  {"query": "日更两章的话钩子级别怎么排", "should_trigger": false},
+  {"query": "第4章 length 报 SHORT，还差多少字", "should_trigger": false},
+  {"query": "确认这一批出图出片", "should_trigger": false},
+  {"query": "把短剧第1集成片上传到抖音", "should_trigger": false}
+]

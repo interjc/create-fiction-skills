@@ -1,0 +1,20 @@
+[
+  {"query": "我这本书现在进行到哪了？下一步该干嘛", "should_trigger": true},
+  {"query": "从创意到竖屏短剧的完整流程是怎样的？我啥都没有，从哪开始", "should_trigger": true},
+  {"query": "我只想写小说，短剧先不做了，把项目终点设成只写网文", "should_trigger": true},
+  {"query": "帮我看看整体进度，三集短剧各自卡在剧本、分镜还是提示词阶段", "should_trigger": true},
+  {"query": "第3集剧本我改过了，它后面的分镜和提示词要按什么顺序重做", "should_trigger": true},
+  {"query": "想把项目终点从分集剧本扩到分镜，接下来交给谁、先做哪几集", "should_trigger": true},
+  {"query": "我想写一本网文然后做成视频，全流程怎么走，每一步用哪个工具", "should_trigger": true},
+  {"query": "不写网文，能直接做原创短剧吗？从哪一步开始", "should_trigger": true},
+  {"query": "好久没打开这个项目了，帮我盘一下各阶段状态和还没跑的检查", "should_trigger": true},
+  {"query": "第3章写完了，写下一章", "should_trigger": false},
+  {"query": "帮我改成短剧，先把小说前三章改成第1到3集剧本", "should_trigger": false},
+  {"query": "第3集剧本定稿了，帮我画分镜", "should_trigger": false},
+  {"query": "按分镜写第2集的首帧提示词", "should_trigger": false},
+  {"query": "开新书：都市悬疑，书名《晚潮药铺》，帮我建项目", "should_trigger": false},
+  {"query": "第4章写完了，帮我审一下", "should_trigger": false},
+  {"query": "现在写到第18章，哪些伏笔逾期了", "should_trigger": false},
+  {"query": "第二卷31到60章的卷纲帮我排", "should_trigger": false},
+  {"query": "把审好的第4章发布到番茄", "should_trigger": false}
+]

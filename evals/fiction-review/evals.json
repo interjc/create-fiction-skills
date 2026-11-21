@@ -1,0 +1,75 @@
+{
+  "skill_name": "fiction-review",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "帮我看看第4章，总觉得读起来像报告，问题都列出来，先别改。",
+      "expected_output": "对埋雷稿第4章做只审不改：跑 length / lint / foreshadow-scan，报出答案表 7 处脚本可检问题；编辑式阅读尽量召回 9 处模型问题；正文与故事档案不动；按汇报模板分栏写脚本结果、冻结状态与模型发现。",
+      "files": [
+        "evals/fixtures/flawed-chapter/chapters/1/4/outline.md",
+        "evals/fixtures/flawed-chapter/chapters/1/4/v1.md",
+        "evals/fixtures/flawed-chapter/answer-key.md"
+      ],
+      "expectations": [
+        "[硬] diff.mjs 的 unchanged 为 true：chapters/1/4/v1.md、chapters/1/4/outline.md 未改，没有新稿次，bible/ 无改动",
+        "[报告] 记录中运行过 length.mjs 4、lint.mjs 4 和 foreshadow-scan.mjs --at 4 --only writeback,invalid 三条命令",
+        "[报告] length 一栏为 PASS（约 2455 字，要求 ≥ 2000）",
+        "[报告] 全书冻结状态单独列出，写明未配置冻结范围（示例书没有 frozen.ranges）",
+        "[硬·答案4] 报出第9行「2011 年」精确年份（exact-year/EY01，阻断）",
+        "[硬·答案5] 报出第17行正文泄漏文件名「timeline.md」（internal-ref/IR01，阻断）",
+        "[硬·答案6] 报出第17行「这不仅仅是一把生锈的钥匙，更是……」排比升华（ai-tone/AT05，阻断）",
+        "[硬·答案8] 报出第39行「一丝不易察觉的」套话（ai-tone/AT01，阻断）",
+        "[硬·答案11] 报出第43行「他终于明白了」总结句（summary/SUM11，建议级）",
+        "[硬·答案14] 报出第63行钩子标记不是最后一个非空行（hook，阻断）",
+        "[硬·答案16] 点名第4章 outline 写了「触 F004」而伏笔表仍是 planted（标为待回写或 writeback 发现均可）",
+        "[召回·答案1] 指出开篇第1段用「灰蒙蒙的薄雾」一类天气或景物空镜开场",
+        "[召回·答案2] 指出第2段时间口径与 timeline 冲突（「快半个月」「刚过立冬」「蔡伯去年春天还在修表」中至少一处），并说明正确口径（接铺第四天、立冬未到、蔡守信三年前立冬已病逝中至少一项）",
+        "[召回·答案3] 指出林砚点烟（「半包香烟」）或葛婶开「杂货铺」与 bible/characters.md 不符，至少一处",
+        "[召回·答案7] 指出唐七欠段坤八万、冬至前还清、拿消息抵账这组信息在叙述和随后对白里重复",
+        "[召回·答案9] 指出「老街上游的二层旧闸房」「声控灯还亮着」与 canon 的闸房构造（下游三里、单层、早已断电）冲突",
+        "[召回·答案10] 指出第41行「难以用语言精确形容的沉重感……微妙而凝重的停滞」是空洞的氛围或情绪套话",
+        "[召回·答案12] 指出第45–51行一连约7句纯对白，中间没有动作、神态或物件",
+        "[召回·答案13] 指出第53行「真相往往就藏在最不起眼的日常裂隙里……」是替读者提炼主旨的作者总结",
+        "[召回·答案15] 指出结尾写待办清单再上床睡觉，没有兑现 outline 承诺的 B 级钩子"
+      ]
+    },
+    {
+      "id": 2,
+      "prompt": "第4章还没发布，你审完直接改吧，重点去 AI 味，剧情走向别动。",
+      "expected_output": "进入审改闭环（未冻结且获授权），最多两轮：清零 lint 阻断、处理建议项与模型问题，只做局部修整；修后重跑脚本；不为迁就草稿去改 canon、人物档案或时间线；前三章不动。",
+      "files": [
+        "evals/fixtures/flawed-chapter/chapters/1/4/outline.md",
+        "evals/fixtures/flawed-chapter/chapters/1/4/v1.md",
+        "evals/fixtures/flawed-chapter/answer-key.md"
+      ],
+      "expectations": [
+        "[硬] 从书根运行 `node <repo>/skills/fiction-review/scripts/lint.mjs 4`：退出码 0，汇总行为「阻断 0」（检查的是 outline `## 定稿` 指向的稿次）",
+        "[硬] 从书根运行 `node <repo>/skills/fiction-review/scripts/length.mjs 4`：退出码 0，输出含「PASS 第4章」",
+        "[硬] 定稿稿次不再包含「2011」「timeline.md」「这不仅仅是」「一丝不易察觉」",
+        "[硬] 定稿稿次的最后一个非空行是 `<!-- hook: X -->`",
+        "[硬] diff.mjs 显示 chapters/1/1/、chapters/1/2/、chapters/1/3/ 以及 bible/canon.md、bible/characters.md、bible/timeline.md 均未修改",
+        "[硬] 若新开了 v2.md，outline.md 的 `## 定稿` 已指向 v2；若在 v1.md 上原地修改，则没有多出 v2.md 以外的新稿次",
+        "[修复召回·答案3] 定稿稿次不再包含「香烟」和「杂货铺」",
+        "[修复召回·答案9] 定稿稿次不再包含「声控灯」和「二层旧闸房」",
+        "[修复召回·答案15] 定稿稿次的结尾不再是写待办清单后睡觉",
+        "[报告] 汇报写明模式为审改闭环、轮次不超过 2，并给出修后复扫结果",
+        "[报告] foreshadow-scan 一栏没有笼统写「通过」：写明 F004 待回写，或说明已同步后的复扫结果"
+      ]
+    },
+    {
+      "id": 3,
+      "prompt": "publish/blurb.md 是我刚改的简介，准备发出去前帮我看看有没有问题，先只列问题。",
+      "expected_output": "按对外文案分流：只对 publish/blurb.md 显式跑 lint，跳过 length 与 foreshadow-scan；报出三处埋入的阻断（现实地名、精确年份、排比升华）并给修改方向；不改文件。",
+      "files": [],
+      "expectations": [
+        "[硬] diff.mjs 的 unchanged 为 true（publish/blurb.md 未修改）",
+        "[报告] 记录中运行过 `lint.mjs publish/blurb.md`（显式传路径）",
+        "[报告] 报出「安洲市」是需脱敏的现实地名，并给出改法（如「下游大城」或「市里」）",
+        "[报告] 报出「2011 年」是精确公历年份，建议改相对时间",
+        "[报告] 报出「这不仅仅是一台停摆的钟，更是……」属于排比升华的 AI 腔",
+        "[报告] 说明 length.mjs 与 foreshadow-scan.mjs 不适用于对外文案（未运行或标不适用），没有把简介当章节查章号",
+        "[报告] 汇报写明模式为只审不改"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,20 @@
+[
+  {"query": "有个模糊的点子：修表匠回老街查父亲失踪的旧案，帮我收敛一下卖点，给两三个方向", "should_trigger": true},
+  {"query": "第一卷30章快写完了，帮我排第二卷31到60章的章节规划表，逾期的伏笔也排进去", "should_trigger": true},
+  {"query": "书名想了好几个都不满意，帮我出几组不同风格的备选，再起草个四段式简介", "should_trigger": true},
+  {"query": "开篇前三章总觉得留不住人，帮我重新设计黄金三章，每章该完成什么", "should_trigger": true},
+  {"query": "平时日更两章，下周要爆更五天每天四章，钩子级别和爽点怎么排", "should_trigger": true},
+  {"query": "全书大纲想重新梳理：明线查旧案，暗线是上游采砂利益链，明暗线大概在多少章交汇合适", "should_trigger": true},
+  {"query": "下一卷主角要轮流去上游几个村子查线索，想做成一站一站的结构，怎么规划才不像游记", "should_trigger": true},
+  {"query": "第10到20章节奏太平，连着好几章没有外部事件打断，帮我重排这段的爽点和钩子", "should_trigger": true},
+  {"query": "publish/blurb.md 还是空的，帮我起草书名、简介、标签和一句话宣传语", "should_trigger": true},
+  {"query": "按卷纲写第31章正文", "should_trigger": false},
+  {"query": "第4章的 outline 帮我先列出来，场景三个左右，写完再写正文", "should_trigger": false},
+  {"query": "简介写好了，帮我审一下有没有 AI 腔和现实地名", "should_trigger": false},
+  {"query": "把定稿的简介发到番茄作品资料里", "should_trigger": false},
+  {"query": "开新书，先把项目目录和 bible 骨架搭好", "should_trigger": false},
+  {"query": "F004 到底在第几章回收的？伏笔表和正文好像对不上", "should_trigger": false},
+  {"query": "把前十章改成竖屏短剧的分集大纲和章集映射", "should_trigger": false},
+  {"query": "准备章总写得很水，有没有具体写法", "should_trigger": false},
+  {"query": "下一步我该干嘛？继续写小说还是先做短剧", "should_trigger": false}
+]

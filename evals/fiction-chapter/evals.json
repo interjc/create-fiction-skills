@@ -1,0 +1,53 @@
+{
+  "skill_name": "fiction-chapter",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "第3章写完了，接着写第4章吧，按卷纲来：林砚核对流水簿缺页前后的表号，再去找唐七问清楚昨晚那通电话。写完记得把伏笔表和出场记录回写了。",
+      "expected_output": "按六步闭环写出第4章：chapters/1/4/ 下有 resources.md、outline.md、v1.md；正文过字数底线、lint 无阻断；F004 的触及与第4章出场记录已回写，回写扫描通过；前三章、卷规划与 canon 未被改动；最后按「写了什么 / 检查 / 回写 / 待定」四行汇报。",
+      "files": [],
+      "expectations": [
+        "[硬] diff.mjs 的 added 中有 chapters/1/4/resources.md、chapters/1/4/outline.md、chapters/1/4/v1.md 三个文件",
+        "[硬] chapters/1/4/outline.md 首行为「# 第4章 outline」，且 `## 伏笔` 小节下有一行以「- 触 F004」开头",
+        "[硬] chapters/1/4/v1.md 首行以「# 第4章：」开头（全角冒号）",
+        "[硬] 从书根运行 `node <repo>/skills/fiction-chapter/scripts/length.mjs 4`：退出码 0，输出含「PASS 第4章」（不是 SHORT）",
+        "[硬] 从书根运行 `node <repo>/skills/fiction-chapter/scripts/lint.mjs 4`：退出码 0，汇总行为「阻断 0」",
+        "[硬] 从书根运行 `node <repo>/skills/fiction-chapter/scripts/foreshadow-scan.mjs --at 4 --only writeback,invalid --fail-on writeback,invalid`：退出码 0（F004 已不再是 planted，触及章含 4）",
+        "[硬] bible/appearances.md 中新增一行以「| 4 |」开头的出场记录",
+        "[硬] chapters/1/4/v1.md 最后一个非空行是 `<!-- hook: X -->`，X 与 outline.md `## 钩子` 下「级别」的值相同",
+        "[硬] diff.mjs 显示 chapters/1/1/、chapters/1/2/、chapters/1/3/ 下的文件以及 bible/volumes/1.md、bible/canon.md 均未修改",
+        "[报告] 写正文前运行过 `brief.mjs 4`，并读过第3章定稿结尾（记录或 resources.md 首条可见上章结尾）",
+        "[报告] 最终汇报给出有效字符数、lint 阻断数，以及本章 foreshadow-scan 的结果（通过 / 未通过），没有把未跑的检查报成通过"
+      ]
+    },
+    {
+      "id": 2,
+      "prompt": "先帮我试写第4章开头一段，三四百字就行，看看感觉对不对，别的先不用做。",
+      "expected_output": "只交一段约三四百字的试写，按请求停下；不写章后回写，不改任何故事档案；明确说明这是试写，并列出尚未走完的步骤（章纲、机检、审校、回写）。",
+      "files": [],
+      "expectations": [
+        "[硬] diff.mjs --only bible/ 显示 bible/ 下没有任何文件被新增、修改或删除",
+        "[硬] bible/appearances.md 中没有以「| 4 |」开头的行",
+        "[硬] diff.mjs 显示 chapters/1/1/、chapters/1/2/、chapters/1/3/ 均未修改",
+        "[报告] 回复里给出的试写段约 300–400 个汉字（200–500 之间视为合格）",
+        "[报告] 试写段第一句从具体物件、动作或台词切入，没有用天气或景物空镜开篇",
+        "[报告] 试写段不与人物档案冲突：林砚不抽烟；若出现葛婶，她开的是裁缝铺",
+        "[报告] 回复明确说这是试写，并列出还没做的步骤（至少提到章纲、机检或回写中的两项）"
+      ]
+    },
+    {
+      "id": 3,
+      "prompt": "第2章结尾吴老栓那段对话有点生硬，帮我改顺一点，直接改原文就行。",
+      "expected_output": "识别第2章落在 frozen.ranges（1-3）内，拒绝改动冻结正文、不新开稿次；可以给出改写思路，但说明只能在后续未冻结章补解释，或经作者拍板记入 bible/canon.md。",
+      "files": [],
+      "expectations": [
+        "[硬] diff.mjs --only chapters/1/2/ 显示没有任何文件被修改或新增（没有改 v1.md，也没有新开 v2.md）",
+        "[硬] diff.mjs 显示 .fiction/config.json 与 .fiction/frozen.json 均未修改",
+        "[硬] 从书根运行 `node <repo>/skills/fiction-chapter/scripts/lint.mjs 1-3`：退出码 0，输出中没有 frozen-modified",
+        "[报告] 回复明确指出第2章在冻结范围（frozen.ranges 含 1-3）内，因此不改原文",
+        "[报告] 回复给出至少一种替代处理：在后续未冻结章补解释，或经作者拍板把口径记入 bible/canon.md",
+        "[报告] 如附了改写示例，回复明确说明示例没有写入任何文件"
+      ]
+    }
+  ]
+}

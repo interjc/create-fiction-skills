@@ -1,0 +1,20 @@
+[
+  {"query": "开新书：都市悬疑，主角是回海边老家接手中药铺的女药剂师，书名暂定《晚潮药铺》，其他参数全用默认，帮我把项目骨架搭起来", "should_trigger": true},
+  {"query": "我在别的平台写了四十多章旧稿，都是 md，放在 manuscript/ 下，想导进来继续用这套工具写，顺便把人物和伏笔反抽一下", "should_trigger": true},
+  {"query": "第4到6章昨天已经在番茄上公开了，帮我更新冻结清单", "should_trigger": true},
+  {"query": "这个书目录里只有 chapters 和 AGENTS.md，bible 一个都没有，帮我把缺的项目文件补齐，已经写的别动", "should_trigger": true},
+  {"query": "想写一本修仙文，设定定了：废柴丹童靠尝毒药升级。先帮我建书项目，第三人称，章长默认", "should_trigger": true},
+  {"query": "lint 一直报 frozen-unsealed，说冻结范围配了但没清单，前30章都发出去了，帮我封存", "should_trigger": true},
+  {"query": "旧稿三章我已经拆成 md 放在 import/ 了，帮我按卷章目录放进项目，原稿别动，还没发布过", "should_trigger": true},
+  {"query": "新开一本言情，书名《檐下雨》，日更两章，短剧暂时不做，帮我初始化项目和 config", "should_trigger": true},
+  {"query": ".fiction/config.json 和 bible/sources.md 都还没有，按默认值给我生成一份，别的文件不用动", "should_trigger": true},
+  {"query": "新书的创意还很模糊，就想写个跟老钟表有关的悬疑，帮我想几个卖点方向和金手指", "should_trigger": false},
+  {"query": "开第二卷了，31到60章的卷纲帮我排一下", "should_trigger": false},
+  {"query": "帮我把今天写好的第5章发到番茄，设成明早8点定时", "should_trigger": false},
+  {"query": "项目导入完了，现在帮我写第41章", "should_trigger": false},
+  {"query": "唐七和段坤的关系变了，该记在哪个 bible 文件里", "should_trigger": false},
+  {"query": "帮我给新书写个简介，再出三个书名备选", "should_trigger": false},
+  {"query": "从前三章帮我提炼一份风格指南", "should_trigger": false},
+  {"query": "好久没打开这个项目了，现在进行到哪一步", "should_trigger": false},
+  {"query": "已经公开的第3章读起来有点 AI 味，帮我看看，不改原文", "should_trigger": false}
+]

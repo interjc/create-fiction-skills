@@ -1,0 +1,48 @@
+{
+  "skill_name": "fiction-visual-prompts",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "第3集分镜已经定稿了，帮我写第3集的首帧提示词和图生视频 prompt，厂商还没定，先用通用写法。",
+      "expected_output": "分镜检查零阻断后用 generic 方言写 prompts/ep003-image.md 与 ep003-video.md，覆盖全部 7 段；守住简报的防剧透清单；块全部是草稿，等作者确认；prompt-check 零阻断；不改分镜与连戏，不调用生成接口。",
+      "files": [],
+      "expectations": [
+        "[硬] 新建 drama/stopped-clock/prompts/ep003-image.md 与 ep003-video.md",
+        "[硬] 从书根运行 `node <repo>/skills/fiction-visual-prompts/scripts/prompt-check.mjs stopped-clock --ep 3`：退出码 0，阻断 0",
+        "[硬] 同一命令加 --json：episodes 中第3集的 video.segments_covered 等于 video.segments（7）",
+        "[硬] 同一 --json 中第3集的全部 image / video 块 dialect 为 generic，status 为 draft（没有 approved 或 done）",
+        "[硬] diff.mjs 显示 storyboards/、episodes/、visual/continuity.md 与 .fiction/config.json 均未修改",
+        "[硬] ep003-image.md 与 ep003-video.md 不含「押物编码」「旧货行」「远房表哥」",
+        "[报告] 记录中开工前运行过 `storyboard-check.mjs stopped-clock --ep 3` 与 `--brief`",
+        "[报告] 没有调用任何图片或视频生成工具",
+        "[报告] 汇报列出块数与建议项处置，并提醒参考图尚未生成（0/22），本批要等作者确认"
+      ]
+    },
+    {
+      "id": 2,
+      "prompt": "第1集的图和视频提示词我想今天拿去生成，先给我列个清单：多少张图、几段视频、一共多少秒，我看完再确认。",
+      "expected_output": "用 prompt-check --json 的 blocks 列预览：帧图 23 块、视频 7 段共 84.5 秒，另有 22 张参考图都未出；不估价；指出应先出参考图再帧图再视频；等作者明确确认，不改任何块的状态。",
+      "files": [],
+      "expectations": [
+        "[硬] diff.mjs 的 unchanged 为 true（没有块被改成「状态：已确认」）",
+        "[报告] 记录中运行过 `prompt-check.mjs stopped-clock --ep 1 --json`",
+        "[报告] 清单数字为：第1集帧图 23 块、视频 7 段、合计 84.5 秒",
+        "[报告] 提到共享的 22 张参考图均未生成，生成顺序应先参考图、再帧图、再视频",
+        "[报告] 没有估算价格，提醒作者自行查看平台计费",
+        "[报告] 明确等待作者确认这一批，没有把任何块标为已确认"
+      ]
+    },
+    {
+      "id": 3,
+      "prompt": "第2集的视频提示词重写一下，江澜那段台词感觉没对上。",
+      "expected_output": "开工门槛：storyboard-check 报分镜台词与剧本对不上（阻断）。不在提示词里另写一版，也不改分镜或剧本；交给 fiction-storyboard，附剧本与分镜路径、段镜号、问题与未跑的提示词检查。",
+      "files": [],
+      "expectations": [
+        "[硬] diff.mjs 的 unchanged 为 true（storyboards/ep002.md、episodes/ep002.md、prompts/ep002-*.md 都没改）",
+        "[报告] 记录中运行过 `storyboard-check.mjs stopped-clock --ep 2`，并报出 sb-dialogue 或 sb-dialogue-missing 阻断（分镜第99行与剧本第16行不符）",
+        "[报告] 交接给 fiction-storyboard，写明剧本与分镜路径、SH010（SEG04）和问题内容",
+        "[报告] 说明提示词未改、prompt-check 尚未运行，等分镜修好后再同步"
+      ]
+    }
+  ]
+}

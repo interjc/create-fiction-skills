@@ -1,0 +1,20 @@
+[
+  {"query": "第3章写完了，写下一章，还是按卷纲走，这章主要是林砚核对流水簿的断号", "should_trigger": true},
+  {"query": "接着写第4章，昨天写到唐七推门进铺子那里就停了，outline 和 resources 都在 chapters/1/4/ 下", "should_trigger": true},
+  {"query": "出第12章，volumes/1.md 里写的是林砚趁雨雾摸近闸房窗口、在窗台灰里摸到红色碎玻璃，字数还是两千五左右", "should_trigger": true},
+  {"query": "第5章江澜在堤岸拍照那段编辑说太巧了，帮我改一下正文，让林砚先看到她停在堤下的自行车，这章还没发", "should_trigger": true},
+  {"query": "今天要更两章，先把第6章写出来，葛婶碰落相框那场", "should_trigger": true},
+  {"query": "第4章先别写正文，帮我把 resources.md 摘好、outline.md 定下来，我看完提纲再说", "should_trigger": true},
+  {"query": "第8章写完之后顺手把出场记录、伏笔表、支线表回写了，扫描要过", "should_trigger": true},
+  {"query": "第9章 length 报 SHORT，还差三百来字，帮我补一场真的戏进去，别写复述和总结凑字", "should_trigger": true},
+  {"query": "试写一下第4章开头三百字，我想先找找感觉", "should_trigger": true},
+  {"query": "第4章写完了，帮我审一下有没有 AI 味和总结句，先列问题别改", "should_trigger": false},
+  {"query": "第4到10章节奏太慢了，连着几章没外部事件，帮我把卷纲章节规划表重排一下", "should_trigger": false},
+  {"query": "这个项目我该先写第4章还是先做短剧第4集？帮我看看整体进度再决定", "should_trigger": false},
+  {"query": "把小说第3章改成短剧第3集的剧本，竖屏，90秒左右", "should_trigger": false},
+  {"query": "行动章我老写成流水账，有没有具体的章型写法可以参考，讲讲方法就行", "should_trigger": false},
+  {"query": "唐七上一次出场是哪一章？appearances 里我没找着，帮我查一下", "should_trigger": false},
+  {"query": "第1到3章已经在番茄公开了，帮我把它们加进冻结清单", "should_trigger": false},
+  {"query": "第4章定稿了，帮我在番茄后台定时到明天中午十二点发出去", "should_trigger": false},
+  {"query": "短剧第3集写完了，接着写第4集剧本", "should_trigger": false}
+]

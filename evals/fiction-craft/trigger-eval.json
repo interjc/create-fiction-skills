@@ -1,0 +1,20 @@
+[
+  {"query": "林砚和唐七对峙那场对话像念台词，潜台词怎么写？给我示范两三句，原文先别动", "should_trigger": true},
+  {"query": "悬疑里想掺一点都市生活流，叙述口径怎么拿捏才不打架", "should_trigger": true},
+  {"query": "准备章总写得很水，一群人围着桌子念计划，有没有章型写法可以参考", "should_trigger": true},
+  {"query": "帮我从前三章反向提炼一份本书风格指南草案，七个维度那种，先给我看", "should_trigger": true},
+  {"query": "设定一次倒太多了，读者记不住闸房构造，信息要怎么分层投放", "should_trigger": true},
+  {"query": "夜探闸房那场氛围不够压，但这本书不搞玄学，克制地写阴森感有什么办法", "should_trigger": true},
+  {"query": "场景-反应节奏老失控，连着三章都在行动，反应段该怎么插", "should_trigger": true},
+  {"query": "林砚和段坤谈旧表估价的交易场景，怎么写才有来回、有试探", "should_trigger": true},
+  {"query": "新书还没动笔，想先定文风：短句多、少感叹号、对话克制，帮我按维度问一遍，做成 style-guide 的条目", "should_trigger": true},
+  {"query": "检查这章有没有 AI 味，chapters/1/4/v1.md", "should_trigger": false},
+  {"query": "按你说的那几个技法，直接把第4章正文写出来吧", "should_trigger": false},
+  {"query": "第二卷的爽点节拍和钩子级别帮我排一下，日更两章", "should_trigger": false},
+  {"query": "林砚到底抽不抽烟？第4章写他点烟，跟人物档案对不上", "should_trigger": false},
+  {"query": "第4章 lint 报了两条 AI 腔 block，帮我改掉再复扫", "should_trigger": false},
+  {"query": "把第3章的对话改写成竖屏短剧的台词格式，带△动作行", "should_trigger": false},
+  {"query": "分镜里竖屏构图怎么安排前中后景，第3集巷口那场", "should_trigger": false},
+  {"query": "开新书，题材包选悬疑加都市，帮我把项目初始化", "should_trigger": false},
+  {"query": "首帧提示词怎么写才不会把动作结果提前画出来", "should_trigger": false}
+]

@@ -1,0 +1,20 @@
+[
+  {"query": "葛婶开的到底是裁缝铺还是杂货铺？前后好像写得不一样，帮我查以哪份为准，给出处", "should_trigger": true},
+  {"query": "下周要写到第18章了，帮我扫一下到时候哪些伏笔到期、哪些已经逾期", "should_trigger": true},
+  {"query": "第3章之后唐七和林砚的关系变了，他承认在躲债，帮我更新人物关系记录", "should_trigger": true},
+  {"query": "整理一下时间线：第4章到底是接铺第几天，离立冬还差几天，timeline 里怎么记", "should_trigger": true},
+  {"query": "第一卷30章写完了，帮我做卷末复盘，写 chapters/1/summary.md", "should_trigger": true},
+  {"query": "bible/drafts 里那份关于江澜身份的讨论稿我已经拍板了，帮我合并进正式设定和相关表", "should_trigger": true},
+  {"query": "新设定：闸房底仓有两道铁门，外门钥匙在林砚手里，内门要另一把。这个该记在哪个文件？", "should_trigger": true},
+  {"query": "F009 老码头沉船谣言我想彻底放弃，伏笔表和支线表要怎么处理才规范", "should_trigger": true},
+  {"query": "做一次一致性审计，1到3章的人物、物品、时间锚点和正文对不对得上，列出文件和行号", "should_trigger": true},
+  {"query": "写第4章，按卷纲来，写完记得回写", "should_trigger": false},
+  {"query": "第二卷的卷纲帮我重排，把 F006 的回收挪到第40章前后，节奏也顺一下", "should_trigger": false},
+  {"query": "第4章文笔帮我审一下，看看有没有 AI 腔和总结句", "should_trigger": false},
+  {"query": "书已经写到420章了，每次查唐七上次出场要翻半天，想建个本地索引", "should_trigger": false},
+  {"query": "把小说前三章改编成短剧，章集映射表也一起建起来", "should_trigger": false},
+  {"query": "第1到3章已经发布了，帮我加进冻结清单并生成哈希", "should_trigger": false},
+  {"query": "短剧第3集分镜里旧钥匙的连戏状态不对，显字之后还画成满是铜绿", "should_trigger": false},
+  {"query": "我现在整体做到哪一步了？小说和短剧分别是什么进度", "should_trigger": false},
+  {"query": "伏笔怎么埋才自然、读者第一次看不出来？给我讲讲技法和例子", "should_trigger": false}
+]

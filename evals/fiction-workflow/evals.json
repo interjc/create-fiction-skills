@@ -1,0 +1,45 @@
+{
+  "skill_name": "fiction-workflow",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "好久没打开这个项目了，现在进行到哪一步了？下一步该干嘛？",
+      "expected_output": "跑 status.mjs --json，用白话讲清小说与短剧各集进度；workflow.target 未设定，请作者在四个终点中选一个，不擅自写配置；把下一步点名交给具体兄弟 skill 与章集；说明 stage 只是机械汇总。",
+      "files": [],
+      "expectations": [
+        "[硬] diff.mjs 的 unchanged 为 true（尤其 .fiction/config.json 没有被写入 workflow.target）",
+        "[报告] 记录中运行过 `status.mjs`（带 --json）",
+        "[报告] 报出 stage 为 prompts；小说已定稿 3 章、冻结 0 章；短剧 stopped-clock 第1–3集剧本与分镜均为 final，提示词块全是草稿，参考图 0/22 已出",
+        "[报告] 说明 workflow.target 尚未设定，请作者在 novel / script / storyboard / prompts 中选择",
+        "[报告] 下一步点名具体 skill 与章集（例如 fiction-chapter 写第4章，或 fiction-visual-prompts 从第1集参考图做起），没有自己动手写章、写剧本或写提示词",
+        "[报告] 说明 stage 只按文件与状态字段汇总，不代表质量合格"
+      ]
+    },
+    {
+      "id": 2,
+      "prompt": "短剧那块我先不做了，就只写小说，把项目终点设成只写网文吧。",
+      "expected_output": "作者已明确选择 novel：读 SB §8 后把 workflow.target 写为 \"novel\"，其他配置键保持不变；不删已有短剧产物；下一步路由到 fiction-chapter 写第4章。",
+      "files": [],
+      "expectations": [
+        "[硬] .fiction/config.json 可解析，workflow.target 等于 \"novel\"",
+        "[硬] .fiction/config.json 的 version、book、lint 三个键与 <repo>/examples/demo-book/.fiction/config.json 完全相同",
+        "[硬] diff.mjs 显示除 .fiction/config.json 外没有任何文件变化（drama/ 下文件一个没删）",
+        "[报告] 下一步交给 fiction-chapter 写第4章（当前末章是第3章）",
+        "[报告] 说明到达 novel 终点后不再推进短剧，已有短剧文件保留不动"
+      ]
+    },
+    {
+      "id": 3,
+      "prompt": "第3集剧本我刚改过一版（状态改成修改了），它后面已经有分镜和提示词了，接下来要怎么处理？",
+      "expected_output": "读 status 发现第3集 script 为 revised、storyboard 为 final；按上游优先给出回退顺序：fiction-short-drama 重检并定稿 → fiction-storyboard 重跑分镜检查、修分镜与连戏 → fiction-visual-prompts 复核受影响块并重跑 prompt-check；只路由，不改文件。",
+      "files": [],
+      "expectations": [
+        "[硬] diff.mjs 的 unchanged 为 true",
+        "[报告] 报出第3集 script 为 revised（修改）、storyboard 为 final",
+        "[报告] 给出的顺序是 fiction-short-drama（剧本检查并重新定稿）→ fiction-storyboard（重跑分镜检查、修订分镜与 visual/continuity.md）→ fiction-visual-prompts（复核受影响提示词块并重跑 prompt-check），并说明不能颠倒",
+        "[报告] 点名第3集及相关文件路径（episodes/ep003.md、storyboards/ep003.md、prompts/ep003-*.md）",
+        "[报告] 没有自己运行 drama-check、storyboard-check 或 prompt-check 并宣称通过，也没有改剧本、分镜或提示词"
+      ]
+    }
+  ]
+}

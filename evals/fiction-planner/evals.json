@@ -1,0 +1,47 @@
+{
+  "skill_name": "fiction-planner",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "有个模糊的想法：江边小镇一个修收音机的年轻人，总能从老收音机的杂音里听出点什么。还没想好走悬疑还是都市异能，帮我收敛几个方向看看，暂时不用建文件。",
+      "expected_output": "步骤 1 创意收敛：给 2–3 个前提变体（卖点、主角优势及代价与限制、目标读者、一句话卖点），向作者要 2–3 部参考作品而不编数据，做「为什么继续读」校验，停下请作者拍板；不建任何文件。",
+      "files": [],
+      "expectations": [
+        "[硬] diff.mjs 的 unchanged 为 true（空目录里没有新建文件）",
+        "[报告] 给出 2–3 个前提变体，每个都写了核心卖点、主角优势及其代价或限制、目标读者、一句话卖点",
+        "[报告] 请作者提供 2–3 部参考作品，回复中没有编造销量、订阅、点击或榜单数字",
+        "[报告] 做了「为什么继续读」一类的留存校验（五问或等价检查）",
+        "[报告] 结尾请作者选定变体，没有擅自往下写书名简介、全书大纲或卷纲"
+      ]
+    },
+    {
+      "id": 2,
+      "prompt": "第一卷规划到30章了，帮我先起个第二卷前十章（31–40）的规划草案，我看完再定。节奏还是日更两章。",
+      "expected_output": "先跑全量 foreshadow-scan 盘欠账，再给 31–40 章八列表草案（钩子分级、日更分组、支线与伏笔排期），列待入账 ID；停下请作者确认，不落盘卷规划文件。",
+      "files": [],
+      "expectations": [
+        "[硬] diff.mjs 显示 bible/volumes/1.md、bible/plot-outline.md、chapters/1/vol-info.md 未修改，也没有新建 bible/volumes/2.md（草案只在回复里或 bible/drafts/ 下）",
+        "[报告] 记录中运行过 `foreshadow-scan.mjs --at <当前最新定稿章>`，且没有加 --only",
+        "[报告] 草案是八列表（章、核心事件、爽点、钩子、支线、伏笔、人物、权重），31–40 每章一行",
+        "[报告] 钩子列只用 S/A/B/C；按日更两章分组时，每组第二章的钩子不低于 A，或对例外说明了理由",
+        "[报告] 第35章前后安排了 B1 支线的小收（江澜亮明身份、双方结盟），与 bible/subplots.md 的计划一致，或说明了改期理由",
+        "[报告] 引用的伏笔 ID 都已在 bible/foreshadows.md 登记；新伏笔单列为待入账清单交 fiction-continuity",
+        "[报告] 说明作者确认后按 volumes/2.md → plot-outline.md → vol-info 的顺序落盘"
+      ]
+    },
+    {
+      "id": 3,
+      "prompt": "简介文件被我误删了。书名就用《停摆的钟》不改，帮我重新写一版简介、标签和一句话宣传语，直接写进 publish/blurb.md，我回头再审。",
+      "expected_output": "按定位起草对外文案并写入 publish/blurb.md（作者已授权落盘）；遵守脱敏、禁用词与内部术语约束，不泄作者真相；书名不变；提示交 fiction-review 机检审校、交 fiction-publish 提交。",
+      "files": [],
+      "expectations": [
+        "[硬] 新建 publish/blurb.md，含简介正文、标签行与一句话宣传语",
+        "[硬] 从书根运行 `node <repo>/skills/fiction-review/scripts/lint.mjs publish/blurb.md`：退出码 0，汇总行为「阻断 0」",
+        "[硬] publish/blurb.md 不含「安洲市」「永宁县」、四位数公历年份，也不含「伏笔」「钩子」「爽点」「支线」「大纲」",
+        "[硬] publish/blurb.md 不含「涂改」「遇难船工」「押物编码」（不泄露作者真相）",
+        "[硬] diff.mjs 显示除 publish/blurb.md 外没有文件变化，.fiction/config.json 的 book.title 仍为「停摆的钟」",
+        "[报告] 汇报提示交 fiction-review 做机检与审校，提交时交 fiction-publish"
+      ]
+    }
+  ]
+}

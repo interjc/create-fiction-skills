@@ -1,0 +1,20 @@
+[
+  {"query": "帮我改成短剧，《停摆的钟》做60集竖屏，每集90秒左右", "should_trigger": true},
+  {"query": "接着写第4集短剧，按 adaptation-map 来，对应小说第4章", "should_trigger": true},
+  {"query": "第2集剧本我改了一版，帮我检查格式和时长，有问题直接改", "should_trigger": true},
+  {"query": "付费卡点放第10集合适吗？前3秒钩子怎么设计才抓人", "should_trigger": true},
+  {"query": "做第4到10集的分集大纲和章集映射，剧本先别写", "should_trigger": true},
+  {"query": "原创一个竖屏短剧，不改编小说，讲江边夜班摆渡人遇到十年前淹死的乘客", "should_trigger": true},
+  {"query": "drama-check 报了 voiceover-open 和 unshootable，帮我把剧本改到零阻断", "should_trigger": true},
+  {"query": "第1集开场是 OS 顶头，太慢了，改成动作开场，台词别动太多", "should_trigger": true},
+  {"query": "小说第4到6章能合成一集短剧吗？帮我写这一集剧本", "should_trigger": true},
+  {"query": "第3集剧本定稿了，帮我拆镜头做分镜", "should_trigger": false},
+  {"query": "把第2集分镜写成图生视频 prompt", "should_trigger": false},
+  {"query": "第2集台词念着拗口，只帮我从文笔上顺一顺，结构、卡点都别动", "should_trigger": false},
+  {"query": "短剧里想把唐七改成女的，小说那边的 canon 和人物档案要怎么记", "should_trigger": false},
+  {"query": "项目做到哪了？现在该写剧本还是该画分镜", "should_trigger": false},
+  {"query": "写小说第4章正文", "should_trigger": false},
+  {"query": "竖屏短剧分镜的景别和运镜怎么选", "should_trigger": false},
+  {"query": "短剧视觉资产的锁定词和参考图槽位帮我补全", "should_trigger": false},
+  {"query": "剧本第2集改了一句台词，同步一下分镜", "should_trigger": false}
+]

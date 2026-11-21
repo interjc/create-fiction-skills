@@ -1,0 +1,20 @@
+[
+  {"query": "检查这章有没有 AI 味，chapters/1/4/v1.md，写完总觉得哪里怪", "should_trigger": true},
+  {"query": "帮我看看第4章，读起来像报告，剧情没错但就是不像小说", "should_trigger": true},
+  {"query": "第4章还没发，你审完直接改，重点去 AI 味，剧情走向别动", "should_trigger": true},
+  {"query": "1到3章连起来复核一下，我怀疑三章结尾都是同一个套路，情绪也一直平的", "should_trigger": true},
+  {"query": "publish/blurb.md 准备发出去了，帮我审一遍，看看有没有现实地名、精确年份或者内部术语漏出来", "should_trigger": true},
+  {"query": "短剧第2集的台词念起来拗口，只从文笔和对白自然度上帮我顺一顺，格式卡点不用管", "should_trigger": true},
+  {"query": "lint 报了5个 block 一个 suggest，帮我逐条看看哪些必须改、哪些可以留", "should_trigger": true},
+  {"query": "这一章是不是有水剧情？你做个逐段删除测试，看哪几段删了也不影响", "should_trigger": true},
+  {"query": "第3章已经公开了，帮我体检一下有没有硬伤，原文不能改，只出报告", "should_trigger": true},
+  {"query": "第4章还没写，按卷纲帮我写出来，两千五百字", "should_trigger": false},
+  {"query": "对话老是像话剧，人物替我讲设定，有没有写潜台词的方法？我想先学学技巧", "should_trigger": false},
+  {"query": "前后矛盾了：第2章说葛婶开裁缝铺，第4章写成杂货铺，以哪份为准、该记在哪个文件", "should_trigger": false},
+  {"query": "短剧第2集的付费卡点位置和单集时长帮我检查一下，drama-check 怎么跑", "should_trigger": false},
+  {"query": "第4章要大改，三个场景顺序全部换掉、章末落点也换，帮我重写一版", "should_trigger": false},
+  {"query": "从前三章帮我提炼一份本书风格指南，写进 bible/style-guide.md", "should_trigger": false},
+  {"query": "简介我已经审好了，帮我提交到番茄作品资料里", "should_trigger": false},
+  {"query": "第3集分镜里的台词和剧本对不上，storyboard-check 报 sb-dialogue，帮我改分镜", "should_trigger": false},
+  {"query": "第1集视频 prompt 里会不会画出了不该露的打火机？帮我查提示词有没有泄底", "should_trigger": false}
+]

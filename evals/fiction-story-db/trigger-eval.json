@@ -1,0 +1,20 @@
+[
+  {"query": "书已经写到420章了，唐七上一次出场是哪一章？每次翻 appearances 太慢", "should_trigger": true},
+  {"query": "给这本三百多章的连载建个本地 SQLite 索引，方便跨卷查伏笔和人物", "should_trigger": true},
+  {"query": "600多章了，哪些伏笔该收了？想用索引按 planted、partial 筛一下", "should_trigger": true},
+  {"query": "story-db status 说有来源文件哈希变了，要不要重建索引", "should_trigger": true},
+  {"query": "写到350章，想用索引查「闸房」这条设定都分布在哪些文件、主写入口是哪份", "should_trigger": true},
+  {"query": "query absent 唐七 --since 300 这个命令怎么用，我想知道他多少章没出场了", "should_trigger": true},
+  {"query": "长篇四百章还有短剧映射，用索引查一下第120章对应哪几集", "should_trigger": true},
+  {"query": "三百多章了，帮我用索引查唐七手上持有过哪些物品", "should_trigger": true},
+  {"query": "story.db 好像过时了，帮我全量重建一下", "should_trigger": true},
+  {"query": "现在才写到第3章，帮我看看哪些伏笔到期了", "should_trigger": false},
+  {"query": "写第4章前先给我出个写作简报", "should_trigger": false},
+  {"query": "唐七和林砚的关系变了，帮我更新人物关系", "should_trigger": false},
+  {"query": "葛婶到底开的什么铺子，以哪份为准", "should_trigger": false},
+  {"query": "第1集分镜的跨集连戏表要更新", "should_trigger": false},
+  {"query": "项目整体进度怎么样了", "should_trigger": false},
+  {"query": "伏笔表格式不对，foreshadow-scan 报 invalid，帮我修", "should_trigger": false},
+  {"query": "把小说1到3章映射成短剧1到3集，写进 adaptation-map", "should_trigger": false},
+  {"query": "帮我查一下前三章有没有 AI 味", "should_trigger": false}
+]

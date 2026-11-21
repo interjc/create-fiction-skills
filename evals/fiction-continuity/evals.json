@@ -1,0 +1,52 @@
+{
+  "skill_name": "fiction-continuity",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "下周大概要写到第18章了，先帮我盘一下到时候哪些伏笔该收了、哪些已经拖过期，每条给个处理建议，表先别改。",
+      "expected_output": "以第18章为截止章跑 foreshadow-scan，按 F-ID 列出逾期、到期、待埋项并逐条给回收 / 触及 / 改期 / 放弃建议；只查不改，改期与放弃标明须作者确认。",
+      "files": [],
+      "expectations": [
+        "[硬] diff.mjs 的 unchanged 为 true（没有改任何档案）",
+        "[报告] 记录中运行过 `foreshadow-scan.mjs --at 18`（没有用 --only 只看部分类别）",
+        "[报告] 点名 F007 蓝皮水文抄件已逾期（计划第10–15章回收）",
+        "[报告] 点名 F001、F002、F004 到第18章都已到期",
+        "[报告] 点名 F003、F006 属于待埋（计划埋设章已过但伏笔表仍是 planned）",
+        "[报告] 每条都给出回收、触及、改期或放弃之一的建议并附理由；凡建议改期或放弃，都写明需作者确认",
+        "[报告] 没有把已收的 F008 或已弃的 F009 列为待处理"
+      ]
+    },
+    {
+      "id": 2,
+      "prompt": "第4章我定稿了（chapters/1/4/v1.md），帮我把故事档案回写一下，伏笔、出场、人物关系这些。",
+      "expected_output": "按定稿与章纲回写 appearances、foreshadows（F004 触及）等主写入口，回写扫描通过；发现正文与档案冲突（林砚抽烟、葛婶杂货铺、上游二层闸房与声控灯、时间口径）时列证据交作者裁决，不把错误写进档案，也不改正文。",
+      "files": [
+        "evals/fixtures/flawed-chapter/chapters/1/4/outline.md",
+        "evals/fixtures/flawed-chapter/chapters/1/4/v1.md"
+      ],
+      "expectations": [
+        "[硬] diff.mjs 显示 chapters/1/4/v1.md 与 chapters/1/4/outline.md 未修改",
+        "[硬] 从书根运行 `node <repo>/skills/fiction-continuity/scripts/foreshadow-scan.mjs --at 4 --only writeback,invalid --fail-on writeback,invalid`：退出码 0",
+        "[硬] bible/appearances.md 中有以「| 4 |」开头的行，且在场列含唐七",
+        "[硬] diff.mjs 显示 bible/characters.md、bible/canon.md、bible/timeline.md 均未修改（葛婶仍是裁缝铺，林砚仍不抽烟）",
+        "[报告] 回复至少指出两处正文与档案的冲突（林砚抽烟 / 葛婶杂货铺 / 上游二层闸房与声控灯 / 「快半个月」「立冬后」的时间口径），给出处并请作者裁决",
+        "[报告] 回复列出实际修改过的档案文件和条目"
+      ]
+    },
+    {
+      "id": 3,
+      "prompt": "葛婶到底开的是什么铺子？第4章初稿写成了杂货铺，我记得前面是裁缝铺，帮我查一下以哪份为准，告诉我出处就行。",
+      "expected_output": "只查不改：结论为裁缝铺，主写入口 bible/characters.md 的葛婶条目，附文件与行号；指出第4章初稿的冲突位置，建议改初稿而不是改档案。",
+      "files": [
+        "evals/fixtures/flawed-chapter/chapters/1/4/v1.md"
+      ],
+      "expectations": [
+        "[硬] diff.mjs 的 unchanged 为 true",
+        "[报告] 结论是裁缝铺",
+        "[报告] 给出主写入口 bible/characters.md 的葛婶条目，并附行号或小节名",
+        "[报告] 指出冲突位于 chapters/1/4/v1.md（「隔壁杂货铺的老板娘葛婶」，约第25行）",
+        "[报告] 建议修改第4章初稿（交 fiction-chapter 或 fiction-review），而不是改 characters.md"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,20 @@
+[
+  {"query": "第3集剧本定稿了，帮我画分镜，竖屏9:16", "should_trigger": true},
+  {"query": "把第2集拆成镜头，每段不超过15秒，一段一次视频生成", "should_trigger": true},
+  {"query": "做第1集的场景脚本，景别、运镜、时长都要标", "should_trigger": true},
+  {"query": "剧本第2集改了一句台词，已经重新定稿，帮我同步分镜，镜号别乱", "should_trigger": true},
+  {"query": "storyboard-check 报 sb-spoiler，打火机本体第3集还不能露，镜头怎么改", "should_trigger": true},
+  {"query": "第3集钥匙已经显字了，分镜的跨集连戏表要更新一下", "should_trigger": true},
+  {"query": "切镜：第3集巷口那场段坤降车窗，拆成几个镜头合适", "should_trigger": true},
+  {"query": "第4集新出场旧闸房，先建个最小视觉资产条目，再把这一集拆镜", "should_trigger": true},
+  {"query": "把剧本转成分镜，段和镜分开写，台词原样认领", "should_trigger": true},
+  {"query": "帮我把小说第4章改成短剧第4集", "should_trigger": false},
+  {"query": "第3集林砚那句台词太硬，帮我改改剧本", "should_trigger": false},
+  {"query": "按分镜写第3集的首帧提示词", "should_trigger": false},
+  {"query": "补全资产锁定词，再写参考图槽位", "should_trigger": false},
+  {"query": "确认这一批出图出片，先列清单", "should_trigger": false},
+  {"query": "第2集剧本的格式和时长帮我检查一下", "should_trigger": false},
+  {"query": "做成视频的流程怎么走，现在卡在哪一步", "should_trigger": false},
+  {"query": "付费卡点放第几集比较好", "should_trigger": false},
+  {"query": "小说第3章巷口夜景的氛围怎么写得更压抑", "should_trigger": false}
+]
