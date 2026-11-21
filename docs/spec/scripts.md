@@ -399,9 +399,9 @@ node scripts/drama-check.mjs <series> [--ep N|N-M] [--fail-on block|suggest] [--
 | `episode-gap` | suggest | 1 到最大已写集号之间缺集 |
 | `episode-total` | suggest | 已写集数 > series `总集数` |
 | `paywall-placement` | block | `<!-- paywall -->` 不在钩子标记之后，或其后还有非空、非注释内容 |
-| `paywall-missing` | block | 无任何卡点，且最大已写集号 ≥ `paywall.first_at[1]` |
-| `paywall-position` | block | 首个卡点集号不在 `paywall.first_at` 区间 |
-| `paywall-ratio` | suggest | `总集数` 已知且 首个卡点集号 / 总集数 不在 `paywall.free_ratio` 区间 |
+| `paywall-missing` | block | `paywall.first_at` 非 `null`，无任何卡点，且最大已写集号 ≥ `paywall.first_at[1]` |
+| `paywall-position` | block | `paywall.first_at` 非 `null` 且首个卡点集号不在该区间；为 `null` 而仍有卡点时给 suggest（配置说不设卡点） |
+| `paywall-ratio` | suggest | `paywall.first_at` 非 `null`、`总集数` 已知且 首个卡点集号 / 总集数 不在 `paywall.free_ratio` 区间 |
 | `paywall-hook` | block | 任一卡点集的钩子低于 `paywall.hook_min` |
 | `paywall-plan` | suggest | series `免费集数` 已填且 ≠ 首个卡点集号 |
 | `map-missing` | suggest | 已写的集在 adaptation-map 没有行 |

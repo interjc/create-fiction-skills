@@ -51,3 +51,10 @@ Back to the [board](README.md). Append new decisions at the end. Never rewrite o
 - Decision: SB §6.2 `埋设章` 在状态为放弃且从未埋下时也允许 `?`。由 T2.c2 改 `bible.mjs` 与测试。
 - Decided by: director（示例书 F009 在真实脚本下报 invalid；这是作者常见的合法情况，不是示例书写错）
 - Status: spec landed; parser pending (T2.c2)
+
+### D-07: fiction-short-drama 设计里的三个口径 (2026-11-21)
+- Decision: (1) `shared/formats.json` 给 `fiction-short-drama` 加 `chapter` 主题（需要 §7.1 定稿、§7.2 钩子级别、§7.3 伏笔动作）。(2) `drama.paywall.first_at` 可为 `null`，表示本剧不设付费卡点；`paywall-missing`、`paywall-ratio` 不查，`paywall-position` 在仍有卡点时降为 suggest。(3) 原创短剧（无小说）保留空的 `foreshadows.md` 表，悬念的埋与收记在 `series.md` 自由小节 `## 悬念账`，不为短剧新开伏笔表。
+- Decided by: director（L2 设计 T4.g 提出的三个开放问题）
+- Motivation and evidence: 设计方的默认做法是把 `first_at` 设成 `[总集数+1, 总集数+1]` 绕过检查，可用但难懂；`null` 是纯新增配置。伏笔表是小说的唯一主写入口（SB §9.2 禁止短剧改它的状态），短剧另开表会形成双头。
+- Rejected options: 新增 `drama.paywall.enabled` 开关（多一个键，与 `first_at` 语义重叠）；允许 `foreshadows.md` 写 `范围：短剧` 行。
+- Status: spec landed（本次提交）；`drama-check.mjs` 与 `config.mjs` 的改动排进 T2.c 返工轮

@@ -583,7 +583,7 @@ UTF-8 JSON。加载规则：与下方默认值深合并（对象递归合并，�
 | `drama.tiers` | {id,max_seconds}[] | `[{"id":"micro","max_seconds":60},{"id":"short","max_seconds":120},{"id":"standard","max_seconds":180},{"id":"long","max_seconds":null}]` | drama-check | 时长档位，按 max 升序；`null` 表示无上限 |
 | `drama.max_scenes` | int | `5` | drama-check | 单集场景数上限（suggest） |
 | `drama.hook.required` | bool | `true` | drama-check | 每集必须有钩子标记 |
-| `drama.paywall.first_at` | [int,int] | `[8,15]` | drama-check | 首个付费卡点所在集的允许范围 |
+| `drama.paywall.first_at` | [int,int]\|null | `[8,15]` | drama-check | 首个付费卡点所在集的允许范围；`null` 表示本剧不设付费卡点（免费或广告剧），卡点位置类规则不查 |
 | `drama.paywall.free_ratio` | [number,number] | `[0.05,0.25]` | drama-check | 免费集数 / 总集数 的允许范围 |
 | `drama.paywall.hook_min` | 钩子级别 | `"A"` | drama-check | 卡点集钩子不低于 |
 | `drama.dialogue_run_max` | int\|null | `6` | drama-check | 同一场景内连续对白行超过此数给 suggest；`null` 不查 |
@@ -1059,3 +1059,4 @@ UTF-8 JSON。加载规则：与下方默认值深合并（对象递归合并，�
 | 日期 | 变更 | 兼容性 |
 |---|---|---|
 | 2026-11-21 | T1.b：新增 §9.4–§9.9（视觉资产、连戏状态、分镜、提示词、方言、防剧透）；§2、§3、§4、§5、§6.1、§8 各有新增行 | 纯新增，`spec_version` 仍为 1；已有项目与已有文件不需要任何改动 |
+| 2026-11-21 | D-07：`drama.paywall.first_at` 可为 `null`（不设付费卡点） | 纯新增，`spec_version` 仍为 1 |

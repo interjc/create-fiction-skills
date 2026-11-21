@@ -16,7 +16,7 @@
     "fiction-continuity":     ["project", "bible", "chapter", "config"],
     "fiction-craft":          ["project"],
     "fiction-workflow":       ["project", "config"],
-    "fiction-short-drama":    ["project", "bible", "drama", "config"],
+    "fiction-short-drama":    ["project", "bible", "chapter", "drama", "config"],
     "fiction-storyboard":     ["project", "drama", "storyboard", "config"],
     "fiction-visual-prompts": ["project", "drama", "storyboard", "prompts", "config"],
     "fiction-story-db":       ["project", "bible", "chapter", "drama", "story-db"],
