@@ -15,7 +15,7 @@ The director (L1) maintains this file. Each card under `tasks/` has exactly one 
 
 | Task | Title | Flow | Holder | Status |
 |---|---|---|---|---|
-| [T1](tasks/T1.md) | 契约：story-bible / skill-authoring / 词表 / 骨架 | designed | director | accepted |
+| [T1](tasks/T1.md) | 契约：story-bible / skill-authoring / 词表 / 骨架 | designed | director | committed |
 | [T2](tasks/T2.md) | 共用零依赖脚本 + validate + sync-shared | outsource | liaison-T2 | planned |
 | [T3](tasks/T3.md) | fiction-story-db（node:sqlite） | outsource | liaison-T3 | planned |
 | [T4](tasks/T4.md) | 9 个 SKILL.md 起草与验收 | designed+outsource | director | planned |
