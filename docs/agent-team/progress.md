@@ -5,17 +5,22 @@ Back to the [board](README.md). Dates are absolute (YYYY-MM-DD). Acceptance numb
 ## Status snapshot
 
 <!-- newest first: one entry per recently accepted, committed or in-flight task -->
+- 2026-11-21: T9 accepted; T1.b in design with Fable 5.2. Wave 1 dispatched: OpenCode gpt-6.2-sol (T2.a, T2.b, T4.a/c/e/h, main checkout, disjoint leases); agy (T4.b/d/f neon-high, T4.f2 hydrogen-high, T5 neon-high, each in its own git worktree under ../cfs-wt/).
+- 2026-11-21: T1 契约冻结并提交（a4b600d）；范围扩展为创意→网文→剧本→分镜→提示词全流程（e7de357）。
 - 2026-11-21: grill 完成，计划草案写入 docs/plan.md，T1–T8 建卡，等待作者确认后开工 T1。
 
 ## Completed log
 
 | Task | Spec / decision | Commit | Changes and verification |
 |---|---|---|---|
+| T1 | docs/spec/* | a4b600d | 三份契约 + 词表，作者确认后冻结 |
+| T9 | T9 brief | (no files) | 调研报告 5 节齐全，结论进入 T1.b |
 
 ## Next-up queue
 
-1. T1 契约（作者确认计划后开始）
-2. T2 / T3 / T4 / T5 并行（T1 冻结后）
+1. 第一波验收：T2.a/T2.b、T4.a–f、T4.f2、T4.h、T5（交叉评审 + 内部验收 + 提交）
+2. T1.b 验收冻结 → 第二波：T2.c、T3、T4.g/i/j、T5.b
+3. T4.k → T6 → T7 → T8
 
 ## Channel quota
 
