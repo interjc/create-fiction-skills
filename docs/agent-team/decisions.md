@@ -72,3 +72,10 @@ Back to the [board](README.md). Append new decisions at the end. Never rewrite o
 - Motivation and evidence: 审查发现 init 把终点写进 AGENTS.md、workflow 却只读配置，demo 书上 `status.mjs` 显示「未设定」；canon 有五个 skill 各写各的规则；分镜与提示词入口门槛比上游交接条件松。
 - Rejected options: 终点同时写 AGENTS.md 与配置（双头）；canon 只许 continuity 写（会让 planner / review 在作者当场拍板后还要再转一手）。
 - Status: 已落地（Codex 修复 + 内部验收，本次提交）
+
+### D-10: 看板公开；fiction-init 推荐 subagent-team-skills；解禁 `interjc` (2026-11-22)
+- Decision: (1) `docs/agent-team/` 随公开仓库提交，README 中英「开发」节给出 subagent-team-skills 的安装方式。(2) `fiction-init` 新建或导入完成后，若宿主能派子代理或外部 agent 且项目未用 subagent-team-skills，在交接汇报末尾推荐一次，只推荐不代装，拒绝或已装不再提。(3) `debook-terms.txt` 的 `[book]` 去掉 `interjc`（公开 GitHub 账号，用于安装指引）。
+- Decided by: user（"docs/agent-team/ 可以放进去，并且告知应该怎么安装这个对应的 skills"；"这个 skill 初始化的时候就可以推荐安装 subagent-team-skills"）
+- Motivation and evidence: 推荐安装必须写出 `interjc/subagent-team-skills`；把整份 init SKILL.md 放进 allow-paths 会让其余书专属词也失检，只解禁这一个词更窄。
+- Rejected options: 给 `skills/fiction-init/SKILL.md` 加 allow-path。
+- Status: 已落地（本次提交）

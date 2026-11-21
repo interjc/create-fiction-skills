@@ -126,7 +126,7 @@ shared/manifest.json              Which scripts each skill bundles
 examples/demo-book/               Original demo book
 evals/                            Eval fixtures and helper scripts
 docs/spec/                        Shared format contracts for skills and scripts
-docs/agent-team/                  Development process notes
+docs/agent-team/                  Development board, decisions and lessons
 tools/                            validate.mjs, sync-shared.mjs
 ```
 
@@ -139,6 +139,31 @@ npm run sync       # Copy shared/lib/ into each skill
 ```
 
 Maintain shared code only in `shared/lib/` and distribute changes with `npm run sync`; do not edit the copies inside individual skills directly. Use only original content from `examples/demo-book/` in examples and docs. Run `npm run validate` and `npm test` before committing.
+
+### How this repo is developed
+
+This repository is built with the [subagent-team](https://github.com/interjc/subagent-team-skills) method: the main session acts as director (orchestration and acceptance), in-house subagents design and review, and external agents (agy, Codex CLI, OpenCode) take drafting, rework and cross-review. The task board, decisions (D-01…), lessons and progress live in [`docs/agent-team/`](docs/agent-team/README.md), so anyone can pick up or reproduce the work.
+
+To keep developing the same way, install the matching skills (`subagent-team`, `cli-agent-delegation`, `agent-handover`):
+
+```bash
+# Claude Code (plugin: three skills plus two read-only reviewer agents)
+claude plugin marketplace add interjc/subagent-team-skills
+claude plugin install subagent-team@subagent-team-skills
+```
+
+```bash
+# Any other agent that supports Agent Skills (skills CLI)
+npx skills add interjc/subagent-team-skills
+```
+
+```bash
+# Codex
+codex plugin marketplace add https://github.com/interjc/subagent-team-skills
+codex plugin add subagent-team@subagent-team-skills
+```
+
+Restart the agent afterwards. See that repository's README for external-agent setup and quota handling.
 
 ## References & Acknowledgements
 

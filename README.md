@@ -123,7 +123,7 @@ shared/manifest.json              每个 skill 带哪些脚本
 examples/demo-book/               原创示例书
 evals/                            评测样本与辅助脚本
 docs/spec/                        各 skill 与脚本共用的格式契约
-docs/agent-team/                  开发过程笔记
+docs/agent-team/                  开发看板、决策与经验记录
 tools/                            validate.mjs、sync-shared.mjs
 ```
 
@@ -136,6 +136,31 @@ npm run sync       # 把 shared/lib/ 复制进各 skill
 ```
 
 共用代码只在 `shared/lib/` 维护，改完用 `npm run sync` 分发；不要直接改各 skill 里的副本。示例与文档只用 `examples/demo-book/` 里的原创内容。提交前请跑 `npm run validate` 和 `npm test`。
+
+### 开发方式与看板
+
+本仓库按 [subagent-team](https://github.com/interjc/subagent-team-skills) 的方法开发：主 session 做总管，负责牵引和验收；内部 subagent 做设计与审查；外部 agent（agy、Codex CLI、OpenCode）承接起草、返工和交叉评审。任务看板、决策（D-01…）、经验教训和进度都在 [`docs/agent-team/`](docs/agent-team/README.md)，可据此接手或复现开发过程。
+
+想用同一套方法继续开发，先装对应的 skills（`subagent-team`、`cli-agent-delegation`、`agent-handover`）：
+
+```bash
+# Claude Code（插件，含三个 skill 和两个只读审核 agent）
+claude plugin marketplace add interjc/subagent-team-skills
+claude plugin install subagent-team@subagent-team-skills
+```
+
+```bash
+# 其他支持 Agent Skills 的 agent（skills CLI）
+npx skills add interjc/subagent-team-skills
+```
+
+```bash
+# Codex
+codex plugin marketplace add https://github.com/interjc/subagent-team-skills
+codex plugin add subagent-team@subagent-team-skills
+```
+
+装完重启 agent。外部 agent 的接入与额度细节见该仓库的 README。
 
 ## 参考与致谢
 

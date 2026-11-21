@@ -235,7 +235,7 @@ local-validation
 [book]
 《开源筑基丹》
 open-cultivation
-interjc
+# interjc  # 已解禁 2026-11-22（作者决定）：公开 GitHub 账号，用于安装指引（如 fiction-init 推荐 subagent-team-skills）
 chapter1_immortal_recipe
 character_design
 # 卷名

@@ -8,6 +8,7 @@ import path from 'node:path';
 
 function walk(root, dir = root, out = {}) {
   for (const entry of readdirSync(dir, { withFileTypes: true })) {
+    if (entry.name === '.git') continue; // 执行者（如 Codex）可能要求书根是 git 仓库
     const full = path.join(dir, entry.name);
     if (entry.isDirectory()) walk(root, full, out);
     else if (entry.isFile()) {
