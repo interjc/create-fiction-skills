@@ -24,7 +24,7 @@ The director (L1) maintains this file. Each card under `tasks/` has exactly one 
 | [T7](tasks/T7.md) | 小规模评测 | designed | director | planned |
 | [T8](tasks/T8.md) | 集成与全量验收 | solo | director | planned |
 | [T9](tasks/T9.md) | 开源短剧/分镜/提示词项目调研 | outsource | liaison-agy-research | accepted |
-| [T1.b](tasks/T1.b.md) | 契约扩展：分镜/提示词/视觉资产 | consult | Fable 5.2 (L2) drafting; director accepts | in progress |
+| [T1.b](tasks/T1.b.md) | 契约扩展：分镜/提示词/视觉资产 | consult | director | committed |
 
 ## Files
 

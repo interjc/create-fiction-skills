@@ -48,7 +48,7 @@
 
 ```
 create-fiction-skills/
-├── .claude-plugin/marketplace.json     # 两个插件：create-fiction（核心 7 个）、create-fiction-extras（story-db、publish）
+├── .claude-plugin/marketplace.json     # 两个插件：create-fiction（核心 10 个：除 story-db、publish 外全部）、create-fiction-extras（story-db、publish）
 ├── skills/
 │   ├── fiction-init/          建书：问答生成项目 AGENTS.md、bible 骨架、主写入口表、选题材包；或导入已有稿件
 │   ├── fiction-planner/       书名简介、黄金三章、全书/卷纲/章纲、爽点节拍、钩子分级、日更组合
@@ -58,8 +58,8 @@ create-fiction-skills/
 │   ├── fiction-craft/         技法库：场景、scene-sequel、信息分层、对话、氛围、叙事渲染、风格指南模板；references/genres/ 题材包
 │   ├── fiction-workflow/      总入口：识别项目处在哪个阶段，路由到对应 skill，管理“只到网文 / 到剧本 / 到短剧”的终点
 │   ├── fiction-short-drama/   网文 → 分集剧本（或原创短剧）：分集大纲、前 3 秒钩子、付费卡点、剧本格式与机检
-│   ├── fiction-storyboard/    剧本 → 场景脚本 / 分镜：镜头表、景别、机位、时长、转场
-│   ├── fiction-visual-prompts/ 分镜 → 图片 / 视频生成提示词：视觉资产库（人物 / 场景 / 道具）、连戏锁、分平台提示词
+│   ├── fiction-storyboard/    剧本 → 场景脚本 / 分镜：段与镜、景别、运镜、时长、转场；建资产库最小条目与连戏表
+│   ├── fiction-visual-prompts/ 分镜 → 图片 / 视频生成提示词：补全视觉资产库外观与锁定词、参考图槽位、方言卡、付费生成前确认
 │   ├── fiction-story-db/      可选：node:sqlite 索引（零依赖）+ brief / update / sources，服务 300 章以上长篇
 │   └── fiction-publish/       实验：平台定时发布（先番茄），参数化
 ├── shared/lib/                 脚本共用代码的唯一源，由 tools/sync-shared.mjs 复制进各 skill 的 scripts/
