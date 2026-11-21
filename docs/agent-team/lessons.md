@@ -4,6 +4,7 @@ Back to the [board](README.md). Newest first. Record a row when the user correct
 
 | Date | Source | Lesson or adjustment | Promoted to |
 |---|---|---|---|
+| 2026-11-21 | user: "扩展……把网文改写为剧本 - 剧本改写为场景脚本 - 脚本改写为视频/图片生成的提示词……从创意到网文小说到剧本到短剧（但也可以只到网文）的工作流"；"如果有比较困难的问题可以先尝试给 fable 5.2 评估"；"一定要活用外部委派，本 agent 主要是做任务牵引和监督验收" | 范围扩成完整流水线；难题先问 Fable 5.2；总监只牵引与验收 | docs/plan.md D14–D17；AGENTS.md `## Subagent team` |
 | 2026-11-21 | user: "每一个关键环节完成都 git commit" | 每个关键环节验收通过后立即本地提交 | AGENTS.md, `## Subagent team` |
 | 2026-11-21 | user: "优先用 opencode 的 gpt，其次用 codex 的" | gpt-6.2-sol 的活先派 OpenCode，再派 Codex | AGENTS.md, `## Subagent team` |
 | 2026-11-21 | user: "现在升级了，有 6.2-sol 了" | OpenCode 2.3.2 提供 gpt-6.2-sol，启用为第二条 gpt-6.2-sol 通道 | AGENTS.md, `## Subagent team` |

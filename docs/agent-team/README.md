@@ -23,6 +23,8 @@ The director (L1) maintains this file. Each card under `tasks/` has exactly one 
 | [T6](tasks/T6.md) | 打包：marketplace / README 中英 | direct | director | planned |
 | [T7](tasks/T7.md) | 小规模评测 | designed | director | planned |
 | [T8](tasks/T8.md) | 集成与全量验收 | solo | director | planned |
+| [T9](tasks/T9.md) | 开源短剧/分镜/提示词项目调研 | outsource | liaison-agy-research | planned |
+| [T1.b](tasks/T1.b.md) | 契约扩展：分镜/提示词/视觉资产 | consult | director | planned |
 
 ## Files
 

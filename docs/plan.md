@@ -28,6 +28,10 @@
 | D11 | 外包范围 | 尽量外发，包括 SKILL.md 正文起草；内部负责契约、规格冻结、验收和提交 |
 | D12 | 语言 | SKILL.md 与 references 用中文；frontmatter description 中英双语；README 中英两版 |
 | D13 | 许可 | MIT（仓库已有 LICENSE） |
+| D14 | 完整流水线（2026-11-21 扩展） | 创意 → 网文 → 分集剧本 → 场景脚本（分镜）→ 图片 / 视频生成提示词；任一阶段都可作为终点（只写网文也完整） |
+| D15 | 新增 skill | `fiction-storyboard`（剧本 → 场景脚本 / 分镜）、`fiction-visual-prompts`（分镜 → 图 / 视频提示词，含视觉资产库与连戏锁）、`fiction-workflow`（总入口与阶段路由）；“创意”阶段并入 `fiction-planner` |
+| D16 | 开源融合 | 剧本 / 分镜 / 提示词阶段先调研开源实现（MIT / Apache-2.0），融合其做法；复用的结构与思路在 README “参考与致谢”注明来源与许可，不整段搬运 |
+| D17 | 难题升级 | 设计难题先交 Fable 5.2 评估；只有无法解决的才问作者 |
 
 ## 3. 定位：和市面方案的区别
 
@@ -52,7 +56,10 @@ create-fiction-skills/
 │   ├── fiction-review/        硬规则扫描 + 编辑式 review + 去 AI 味 + 跨章复核，闭环到无明显问题
 │   ├── fiction-continuity/    story bible 读写协议：伏笔/支线/人物/时间线/物品、冲突裁决、伏笔逾期扫描
 │   ├── fiction-craft/         技法库：场景、scene-sequel、信息分层、对话、氛围、叙事渲染、风格指南模板；references/genres/ 题材包
-│   ├── fiction-short-drama/   竖屏短剧：原创或从 bible 改编、分集大纲、前 3 秒钩子、付费卡点、剧本格式与机检
+│   ├── fiction-workflow/      总入口：识别项目处在哪个阶段，路由到对应 skill，管理“只到网文 / 到剧本 / 到短剧”的终点
+│   ├── fiction-short-drama/   网文 → 分集剧本（或原创短剧）：分集大纲、前 3 秒钩子、付费卡点、剧本格式与机检
+│   ├── fiction-storyboard/    剧本 → 场景脚本 / 分镜：镜头表、景别、机位、时长、转场
+│   ├── fiction-visual-prompts/ 分镜 → 图片 / 视频生成提示词：视觉资产库（人物 / 场景 / 道具）、连戏锁、分平台提示词
 │   ├── fiction-story-db/      可选：node:sqlite 索引（零依赖）+ brief / update / sources，服务 300 章以上长篇
 │   └── fiction-publish/       实验：平台定时发布（先番茄），参数化
 ├── shared/lib/                 脚本共用代码的唯一源，由 tools/sync-shared.mjs 复制进各 skill 的 scripts/
@@ -122,11 +129,18 @@ create-fiction-skills/
 | T4.g | `fiction-short-drama`：L2 先出方法设计（含 bible 直通），冻结后外发起草 | designed+outsource | 设计内部 L2；起草 agy · gemini-4-neon-high | gpt-6.2-sol 交叉（OpenCode，备选 Codex） + 内部 L2 验收 |
 | T4.h | `fiction-publish`：参数化移植 | outsource | OpenCode · gpt-6.2-sol · medium（备选 Codex） | 内部 |
 | T5 | 示例书：bible、3 章、3 集短剧、埋雷测试稿（矛盾清单单独存放供评测对照） | outsource | agy · gemini-4-neon-high | 内部内容审查 |
+| T9 | 开源调研：短剧剧本 / 分镜 / 提示词类开源项目拆解与融合建议 | outsource（只读） | agy · gemini-4-neon-high | 内部 L2 |
+| T1.b | 契约扩展：分镜与提示词格式、视觉资产库、config 扩展（基于 T9） | consult + designed | Fable 5.2 设计，L1 验收冻结 | — |
+| T2.c | 脚本扩展：分镜 / 提示词检查（基于 T1.b） | outsource | OpenCode · gpt-6.2-sol · medium（备选 Codex） | 内部 L3 |
+| T4.i | `fiction-storyboard` | outsource | agy · gemini-4-neon-high | gpt-6.2-sol 交叉 + 内部 L2 验收 |
+| T4.j | `fiction-visual-prompts` | outsource | OpenCode · gpt-6.2-sol · high（备选 Codex） | agy neon 交叉 + 内部 L2 验收 |
+| T4.k | `fiction-workflow` 总入口（其他 skill 定稿后） | outsource | OpenCode · gpt-6.2-sol · high（备选 Codex） | agy neon 交叉 + 内部 |
+| T5.b | 示例书扩展：3 集分镜 + 提示词 | outsource | agy · gemini-4-neon-high | 内部 |
 | T6 | 打包：marketplace.json、plugin.json、README 中文版；英文 README 翻译 | direct + outsource | 中文内部；英文 agy · gemini-4-hydrogen | 内部 |
 | T7 | 评测：每个核心 skill 2–3 个用例（触发是否准确 + 对示例书跑一遍），产出交作者抽查 | designed | 内部 L2/L3 | 作者 |
 | T8 | 集成：跨 skill 一致性、交叉引用、全量验收、提交 | solo | L1 | — |
 
-依赖：T1 → T2/T3/T4/T5 并行 → T6 → T7 → T8。T4 各 skill 的 brief 都附：契约文件、来源映射对应行、原文件路径（外部可直接读 open-cultivation）、去书专属化词表。
+依赖：T1 → 第一波（T2.a/T2.b、T4.a–f、T4.f2、T4.h、T5、T9）并行 → T1.b（依赖 T9）→ 第二波（T2.c、T3、T4.g/i/j、T5.b）→ T4.k → T6 → T7 → T8。T4 各 skill 的 brief 都附：契约文件、来源映射对应行、原文件路径（外部可直接读 open-cultivation）、去书专属化词表。
 
 OpenCode 与 Codex：两者都跑 gpt-6.2-sol。按作者 2026-11-21 的指示，gpt-6.2-sol 的活先派 OpenCode，OpenCode 不可用或额度用完再派 Codex。二者是同一模型，互相不担任交叉审查；gpt 起草的产物由 agy 交叉审，agy 起草的产物由 gpt-6.2-sol 交叉审。
 

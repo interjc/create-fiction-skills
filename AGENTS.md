@@ -32,6 +32,7 @@
 |---|---|---|---|---|
 | L1 | Director (main session) | high | the session's own model (never switched) | high |
 | L2 | Designer / task lead / content acceptance | high | auto | medium–high |
+| L2 | Principal expert (hard design calls) | top | Fable 5.2 | default |
 | L3 | In-house reviewer (routine) | mid | auto, ≠ author's model | medium |
 | L3 | Runner, liaison | low | auto (Haiku) | low |
 
@@ -41,6 +42,8 @@
 | agy | agy-staff plugin, fallback `agy-run.mjs` | gemini-4-neon (main); gemini-4-hydrogen for execution and bulk | SKILL.md drafts, genre packs, demo book, translation, read-only cross review | yes | verified 2026-11-21 (models listed) |
 | OpenCode | ACP (`opencode-acp-run.mjs`) | openai/gpt-6.2-sol only | first choice for all gpt-6.2-sol work: scripts, story-db, publish, SKILL.md drafts, read-only cross review of agy drafts (same model as Codex, so the two never cross-review each other) | yes, allow-listed shell | verified 2026-11-21 (OpenCode 2.3.2, model listed) |
 
+- Director role: orchestration, supervision and acceptance until the whole program is done; delegate everything else, external first (user, 2026-11-21)
+- Hard design problems: consult Fable 5.2 (in-house principal expert) first; ask the author only when that cannot settle it (user, 2026-11-21)
 - Never outsourced: `docs/spec/` (contracts), `docs/plan.md`, final acceptance of every SKILL.md
 - Shared files (director only): `AGENTS.md`, `docs/plan.md`, `docs/spec/*`, `.claude-plugin/*`, `docs/agent-team/README.md`
 - Acceptance commands: `node tools/validate.mjs`; `node --test skills/*/scripts/tests/`; skill-creator `quick_validate.py` per skill
