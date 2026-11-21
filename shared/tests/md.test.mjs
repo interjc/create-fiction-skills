@@ -1,7 +1,7 @@
 import assert from 'node:assert/strict';
 import { test } from 'node:test';
 
-const { HOOK_ORDER, maskComments, parseChapterList, parseChapterRef, parseFields, parseMarkers,
+const { HOOK_ORDER, linesOf, maskComments, parseChapterList, parseChapterRef, parseFields, parseMarkers,
   parseTables, sections, splitList } = await import(new URL('../lib/md.mjs', import.meta.url));
 
 test('table escapes, reordering, multiple tables, row line numbers and malformed separator', () => {
@@ -42,4 +42,14 @@ test('fenced examples do not make tables or headings; extra cells do not change 
   const text = '```md\n## 示例\n| 假表 |\n|---|\n```\n## 真表\n| 键 | 值 |\n|---|---|\n| 门 | 木 | 忽略 |';
   assert.deepEqual(sections(text, 2).map(section => section.name), ['真表']);
   assert.deepEqual(parseTables(text).map(table => table.rows[0].fields), [{ 键: '门', 值: '木' }]);
+});
+
+test('Markdown strips exactly one leading BOM, preserving in-body BOMs and marker columns', () => {
+  assert.deepEqual(linesOf('\uFEFF\uFEFF甲\r\n\uFEFF乙'), ['\uFEFF甲', '\uFEFF乙']);
+  assert.equal(maskComments('\uFEFF\uFEFF<!-- 注 -->乙'), '\uFEFF          乙');
+  assert.deepEqual(sections('\uFEFF### 人物\n- 身份：修表匠', 3),
+    [{ name: '人物', line: 1, lines: ['- 身份：修表匠'] }]);
+  assert.deepEqual(sections('\uFEFF\uFEFF### 人物', 3), []);
+  assert.equal(parseTables('\uFEFF| 左 |\n|---|\n| 甲 |')[0].rows[0].fields.左, '甲');
+  assert.deepEqual(parseMarkers('\uFEFF<!-- hook: A -->'), [{ kind: 'hook', value: 'A', line: 1, column: 1 }]);
 });

@@ -1,16 +1,20 @@
 /** 钩子级别从强到弱。 */
 export const HOOK_ORDER = Object.freeze(['S', 'A', 'B', 'C']);
 
-/** 通用换行规范。 */
-export function linesOf(text) {
-  return text.split(/\r\n?|\n/);
-}
-
+/** 只去掉文档开头的一个 UTF-8 BOM。 */
+export const stripBom = text => text.replace(/^\uFEFF/u, '');
 const commentPattern = /<!--[\s\S]*?-->/g;
+const maskCommentSpans = text => text.replace(commentPattern, comment => comment.replace(/[^\r\n]/gu, ' '));
+
+/** 通用换行规范；需要可见行时在同一次预处理中屏蔽注释。 */
+export function linesOf(text, { mask = false } = {}) {
+  const source = stripBom(text);
+  return (mask ? maskCommentSpans(source) : source).split(/\r\n?|\n/);
+}
 
 /** 注释区按码点换成空格，保留行尾及每行码点列。 */
 export function maskComments(text) {
-  return text.replace(commentPattern, comment => comment.replace(/[^\r\n]/gu, ' '));
+  return maskCommentSpans(stripBom(text));
 }
 
 function opensFence(line) {
@@ -26,7 +30,7 @@ function closesFence(line, marker) {
 /** 结构查找用的可见行：代码围栏中的例子不是标题、字段或表格。 */
 export function structuralLines(text) {
   let fence = null;
-  return linesOf(maskComments(text)).map(line => {
+  return linesOf(text, { mask: true }).map(line => {
     if (fence) {
       if (closesFence(line, fence)) fence = null;
       return '';
@@ -206,7 +210,7 @@ export function sections(text, level) {
 /** 识别单独成行的注释标记，不把嵌入多行注释的伪标记当成标记。 */
 export function parseMarkers(text) {
   const result = [];
-  const normalized = text.replace(/\r\n?/g, '\n');
+  const normalized = stripBom(text).replace(/\r\n?/g, '\n');
   let line = 1;
   let cursor = 0;
   for (const match of normalized.matchAll(commentPattern)) {

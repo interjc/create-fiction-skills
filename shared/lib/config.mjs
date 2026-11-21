@@ -1,6 +1,6 @@
 import { readFileSync } from 'node:fs';
 import path from 'node:path';
-import { HOOK_ORDER, parseChapterRef } from './md.mjs';
+import { HOOK_ORDER, parseChapterRef, stripBom } from './md.mjs';
 
 /** SB §8 的默认配置。 */
 export const DEFAULT_CONFIG = {
@@ -109,7 +109,7 @@ const schema = {
       && x.every((y, i) => i === 0 || (x[i - 1].max_seconds !== null
         && x[i - 1].max_seconds <= (y.max_seconds ?? Infinity))),
     max_scenes: nonnegative, hook: { required: bool },
-    paywall: { first_at: pair(positive), free_ratio: pair(x => number(x) && x >= 0 && x <= 1), hook_min: hook },
+    paywall: { first_at: nullable(pair(positive)), free_ratio: pair(x => number(x) && x >= 0 && x <= 1), hook_min: hook },
     dialogue_run_max: nullable(nonnegative), voiceover: { os_max: nullable(nonnegative), vo_max: nullable(nonnegative) },
   },
   visual: { aspect_ratio: x => string(x) && /^\d+:\d+$/.test(x) },
@@ -161,7 +161,7 @@ export function loadConfig(root) {
   }
   let value;
   try {
-    value = JSON.parse(raw.replace(/^\uFEFF/, ''));
+    value = JSON.parse(stripBom(raw));
   } catch {
     return { config: defaults, found: true, errors: ['.fiction/config.json：不是合法 JSON'] };
   }

@@ -46,6 +46,38 @@ test('skill-md requires a file for each immediate directory and --only filters f
   only(root, 'compatibility');
 });
 
+test('Git-ignored SKILL.md still runs the on-disk skill and Markdown checks', t => {
+  const root = fixture(t);
+  git(root, 'init', '-q');
+  put(root, '.gitignore', `${skill}\n`);
+  git(root, 'check-ignore', skill);
+  put(root, skill, skillText('Only English words.', `compatibility: '${'甲'.repeat(501)}'\n`)
+    .replace('fiction-notes', 'fiction-other') + '行\n'.repeat(500) + 'docs/spec\n');
+  const checks = 'skill-md,frontmatter,description,compatibility,skill-lines,spec-ref';
+  const result = only(root, checks, 1);
+  assert.deepEqual(result.findings.map(({ check, file }) => [check, file]),
+    ['skill-lines', 'frontmatter', 'description', 'compatibility', 'spec-ref'].map(check => [check, skill]));
+  assert.ok(result.skills.find(item => item.name === 'fiction-notes').lines > 500);
+  put(root, skill, skillText());
+  only(root, checks);
+});
+
+test('validate accepts one UTF-8 BOM in Markdown and JSON without hiding first-line links', t => {
+  const root = fixture(t);
+  put(root, skill, `\uFEFF${skillText()}`);
+  put(root, market, `\uFEFF${JSON.stringify({ source: `./${notes}` })}`);
+  put(root, 'tools/package.json', '\uFEFF{"dependencies":{}}');
+  const doc = 'docs/links.md';
+  put(root, doc, '\uFEFF[指引]: missing.md\n');
+  const checks = 'frontmatter,description,marketplace,imports,links';
+  const result = only(root, checks, 1);
+  assert.deepEqual(result.findings.map(({ check, file, line }) => [check, file, line]), [['links', doc, 1]]);
+  put(root, 'docs/missing.md', '正文\n');
+  only(root, checks);
+  put(root, 'tools/package.json', '\uFEFF\uFEFF{}');
+  assert.deepEqual(only(root, 'imports', 1).findings.map(f => f.file), ['tools/package.json']);
+});
+
 test('frontmatter accepts its scalar subset and rejects malformed or unknown fields and names', t => {
   const root = fixture(t);
   only(root, 'frontmatter');

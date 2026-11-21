@@ -1,7 +1,7 @@
 import path from 'node:path';
 import { finding, integer, sortFindings } from './cli.mjs';
 import { parseAction, singleChapter, tableRows } from './bible.mjs';
-import { cell, HOOK_ORDER, linesOf, maskComments, parseChapterList, parseFields, parseMarkers, splitList } from './md.mjs';
+import { cell, HOOK_ORDER, linesOf, parseChapterList, parseFields, parseMarkers, splitList } from './md.mjs';
 
 function report(file) {
   const items = [];
@@ -31,7 +31,7 @@ function fieldsOf(lines, output, keys) {
 /** 解析短剧总设定；允许创作中的总集数、时长、免费集数尚未填写。 */
 export function parseSeries(text, file = 'series.md') {
   const output = report(file);
-  const lines = linesOf(maskComments(text));
+  const lines = linesOf(text, { mask: true });
   const title = /^# (\S.*)$/.exec(lines[0].trimEnd());
   if (!title) output.error(1, '短剧总设定首行须为「# 剧名」');
   const nextSection = lines.findIndex((line, i) => i > 0 && /^#{1,6}\s/.test(line));
@@ -147,11 +147,11 @@ function lineDetails(line, lineNo, scene, output) {
 /** 解析单集，保留结构、计数、标记及可按集过滤的格式问题。 */
 export function parseEpisode(text, file = 'ep001.md', { hookRequired = true } = {}) {
   const output = report(file);
-  const visible = linesOf(maskComments(text));
+  const visible = linesOf(text, { mask: true });
   const original = linesOf(text);
-  const name = path.posix.basename(file);
+  const name = path.win32.basename(file);
   const episode = positive(/^ep(\d+)\.md$/.exec(name)?.[1]);
-  const title = /^# 第(\d+)集：(\S.*)$/.exec(visible[0]);
+  const title = /^# 第(\d+)集：(\S.*)$/.exec(visible[0].trimEnd());
   if (!title || episode === null || name !== `ep${String(episode).padStart(3, '0')}.md` || Number(title[1]) !== episode) {
     output.rule('ep-title', 1, '分集首行标题格式非法或集号与文件名不符', { excerpt: visible[0], column: 1 });
   }
@@ -176,7 +176,7 @@ export function parseEpisode(text, file = 'ep001.md', { hookRequired = true } = 
     const line = visible[index];
     const number = index + 1;
     if (/^ {0,3}##(?:[ \t]|$)/.test(line)) {
-      const header = sceneHeader.exec(line);
+      const header = sceneHeader.exec(line.trimEnd());
       const sceneNumber = header && Number.isSafeInteger(Number(header[1])) ? Number(header[1]) : null;
       current = { number: sceneNumber, line: number, chars: 0, people: [], actions: 0, content: [] };
       if (!header) output.rule('scene-header', number, '场景头格式非法', { excerpt: line, column: 1 });

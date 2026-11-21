@@ -134,3 +134,29 @@ test('lint findings distinguish the observation from the suggested edit', () => 
   assert.equal(tone.hint, '换成具体动作或物件');
   assert.ok(!findings.some(item => item.hint && item.message.includes(item.hint)));
 });
+
+test('lint-ignore skips intervening comment-only lines and can stack on one visible line', () => {
+  const text = '<!-- lint-ignore: AT01 -->\n<!-- note:\n批注 -->\n\n<!-- lint-ignore: SUM01 -->\n'
+    + '这就是一丝不易察觉的。 <!-- 行内批注 -->\n这就是一丝不易察觉的。';
+  const { findings, suppressed } = lintFile(text);
+  assert.equal(suppressed, 2);
+  assert.deepEqual(findings.map(({ line, id }) => [line, id]), [[7, 'SUM01'], [7, 'AT01']]);
+});
+
+test('lint accepts BOM chapter titles and frozen JSON but still hashes the original draft bytes', t => {
+  assert.deepEqual(lintFile(`\uFEFF${good}`, chapter).findings, []);
+  const book = mkdtempSync(path.join(tmpdir(), 'fiction-lint-bom-'));
+  t.after(() => rmSync(book, { recursive: true, force: true }));
+  cpSync(root, book, { recursive: true });
+  assert.equal(runAt(book, '--freeze').status, 0);
+  const manifest = path.join(book, '.fiction/frozen.json');
+  writeFileSync(manifest, `\uFEFF${readFileSync(manifest, 'utf8')}`);
+  const check = () => runAt(book, '1', '--json');
+  assert.equal(check().status, 0);
+  const draft = path.join(book, 'chapters/1/2/v1.md');
+  writeFileSync(draft, `\uFEFF${readFileSync(draft, 'utf8')}`);
+  const changed = check();
+  assert.equal(changed.status, 1);
+  assert.deepEqual(JSON.parse(changed.stdout).findings.map(({ rule, file }) => [rule, file]),
+    [['frozen-modified', 'chapters/1/2/v1.md']]);
+});

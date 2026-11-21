@@ -26,6 +26,7 @@ const read = (root, file) => readFileSync(path.join(root, file));
 test('sync creates exact wrappers and byte-for-byte lib, test and recursive fixture copies', t => {
   const root = fixture(t);
   const input = Buffer.from("// 注释\r\nexport const paper = '邮戳';\r\n");
+  put(root, manifest, `\uFEFF${get(root, manifest)}`);
   put(root, 'shared/lib/paper.mjs', input);
   put(root, 'shared/lib/ignore.txt', 'late addition');
   put(root, 'shared/lib/sub/ignore.mjs', 'export const ignored = 1;\n');
@@ -100,34 +101,34 @@ test('sync plans updates and stale deletions without writing, then repairs only 
   assert.deepEqual(sync(root, ['--check'], 1).map(x => x.skill), ['fiction-margin']);
 });
 
-test('sync refuses unmarked wrapper or test collisions before any write', t => {
+test('sync refuses unmarked wrapper collisions before any write', t => {
   const root = fixture(t);
   const personal = 'export const draft = "保留";\n';
-  for (const file of [wrapper, testCopy]) {
-    put(root, file, personal);
-    const changes = sync(root, ['--check'], 1);
-    assert.ok(changes.some(change => change.action === 'drift' && change.file === file));
-    const result = run(root, 'sync-shared', []);
-    assert.equal(result.status, 2);
-    assert.equal(result.stdout, '');
-    assert.match(result.stderr, /拒绝覆盖/);
-    assert.deepEqual(sync(root, [], 2), []);
-    assert.equal(get(root, file), personal);
-    assert.equal(exists(root, other), false);
-    assert.equal(exists(root, `${scripts}/lib`), false);
-    unlinkSync(path.join(root, file));
-  }
+  put(root, wrapper, personal);
+  const changes = sync(root, ['--check'], 1);
+  assert.ok(changes.some(change => change.action === 'drift' && change.file === wrapper));
+  const result = run(root, 'sync-shared', []);
+  assert.equal(result.status, 2);
+  assert.equal(result.stdout, '');
+  assert.match(result.stderr, /拒绝覆盖/);
+  assert.deepEqual(sync(root, [], 2), []);
+  assert.equal(get(root, wrapper), personal);
+  assert.equal(exists(root, other), false);
+  assert.equal(exists(root, `${scripts}/lib`), false);
+  unlinkSync(path.join(root, wrapper));
   sync(root, [], 0);
 });
 
-test('sync accepts an identical unmarked test but never removes files in mixed-ownership directories', t => {
+test('sync overwrites an updated unmarked test copy and keeps other paths in mixed-ownership directories', t => {
   const root = fixture(t);
-  put(root, testSource, get(root, testSource).split('\n').slice(1).join('\n'));
-  put(root, testCopy, get(root, testSource));
   sync(root, [], 0);
-  put(root, testSource, `${get(root, testSource)}// 本次修订\n`);
-  sync(root, ['--check'], 1);
-  sync(root, [], 2);
+  const old = read(root, testCopy);
+  assert.doesNotMatch(old.toString('utf8'), /GENERATED/);
+  put(root, testSource, `\uFEFF${get(root, testSource).replaceAll('\n', '\r\n')}// 本次修订\r\n`);
+  assert.deepEqual(sync(root, ['--check'], 1), [{ skill: 'fiction-notes', action: 'drift', file: testCopy }]);
+  assert.deepEqual(read(root, testCopy), old);
+  assert.deepEqual(sync(root, [], 0), [{ skill: 'fiction-notes', action: 'update', file: testCopy }]);
+  assert.deepEqual(read(root, testCopy), read(root, testSource));
   unlinkSync(path.join(root, testSource));
   put(root, manifest, JSON.stringify({ skills: { 'fiction-notes': [] } }));
   const changes = sync(root, [], 0);

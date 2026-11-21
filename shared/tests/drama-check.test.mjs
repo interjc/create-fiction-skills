@@ -73,6 +73,46 @@ test('series rules still use all episodes when --ep limits episode rules', t => 
   assert.equal(all.findings.some(item => item.rule === 'map-unresolved'), false);
 });
 
+test('D-07 null paywall range permits no marker past the usual deadline', t => {
+  const book = mkdtempSync(path.join(tmpdir(), 'fiction-drama-free-'));
+  t.after(() => rmSync(book, { recursive: true, force: true }));
+  cpSync(root, book, { recursive: true });
+  const episode = n => path.join(book, `drama/stopped-clock/episodes/ep00${n}.md`);
+  writeFileSync(episode(1), readFileSync(episode(1), 'utf8').replace('<!-- paywall -->', ''));
+  writeFileSync(episode(2), '# 第2集：灯影\n\n## 场景1：闸房·内·夜\n△ 他点亮那盏河灯。\n<!-- hook: A -->\n');
+  assert.ok(checkSeries(book, 'stopped-clock').findings.some(f => f.rule === 'paywall-missing'));
+
+  const { config } = loadConfig(book);
+  config.drama.paywall.first_at = null;
+  writeFileSync(path.join(book, '.fiction/config.json'), JSON.stringify(config));
+  const proc = spawnSync(process.execPath, [fileURLToPath(lib), 'stopped-clock', '--root', book, '--json'], { encoding: 'utf8' });
+  assert.equal(proc.status, 0, proc.stderr);
+  const report = JSON.parse(proc.stdout);
+  assert.deepEqual(report.findings, []);
+  assert.deepEqual(report.paywall, { first: null, all: [], total: 2, ratio: null });
+});
+
+test('D-07 unexpected markers suggest position, skip ratio, and retain hook and placement blocks', t => {
+  const book = mkdtempSync(path.join(tmpdir(), 'fiction-drama-free-'));
+  t.after(() => rmSync(book, { recursive: true, force: true }));
+  cpSync(root, book, { recursive: true });
+  const { config } = loadConfig(book);
+  config.drama.paywall.free_ratio = [0, 0.1];
+  assert.ok(checkSeries(book, 'stopped-clock', { config }).findings.some(f => f.rule === 'paywall-ratio'));
+  config.drama.paywall.first_at = null;
+  const check = failOn => checkSeries(book, 'stopped-clock', { config, failOn });
+  const report = check();
+  assert.equal(report.ok, true);
+  assert.equal(check('suggest').ok, false);
+  assert.deepEqual(report.paywall, { first: 1, all: [1], total: 2, ratio: 0.5 });
+  assert.deepEqual(report.findings.map(({ rule, level, line }) => [rule, level, line]), [['paywall-position', 'suggest', 15]]);
+  const file = path.join(book, report.episodes[0].file);
+  writeFileSync(file, readFileSync(file, 'utf8').replace('<!-- hook: A -->\n<!-- paywall -->', '<!-- paywall -->\n<!-- hook: C -->'));
+  assert.deepEqual(check().findings.map(({ rule, level }) => [rule, level]), [
+    ['paywall-hook', 'block'], ['paywall-position', 'suggest'], ['paywall-placement', 'block'],
+  ]);
+});
+
 test('new §7 rules: action-only UA patterns, run resets, and OS/VO boundaries', t => {
   const book = mkdtempSync(path.join(tmpdir(), 'fiction-drama-'));
   t.after(() => rmSync(book, { recursive: true, force: true }));

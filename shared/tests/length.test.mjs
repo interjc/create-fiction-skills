@@ -19,6 +19,12 @@ test('§3.3 vectors and code points, headings, front matter, fences and images',
   assert.equal(stripMarkdownForLength('---\r\nx: y\r\n---\r## 标题\r\n\n~~~\n𠮷！\n~~~\n![图](a)\n> 他'), '𠮷！他');
 });
 
+test('length strips BOM before matching front matter and chapter title', () => {
+  const chapter = '# 第1章：标题\r\n\r\n他推门。\r\n';
+  assert.equal(countChapterCharacters(`\uFEFF${chapter}`), 4);
+  assert.equal(stripMarkdownForLength(`\uFEFF---\r\ntitle: 红灯\r\n---\r\n${chapter}`), '他推门。');
+});
+
 test('length JSON key sets, frozen states, ranges, exit codes and help', () => {
   const all = run('--all', '--json');
   assert.equal(all.status, 0, all.stderr);

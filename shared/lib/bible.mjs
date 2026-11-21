@@ -424,6 +424,7 @@ export function parseVolumePlan(text, file = 'bible/volumes/1.md') {
   const result = collector(file);
   const lines = linesOf(text);
   const blocks = sections(text, 2).filter(block => block.name === '章节规划');
+  if (blocks.length === 0) result.error(1, '缺少「## 章节规划」节');
   const volumeMeta = volumeRange(lines.slice(0, (blocks[0]?.line ?? lines.length + 1) - 1), result);
   if (volumeMeta) result.add({ chapter: null, range: volumeMeta.range }, volumeMeta.line);
   const chapters = new Set();
@@ -450,7 +451,7 @@ export function parseVolumePlan(text, file = 'bible/volumes/1.md') {
 export function parseVolInfo(text, file = 'chapters/1/vol-info.md') {
   const result = collector(file);
   const lines = linesOf(text);
-  const title = /^# 第([1-9]\d*)卷：(\S.*)$/.exec(lines[0]);
+  const title = /^# 第([1-9]\d*)卷：(\S.*)$/.exec(linesOf(text, { mask: true })[0].trimEnd());
   if (!title) result.error(1, '卷摘要标题格式非法');
   const meta = volumeRange(lines, result);
   if (meta && title) {
@@ -481,7 +482,7 @@ function parseOutlineEntries(block, result, convert) {
 /** 解析章节提纲；只有实际提供的字段才会覆盖卷规划。 */
 export function parseOutline(text, file = 'outline.md') {
   const result = collector(file);
-  const title = /^# 第(0|[1-9]\d*)章 outline$/.exec(linesOf(text)[0]);
+  const title = /^# 第(0|[1-9]\d*)章 outline$/.exec(linesOf(text, { mask: true })[0].trimEnd());
   const chapter = title ? attempt(result, 1, () => singleChapter(title[1], '章号')) : undefined;
   if (!title) result.error(1, '提纲首行须为「# 第N章 outline」');
   const blocks = new Map();

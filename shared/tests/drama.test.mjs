@@ -42,3 +42,19 @@ test('episode parser skips annotations, supports Unicode and enforces marker pos
   const invalid = parseEpisode(`${text}\n人物：葛婶`, 'ep004.md');
   assert.deepEqual(invalid.errors.map(error => error.rule), ['hook', 'paywall-placement', 'bad-line']);
 });
+
+test('episode headers ignore trailing whitespace and inline HTML comments', () => {
+  const source = '# 第1集：回声\n\n## 场景1：铺子·内·夜\n△ 推门。\n<!-- hook: A -->\n';
+  const annotated = source.replace('回声', '回声 <!-- 标题批注 --> \t').replace('内·夜', '内·夜 <!-- 场景批注 --> ');
+  for (const text of [annotated, source.replace('回声', '回声 \t').replace('内·夜', '内·夜 \t')]) {
+    assert.deepEqual(parseEpisode(text), parseEpisode(source));
+  }
+  assert.equal(parseEpisode(source.replace('## 场景', ' ## 场景')).errors[0].rule, 'scene-header');
+});
+
+test('episode parser accepts a backslash file path without rewriting its reported location', () => {
+  const file = 'drama\\short\\episodes\\ep004.md';
+  const result = parseEpisode('# 第4集：回声\n## 场景1：铺子·内·夜\n△ 推门。\n<!-- hook: A -->', file);
+  assert.deepEqual(result.errors, []);
+  assert.deepEqual([result.items[0].episode, result.items[0].file], [4, file]);
+});

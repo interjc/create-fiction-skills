@@ -3,7 +3,7 @@ import path from 'node:path';
 import { directMain, EXIT, failLevel, finding, lexical, runCli } from './cli.mjs';
 import { DIALECT_ID, requireConfig } from './config.mjs';
 import { selectedEpisodeRange, withoutWhitespace } from './drama.mjs';
-import { linesOf, maskComments } from './md.mjs';
+import { linesOf } from './md.mjs';
 import { compilePattern, DEFAULT_PATTERNS, literalPattern } from './patterns.mjs';
 import { assetKey, episodeFileNumber, parsePromptFile, promptFileKind, PROMPT_STATUS, REF_ID, resolveAsset, usableFrom } from './visual.mjs';
 import { checkExit, checkSummary, filesIn, findingLines, loadStoryboard, numberInRange, readParsed, seriesBase, snapshot } from './visual-project.mjs';
@@ -73,7 +73,7 @@ function referenceCandidates(ref, block, indexes) {
 
 function matchText(fence, patterns, add, rule, message, defaultHint) {
   if (!fence?.end) return;
-  const lines = linesOf(rule === 'pr-internal-ref' ? fence.raw : maskComments(fence.raw));
+  const lines = linesOf(fence.raw, { mask: rule !== 'pr-internal-ref' });
   for (const [offset, line] of lines.entries()) for (const { id, regex, hint } of patterns) {
     for (const match of line.matchAll(regex)) add(rule, message, { id, line: fence.line + offset + 1,
       column: Array.from(line.slice(0, match.index)).length + 1, excerpt: match[0], hint: hint ?? defaultHint });

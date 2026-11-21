@@ -1,14 +1,14 @@
 import { readFileSync } from 'node:fs';
 import path from 'node:path';
 import { stripLocalLinks } from './markdown.mjs';
-import { countLines, isObject, splitLines, stat } from './repo.mjs';
+import { countLines, isObject, splitLines, stat, stripBom } from './repo.mjs';
 
 const manifest = 'shared/formats.json';
 const source = 'docs/spec/story-bible.md';
 const skillName = /^fiction-[a-z0-9]+(?:-[a-z0-9]+)*$/;
 const topicName = /^[a-z0-9][a-z0-9-]*$/;
 const sectionNumber = /^(?:0|[1-9]\d*)(?:\.(?:0|[1-9]\d*))?$/;
-const decoder = new TextDecoder('utf-8', { fatal: true });
+const decoder = new TextDecoder('utf-8', { fatal: true, ignoreBOM: true });
 const sectionList = sections => sections.map(number => `§${number}`).join('、');
 
 function read(root, file, optional = false) {
@@ -34,7 +34,7 @@ export function loadFormats(root) {
   const fail = message => { throw new Error(`${manifest}：${message}`); };
   let config;
   try {
-    config = JSON.parse(text);
+    config = JSON.parse(stripBom(text));
   } catch (error) {
     fail(error.message);
   }

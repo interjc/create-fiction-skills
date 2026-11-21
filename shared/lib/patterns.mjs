@@ -83,7 +83,7 @@ export function loadPatterns(root, config) {
   const disabled = new Set();
   const report = (line, message, excerpt) => errors.push(finding('patterns', file, message, { line, excerpt }));
   let section = null;
-  for (const [i, rawLine] of linesOf((text ?? '').replace(/^\uFEFF/, '')).entries()) {
+  for (const [i, rawLine] of linesOf(text ?? '').entries()) {
     const line = rawLine.trim();
     if (!line || line.startsWith('#')) continue;
     if (line === '[disable]') {

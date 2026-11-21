@@ -33,7 +33,7 @@ export function loadDebook(root) {
   const bytes = readFileSync(path.join(root, termsFile));
   let text;
   try {
-    text = new TextDecoder('utf-8', { fatal: true }).decode(bytes);
+    text = new TextDecoder('utf-8', { fatal: true, ignoreBOM: true }).decode(bytes);
   } catch {
     throw new Error(`${termsFile}：词表必须是 UTF-8`);
   }

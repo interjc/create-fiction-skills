@@ -4,7 +4,7 @@ import {
 import path from 'node:path';
 import { formatTrees, loadFormats } from './formats.mjs';
 import { namedExport } from './javascript.mjs';
-import { compare, isObject, splitLines, stat } from './repo.mjs';
+import { compare, isObject, splitLines, stat, stripBom } from './repo.mjs';
 
 const skillName = /^fiction-[a-z0-9]+(?:-[a-z0-9]+)*$/;
 const entryName = /^[a-z0-9]+(?:-[a-z0-9]+)*$/;
@@ -37,7 +37,7 @@ function manifest(root) {
   const text = read(root, file).toString('utf8');
   let parsed;
   try {
-    parsed = JSON.parse(text);
+    parsed = JSON.parse(stripBom(text));
   } catch (error) {
     throw new Error(`${file}：${error.message}`);
   }
@@ -217,8 +217,8 @@ export function syncShared(root, { check = false, skill } = {}) {
         const test = `${entry}.test.mjs`;
         const source = `shared/tests/${test}`;
         const bytes = tests && read(root, source, true);
-        // The exact marker is opt-in for an otherwise byte-for-byte test copy.
-        if (bytes) copy(`${testDir}/${test}`, bytes, marker(source));
+        // Test copies are owned at this path, without changing their bytes.
+        if (bytes) copy(`${testDir}/${test}`, bytes);
       }
       mirror(`${testDir}/fixtures-shared`, entries.length ? fixtures : undefined);
     }

@@ -7,22 +7,27 @@ const book = new URL('./fixtures-shared/watch-shop/', import.meta.url);
 const read = file => readFileSync(new URL(file, book), 'utf8');
 
 const formats = [
-  ['parseSources', 'bible/sources.md', 'sources.md', 4],
-  ['parseForeshadows', 'bible/foreshadows.md', 'foreshadows.md', 5],
-  ['parseSubplots', 'bible/subplots.md', 'subplots.md', 2],
-  ['parseCharacters', 'bible/characters.md', 'characters.md', 3],
-  ['parseAppearances', 'bible/appearances.md', 'appearances.md', 3],
-  ['parseDynamics', 'bible/character-dynamics.md', 'character-dynamics.md', 3],
-  ['parseTimeline', 'bible/timeline.md', 'timeline.md', 6],
-  ['parseInventory', 'bible/inventory.md', 'inventory.md', 2],
-  ['parseStorylines', 'bible/storylines.md', 'storylines.md', 2],
-  ['parseVolumePlan', 'bible/volumes/1.md', 'volume-plan.md', 4],
-  ['parseVolInfo', 'chapters/1/vol-info.md', 'vol-info.md', 1],
-  ['parseOutline', 'chapters/1/3/outline.md', 'outline.md', 1],
-  ['parseSettingTags', 'bible/canon.md', 'settings.md', 1],
+  ['parseSources', 'bible/sources.md', 'sources.md', 4, [[3, '主写入口不是有效的相对路径']]],
+  ['parseForeshadows', 'bible/foreshadows.md', 'foreshadows.md', 5, [
+    [3, '未来出现方式为空'], [4, '非已回收伏笔不得填写实际回收章'], [5, '计划回收不得早于埋设章'],
+    [6, '已放弃伏笔须填写备注'], [7, '伏笔状态须恰好命中一种取值'],
+  ]],
+  ['parseSubplots', 'bible/subplots.md', 'subplots.md', 2, [[9, '实际章不符合生命周期顺序']]],
+  ['parseCharacters', 'bible/characters.md', 'characters.md', 3, [
+    [1, '身份不能为空'], [3, '人物级别须恰好命中一种取值'], [7, '常驻须为是或否'],
+  ]],
+  ['parseAppearances', 'bible/appearances.md', 'appearances.md', 3, [[3, '出场备注格式非法']]],
+  ['parseDynamics', 'bible/character-dynamics.md', 'character-dynamics.md', 3, [[3, '章须为单个章号']]],
+  ['parseTimeline', 'bible/timeline.md', 'timeline.md', 6, [[3, '锚点类型须恰好命中一种取值']]],
+  ['parseInventory', 'bible/inventory.md', 'inventory.md', 2, [[3, 'ID非法']]],
+  ['parseStorylines', 'bible/storylines.md', 'storylines.md', 2, [[3, '故事线类型非法']]],
+  ['parseVolumePlan', 'bible/volumes/1.md', 'volume-plan.md', 4, [[2, '章号或范围非法'], [8, '钩子级别非法']]],
+  ['parseVolInfo', 'chapters/1/vol-info.md', 'vol-info.md', 1, [[1, '卷摘要标题格式非法'], [2, '章节范围须为章号或范围']]],
+  ['parseOutline', 'chapters/1/3/outline.md', 'outline.md', 1, [[13, '伏笔动作非法'], [15, '定稿节须指定一个稿次']]],
+  ['parseSettingTags', 'bible/canon.md', 'settings.md', 1, [[2, '章号或范围非法']]],
 ];
 
-for (const [name, valid, invalid, count] of formats) {
+for (const [name, valid, invalid, count, expected] of formats) {
   test(`${name}: valid and invalid original samples`, () => {
     const parsed = bible[name](read(valid), valid);
     assert.deepEqual(parsed.errors, []);
@@ -30,10 +35,37 @@ for (const [name, valid, invalid, count] of formats) {
     assert.ok(parsed.items.every(item => item.file === valid && Number.isInteger(item.line)));
     const file = `invalid/${invalid}`;
     const broken = bible[name](read(file), file);
-    assert.ok(broken.errors.length > 0);
-    assert.ok(broken.errors.every(error => error.file === file && Number.isInteger(error.line)));
+    assert.equal(broken.errors.length, expected.length);
+    for (const [index, [line, reason]] of expected.entries()) {
+      const error = broken.errors[index];
+      assert.equal(error.file, file);
+      assert.equal(error.line, line);
+      assert.ok(error.message.includes(reason), error.message);
+    }
   });
 }
+
+test('volume plan requires the exact chapter-planning heading', () => {
+  const source = read('bible/volumes/1.md');
+  for (const replacement of ['', '## 章节计划']) {
+    const { items, errors } = bible.parseVolumePlan(source.replace('## 章节规划', replacement));
+    assert.deepEqual(errors.map(({ line, message }) => [line, message]), [[1, '缺少「## 章节规划」节']]);
+    assert.deepEqual(items.map(item => item.chapter), [null]);
+  }
+});
+
+test('vol-info and outline titles ignore trailing whitespace and inline HTML comments', () => {
+  for (const [parse, file] of [
+    [bible.parseVolInfo, 'chapters/1/vol-info.md'],
+    [bible.parseOutline, 'chapters/1/3/outline.md'],
+  ]) {
+    const source = read(file);
+    for (const suffix of [' \t', ' <!-- 批注 --> \t']) {
+      const annotated = source.replace(/^[^\r\n]+/, `$&${suffix}`);
+      assert.deepEqual(parse(annotated, file), parse(source, file));
+    }
+  }
+});
 
 test('normalized references, statuses, notes and sections', () => {
   const fs = bible.parseForeshadows(read('bible/foreshadows.md')).items;

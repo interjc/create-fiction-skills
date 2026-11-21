@@ -26,7 +26,8 @@ export function findRepo(start, searchParents) {
 export const compare = (a, b) => a < b ? -1 : a > b ? 1 : 0;
 export const codePoints = text => [...text].length;
 export const escapeRegExp = text => text.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
-export const splitLines = text => text.split(/\r\n|\n|\r/);
+export const stripBom = text => text.replace(/^\uFEFF/u, '');
+export const splitLines = text => stripBom(text).split(/\r\n|\n|\r/);
 export const countLines = text => (text.match(/\n/g)?.length ?? 0) + Number(text.length > 0 && !text.endsWith('\n'));
 export const isObject = value => value !== null && typeof value === 'object' && !Array.isArray(value);
 

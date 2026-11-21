@@ -75,9 +75,15 @@ export async function runCli(tool, argv, options, usage, run) {
   }
 }
 
+/** Windows 上盘符和路径的大小写不影响入口识别。 */
+export function sameEntryPath(invoked, moduleFile, platform = process.platform) {
+  if (platform === 'win32') return path.win32.resolve(invoked).toLowerCase() === path.win32.resolve(moduleFile).toLowerCase();
+  return path.posix.resolve(invoked) === moduleFile;
+}
+
 /** 只在直接执行模块时调用入口；被包装脚本导入时不执行。 */
 export async function directMain(url, main) {
-  if (process.argv[1] && path.resolve(process.argv[1]) === fileURLToPath(url)) {
+  if (process.argv[1] && sameEntryPath(process.argv[1], fileURLToPath(url))) {
     process.exitCode = await main(process.argv.slice(2));
   }
 }

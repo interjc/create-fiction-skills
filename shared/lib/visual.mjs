@@ -3,7 +3,7 @@ import { FORESHADOW_ID, tableRows } from './bible.mjs';
 import { finding, sortFindings } from './cli.mjs';
 import { DIALECT_ID } from './config.mjs';
 import { episodeStatus, parseDialogue } from './drama.mjs';
-import { cell, linesOf, maskComments, parseFences, parseFields, splitHeading, splitList, structuralLines } from './md.mjs';
+import { cell, linesOf, parseFences, parseFields, splitHeading, splitList, structuralLines } from './md.mjs';
 
 export const SHOT_SIZES = Object.freeze({ LS: '远景', FS: '全景', MS: '中景', MCU: '近景', CU: '特写', ECU: '大特写' });
 export const CAMERA_MOVES = Object.freeze({ static: '固定', push: '推', pull: '拉', pan: '摇',
@@ -231,7 +231,7 @@ function enumValue(value, table) {
 export function parseStoryboard(text, file = 'ep001.md') {
   const output = report(file);
   const original = linesOf(text);
-  const lines = linesOf(maskComments(text)).map(line => line.trim() ? line : '');
+  const lines = linesOf(text, { mask: true }).map(line => line.trim() ? line : '');
   const episode = episodeFileNumber(file);
   const title = /^# 第(\d+)集分镜(：.*)?$/.exec(original[0]);
   if (!title || episode === null || episodeFilename(episode) !== path.posix.basename(file)

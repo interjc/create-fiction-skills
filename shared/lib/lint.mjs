@@ -6,7 +6,7 @@ import {
   choices, directMain, EXIT, failLevel, finding, formatFinding, lexical, runCli, sortFindings,
 } from './cli.mjs';
 import { DEFAULT_CONFIG, requireConfig } from './config.mjs';
-import { HOOK_ORDER, linesOf, maskComments, parseMarkers, sections, splitList } from './md.mjs';
+import { HOOK_ORDER, linesOf, parseMarkers, sections, splitList, stripBom } from './md.mjs';
 import { compilePattern, DEFAULT_PATTERNS, literalPattern, loadPatterns } from './patterns.mjs';
 import {
   entries, explicitFile, isFrozen, listChapters, missingChapters, readOptional, resolveSelector, seriesEpisodeFiles,
@@ -140,9 +140,9 @@ export function lintFile(text, {
   subplotIds = [], rules = null,
 } = {}) {
   const original = linesOf(text);
-  const visible = linesOf(maskComments(text));
+  const visible = linesOf(text, { mask: true });
   const markers = parseMarkers(text);
-  const ignored = makeIgnore(markers, original);
+  const ignored = makeIgnore(markers, visible);
   const findings = [];
   let suppressed = 0;
   const add = (rule, message, options = {}) => {
@@ -182,7 +182,7 @@ function readSeal(root) {
   const raw = readOptional(root, manifestPath);
   if (raw === null) return null;
   let value;
-  try { value = JSON.parse(raw); } catch { throw new Error(`${manifestPath}：不是合法 JSON`); }
+  try { value = JSON.parse(stripBom(raw)); } catch { throw new Error(`${manifestPath}：不是合法 JSON`); }
   if (value?.spec_version !== 1 || typeof value.created !== 'string' || Number.isNaN(Date.parse(value.created))
     || !Array.isArray(value.ranges) || !value.ranges.every(x => typeof x === 'string')
     || !value.files || typeof value.files !== 'object' || Array.isArray(value.files)

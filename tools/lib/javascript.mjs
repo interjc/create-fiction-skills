@@ -1,4 +1,6 @@
 // A lexical scan, not evaluation: checking a repository must not run its scripts.
+import { stripBom } from './repo.mjs';
+
 const idStart = /[$_\p{ID_Start}]/u;
 const idContinue = /[$\u200c\u200d\p{ID_Continue}]/u;
 const beforeExpression = new Set([
@@ -18,9 +20,9 @@ function unicodeEscape(source, at) {
 }
 
 export function jsTokens(text) {
-  const source = text.replace(/\r\n?|\u2028|\u2029/g, '\n');
+  const source = stripBom(text).replace(/\r\n?|\u2028|\u2029/g, '\n');
   const tokens = [];
-  let i = (source[0] === '\ufeff' ? 1 : 0);
+  let i = 0;
   let line = 1;
   const push = (kind, value, at = line, column) => tokens.push({ kind, value, line: at, column });
   const pointAt = at => at < source.length ? String.fromCodePoint(source.codePointAt(at)) : '';

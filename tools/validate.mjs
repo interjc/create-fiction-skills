@@ -6,7 +6,7 @@ import { loadFormats } from './lib/formats.mjs';
 import { parseFrontmatter } from './lib/frontmatter.mjs';
 import { importSpecifiers } from './lib/javascript.mjs';
 import { markdownLinks } from './lib/markdown.mjs';
-import { codePoints, compare, countLines, isObject, repoFiles, runCli, stat } from './lib/repo.mjs';
+import { codePoints, compare, countLines, isObject, repoFiles, runCli, stat, stripBom } from './lib/repo.mjs';
 import { syncShared } from './lib/shared-sync.mjs';
 import { checkDialectCard, checkSpecRefs } from './lib/skill-references.mjs';
 
@@ -27,7 +27,7 @@ function readText(absolute) {
 }
 
 function checkSkill(file, name, text, add) {
-  const lines = countLines(text);
+  const lines = countLines(stripBom(text));
   if (lines > 500) add('skill-lines', file, null, `SKILL.md 有 ${lines} 行，超过 500 行`);
   const { fields, error } = parseFrontmatter(text);
   if (error) {
@@ -100,7 +100,7 @@ function imports(root, file, text, add) {
 
 function readJson(text, file, check, add) {
   try {
-    return { value: JSON.parse(text) };
+    return { value: JSON.parse(stripBom(text)) };
   } catch {
     add(check, file, null, '不是合法的 JSON');
   }
@@ -162,7 +162,9 @@ function validate(root, { only }) {
     const file = `skills/${name}/SKILL.md`;
     const absolute = path.join(root, file);
     const exists = stat(absolute)?.isFile();
-    const text = exists && files.has(file) ? readText(absolute) : undefined;
+    // SKILL.md is required by directory, even when Git ignores the file.
+    if (exists) files.add(file);
+    const text = exists ? readText(absolute) : undefined;
     if (!exists) add('skill-md', file, null, '缺少 SKILL.md');
     skills.push({
       name,
@@ -186,7 +188,7 @@ function validate(root, { only }) {
     const text = readText(absolute);
     if (text === undefined) continue;
     if (refs) {
-      const lines = countLines(text);
+      const lines = countLines(stripBom(text));
       if (lines > 400) add('reference-lines', file, null, `参考文档有 ${lines} 行，超过 400 行`);
     }
     if (links) for (const { target, line, column } of markdownLinks(text)) {

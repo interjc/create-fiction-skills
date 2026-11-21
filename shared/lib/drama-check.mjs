@@ -99,18 +99,21 @@ function checkPaywall(episodes, series, config, findings) {
   const add = (rule, message, { file = series.file, level = 'block', line = null } = {}) => {
     findings.push(finding(rule, file, message, { level, line }));
   };
-  const [min, max] = config.first_at;
-  if (first === null && (episodes.at(-1)?.episode ?? 0) >= max) {
-    add('paywall-missing', `已写至第${max}集或之后，但缺少卡点`);
-  }
-  if (first !== null && (first < min || first > max)) {
-    add('paywall-position', `首个卡点第${first}集不在 ${min}-${max} 集内`, {
-      file: walls[0].file, line: walls[0].paywalls[0].line,
-    });
-  }
-  const [ratioMin, ratioMax] = config.free_ratio;
-  if (ratio !== null && (ratio < ratioMin || ratio > ratioMax)) {
-    add('paywall-ratio', `免费集数比例不在 ${ratioMin}-${ratioMax} 内`, { level: 'suggest' });
+  const position = first === null ? null : { file: walls[0].file, line: walls[0].paywalls[0].line };
+  if (config.first_at === null) {
+    if (position) add('paywall-position', '配置不设付费卡点，但剧本仍有卡点', { ...position, level: 'suggest' });
+  } else {
+    const [min, max] = config.first_at;
+    if (first === null && (episodes.at(-1)?.episode ?? 0) >= max) {
+      add('paywall-missing', `已写至第${max}集或之后，但缺少卡点`);
+    }
+    if (first !== null && (first < min || first > max)) {
+      add('paywall-position', `首个卡点第${first}集不在 ${min}-${max} 集内`, position);
+    }
+    const [ratioMin, ratioMax] = config.free_ratio;
+    if (ratio !== null && (ratio < ratioMin || ratio > ratioMax)) {
+      add('paywall-ratio', `免费集数比例不在 ${ratioMin}-${ratioMax} 内`, { level: 'suggest' });
+    }
   }
   for (const item of walls) {
     const hook = HOOK_ORDER.indexOf(item.hook);

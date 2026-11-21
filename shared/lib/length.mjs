@@ -2,11 +2,12 @@ import { readFileSync } from 'node:fs';
 import path from 'node:path';
 import { directMain, EXIT, integer, runCli } from './cli.mjs';
 import { requireConfig } from './config.mjs';
+import { stripBom } from './md.mjs';
 import { isFrozen, missingChapters, resolveSelector } from './project.mjs';
 
 /** 按脚本契约的固定顺序去除不计字数的 Markdown。 */
 export function stripMarkdownForLength(markdown) {
-  let text = markdown.replace(/\r\n?/g, '\n');
+  let text = stripBom(markdown).replace(/\r\n?/g, '\n');
   text = text.replace(/^---\n[\s\S]*?\n---(?:\n|$)/, '');
   text = text.replace(/<!--[\s\S]*?-->/g, '');
   const lines = text.split('\n');

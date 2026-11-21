@@ -5,7 +5,7 @@ import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { test } from 'node:test';
 
-const { EXIT, findBookRoot, finding, formatFinding, parseCli, sortFindings } =
+const { EXIT, findBookRoot, finding, formatFinding, parseCli, sameEntryPath, sortFindings } =
   await import(new URL('../lib/cli.mjs', import.meta.url));
 const book = fileURLToPath(new URL('./fixtures-shared/watch-shop/', import.meta.url));
 
@@ -36,4 +36,12 @@ test('Finding shape, order and Chinese rendering', () => {
   const earlier = { ...f, column: 1 };
   const before = { ...f, rule: 'aaa' };
   assert.deepEqual(sortFindings([f, before, earlier]), [earlier, before, f]);
+});
+
+test('direct entry path comparison is case-insensitive only on Windows', () => {
+  assert.equal(sameEntryPath('c:\\BOOK\\scripts\\..\\Lib\\STATUS.MJS', 'C:\\book\\lib\\status.mjs', 'win32'), true);
+  assert.equal(sameEntryPath('D:\\book\\lib\\status.mjs', 'C:\\book\\lib\\status.mjs', 'win32'), false);
+  assert.equal(sameEntryPath('C:\\book\\status.mjs', 'C:\\book\\lib\\status.mjs', 'win32'), false);
+  assert.equal(sameEntryPath('/book/lib/STATUS.MJS', '/book/lib/status.mjs', 'darwin'), false);
+  assert.equal(sameEntryPath('/book/scripts/../lib/status.mjs', '/book/lib/status.mjs', 'linux'), true);
 });
