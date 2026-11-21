@@ -59,3 +59,13 @@ test('normalized references, statuses, notes and sections', () => {
   const [setting] = bible.parseSettingTags(read('bible/canon.md')).items;
   assert.deepEqual(setting.chapters, [1, 3, 4]);
 });
+test('D-06 permits never-planted drops; invalid records identify ID and name', () => {
+  const table = '| ID | 伏笔 | 读者已知 | 作者真相 | 埋设章 | 计划回收章 | 实际回收章 | 状态 | 未来出现方式 | 备注 |\n'
+    + '|---|---|---|---|---|---|---|---|---|---|\n'
+    + '| F031 | 未响的铃 | 尚无 | 铃心遗失 | ? | ? | | 已放弃 | | 删去市集一场 |\n'
+    + '| F032 | 折叠的纸 | 有一道痕 | 夹层里有信 | ? | ? | | 已埋设 | 收信时展开 | |\n'
+    + '| F033 | 未亮的灯 | 尚无 | 灯芯沾水 | ? | ? | | 已放弃 | | |\n';
+  const { items, errors } = bible.parseForeshadows(table);
+  assert.deepEqual(items.map(({ id, status, planted }) => [id, status, planted]), [['F031', 'dropped', null]]);
+  assert.deepEqual(errors.map(({ id, excerpt }) => [id, excerpt]), [['F032', 'F032 折叠的纸'], ['F033', 'F033 未亮的灯']]);
+});

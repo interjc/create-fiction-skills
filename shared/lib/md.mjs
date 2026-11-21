@@ -13,19 +13,26 @@ export function maskComments(text) {
   return text.replace(commentPattern, comment => comment.replace(/[^\r\n]/gu, ' '));
 }
 
+function opensFence(line) {
+  const match = /^ {0,3}(`{3,}|~{3,})(.*)$/.exec(line);
+  return match && (match[1][0] !== '`' || !match[2].includes('`')) ? match[1] : null;
+}
+
+function closesFence(line, marker) {
+  const close = /^ {0,3}(`{3,}|~{3,})[ \t]*$/.exec(line)?.[1];
+  return close?.[0] === marker[0] && close.length >= marker.length;
+}
+
 /** 结构查找用的可见行：代码围栏中的例子不是标题、字段或表格。 */
 export function structuralLines(text) {
   let fence = null;
   return linesOf(maskComments(text)).map(line => {
     if (fence) {
-      const close = /^ {0,3}(`{3,}|~{3,})[ \t]*$/.exec(line)?.[1];
-      if (close?.[0] === fence[0] && close.length >= fence.length) fence = null;
+      if (closesFence(line, fence)) fence = null;
       return '';
     }
-    const opening = /^ {0,3}(`{3,}|~{3,})(.*)$/.exec(line);
-    if (!opening || (opening[1][0] === '`' && opening[2].includes('`'))) return line;
-    fence = opening[1];
-    return '';
+    fence = opensFence(line);
+    return fence ? '' : line;
   });
 }
 
@@ -102,6 +109,48 @@ export function parseFields(lines) {
 /** 切分通用列表，不改变项目文字。 */
 export function splitList(value) {
   return (cell(value) ?? '').split(/[、，,]/).map(part => part.trim()).filter(part => cell(part) !== null);
+}
+
+/** 标题分段保留空项，以便调用方拒绝不合法的标题。 */
+export function splitHeading(value) {
+  return value.split(/[｜|]/u).map(part => part.trim());
+}
+
+/** 读取指定名称的围栏；行号从 1 起，未闭合的 end 为 null。 */
+export function parseFences(lines) {
+  const items = [];
+  let fence = null;
+  let comment = false;
+  for (let i = 0; i < lines.length; i++) {
+    const line = lines[i];
+    if (fence) {
+      const close = fence.item ? line === '```' : closesFence(line, fence.marker);
+      if (close) {
+        if (fence.item) {
+          fence.item.end = i + 1;
+          fence.item.raw = lines.slice(fence.item.line, i).join('\n');
+          fence.item.content = fence.item.raw.trim();
+        }
+        fence = null;
+      }
+      continue;
+    }
+    if (!comment) {
+      const name = /^```(prompt|negative)$/.exec(line)?.[1];
+      const marker = opensFence(line);
+      if (marker) {
+        const item = name ? { kind: name, line: i + 1, end: null, raw: '', content: '' } : null;
+        if (item) items.push(item);
+        fence = { marker, item };
+        continue;
+      }
+    }
+    for (const { 0: token } of line.matchAll(/<!--|-->/g)) {
+      if (!comment && token === '<!--') comment = true;
+      else if (comment && token === '-->') comment = false;
+    }
+  }
+  return items;
 }
 
 /** 解析章号/闭区间，无值或待定为 null；非法值抛出异常。 */

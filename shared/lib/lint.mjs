@@ -22,6 +22,17 @@ const separatorVariants = [
   /^\s*[—～~]{3,}\s*$/, /^\s+---\s*$|^---\s+$/,
 ];
 const ruleTitles = { 'ai-tone': 'AI 腔', summary: '总结句', 'exact-year': '精确日期', 'internal-ref': '内部引用', custom: '自定义模式' };
+const advice = {
+  IR01: '删掉文件名，改写成读者看得懂的正文', IR02: '删掉项目路径', IR03: '改成故事中的时间或事件',
+  IR04: '改用故事中的名称', IR05: '移除 Markdown 链接', IR06: '把标记移入 HTML 注释', IR07: '核对并移除误入正文的支线编号',
+  SUM07: '删掉空泛收束，保留具体结果', SUM08: '删掉空泛收束，保留具体结果', SUM09: '删去论文式收束',
+  SUM10: '保留事实，让读者判断', SUM13: '删掉含糊限定，明确所指',
+  AT01: '换成具体动作或物件', AT02: '用声音或动作写出现场变化', AT03: '写具体的事件或因果',
+  AT04: '删掉说明文连接词', AT05: '删掉拔高，写当事人的反应', AT06: '用动作表现情绪',
+  AT07: '用动作表现情绪', AT08: '写出物件实际的声音或状态', AT09: '写具体表情或动作',
+  AT24: '删去刻意定格，直接写动作', AT25: '用可见反应表现情绪', AT26: '改写成具体声响、气味或光线',
+  AT27: '用身体动作表现反应', AT28: '明确所指或删去含糊修饰', AT29: '换成有场景作用的动作',
+};
 
 function selectedRule(rule, rules) {
   return rules == null || rules.includes(rule);
@@ -77,14 +88,14 @@ function filePatterns(config, patterns, subplotIds) {
   for (const item of patterns) {
     if (item.rule === 'exact-year' && !config.lint.desensitize.exact_years) continue;
     const title = ruleTitles[item.rule];
-    const message = item.hint && ['ai-tone', 'summary', 'internal-ref'].includes(item.rule)
-      ? `${title}：${item.hint}` : title;
+    const message = advice[item.id] ? `${title}：${item.hint}` : title;
+    const hint = advice[item.id] ?? item.hint;
     if (item.id === 'IR07') {
       for (const id of subplotIds) {
-        compiled.push({ ...item, message, regex: literalPattern(id, { word: true, sensitive: true }) });
+        compiled.push({ ...item, message, hint, regex: literalPattern(id, { word: true, sensitive: true }) });
       }
     } else {
-      compiled.push({ ...item, message, regex: compilePattern(item.source) });
+      compiled.push({ ...item, message, hint, regex: compilePattern(item.source) });
     }
   }
   return compiled;

@@ -37,7 +37,15 @@ test('every SB §8 key and default exactly matches', () => {
         { id: 'standard', max_seconds: 180 }, { id: 'long', max_seconds: null }],
       max_scenes: 5, hook: { required: true },
       paywall: { first_at: [8, 15], free_ratio: [0.05, 0.25], hook_min: 'A' },
+      dialogue_run_max: 6, voiceover: { os_max: 2, vo_max: 1 },
     },
+    visual: { aspect_ratio: '9:16' },
+    storyboard: { segment: { max_seconds: 15 }, shot: { seconds: [2, 5] }, duration_tolerance: 0.15, max_people: 3 },
+    prompts: {
+      image: { dialect: 'generic', max_chars: 1000 }, video: { dialect: 'generic', max_chars: 1500 },
+      dialogue_check: true, dialects: {},
+    },
+    workflow: { target: null },
   });
 });
 
@@ -60,4 +68,30 @@ test('deep merge, explicit null, array replacement, unknown keys and malformed c
   assert.match(loadConfig(root).errors.join('\n'), /length.min[\s\S]*hook[\s\S]*frozen.ranges[\s\S]*chars_per_minute[\s\S]*不支持 version 2/);
   writeFileSync(file, '{');
   assert.match(loadConfig(root).errors[0], /不是合法 JSON/);
+});
+
+test('visual and dialect config validates nested settings while preserving explicit limits of null', t => {
+  const root = mkdtempSync(path.join(tmpdir(), 'fiction-config-'));
+  t.after(() => rmSync(root, { recursive: true, force: true }));
+  mkdirSync(path.join(root, '.fiction'));
+  const file = path.join(root, '.fiction/config.json');
+  const value = {
+    drama: { dialogue_run_max: null, voiceover: { vo_max: 0 } },
+    storyboard: { shot: { seconds: [1.5, 4.5] } },
+    prompts: { video: { dialect: 'paper-test' }, dialects: {
+      'paper-test': { max_chars: null, max_seconds: 11.5, max_refs: 2, forbid: ['写实'], confirmed_at: null },
+    } },
+  };
+  writeFileSync(file, JSON.stringify(value));
+  const loaded = loadConfig(root);
+  assert.deepEqual(loaded.errors, []);
+  assert.equal(loaded.config.drama.dialogue_run_max, null);
+  assert.deepEqual(loaded.config.drama.voiceover, { os_max: 2, vo_max: 0 });
+  assert.deepEqual(loaded.config.prompts.dialects, value.prompts.dialects);
+  value.drama.voiceover.vo_max = -1;
+  value.prompts.dialects['paper-test'].forbid = [false];
+  value.storyboard.shot.seconds.reverse();
+  writeFileSync(file, JSON.stringify(value));
+  const invalid = loadConfig(root).errors.join('\n');
+  for (const key of ['drama.voiceover.vo_max', 'storyboard.shot.seconds', 'prompts.dialects']) assert.ok(invalid.includes(key));
 });

@@ -98,7 +98,7 @@ function variant(value, aliases, label, { contains = false } = {}) {
 }
 
 /** 读取符合列契约的表，按原始行号逐行回调。 */
-export function tableRows(text, headers, target, visit, { offset = 0, optional = false, identify } = {}) {
+export function tableRows(text, headers, target, visit, { offset = 0, optional = false, identify, location } = {}) {
   let found = false;
   for (const table of parseTables(text)) {
     if (!(identify ? identify(table.headers) : table.headers.some(header => headers.includes(header)))) continue;
@@ -112,7 +112,7 @@ export function tableRows(text, headers, target, visit, { offset = 0, optional =
     if (table.errors.some(error => error.line === table.line)) continue;
     for (const row of table.rows) {
       const line = row.line + offset;
-      attempt(target, line, () => visit(row.fields, line, row.cells));
+      attempt(target, line, () => visit(row.fields, line, row.cells), location?.(row.fields));
     }
   }
   if (!found && !optional) target.error(offset + 1, `缺少表格：${headers.join('、')}`);
@@ -139,11 +139,12 @@ export function parseForeshadows(text, file = 'bible/foreshadows.md') {
   const ids = new Set();
   const groups = sections(text, 2);
   const headers = ['ID', '伏笔', '读者已知', '作者真相', '埋设章', '计划回收章', '实际回收章', '状态', '未来出现方式'];
+  const location = row => ({ id: cell(row.ID), excerpt: [cell(row.ID), cell(row.伏笔)].filter(Boolean).join(' ') || null });
   tableRows(text, headers, result, (row, line) => {
     const id = idOf(row.ID, FORESHADOW_ID);
     unique(ids, id);
     const status = variant(row.状态, fsStates, '伏笔状态');
-    const planted = singleChapter(row.埋设章, '埋设章', { unknown: status === 'planned' });
+    const planted = singleChapter(row.埋设章, '埋设章', { unknown: status === 'planned' || status === 'dropped' });
     const target = reference(row.计划回收章, '计划回收章', { unknown: true });
     const resolved = singleChapter(row.实际回收章, '实际回收章', { optional: true });
     const note = cell(row.备注);
@@ -157,7 +158,7 @@ export function parseForeshadows(text, file = 'bible/foreshadows.md') {
     const future = cell(row.未来出现方式);
     // 已回收和已放弃均已结；只有未结状态按 §6.2 报提示。
     if (isOpenForeshadow({ status }) && !future) {
-      result.error(line, `${id} 的未来出现方式为空`, { id, level: 'suggest' });
+      result.error(line, `${id} 的未来出现方式为空`, { ...location(row), level: 'suggest' });
     }
     const touched = parseChapterList(row.触及章);
     const anchor = groups.findLast(section => section.line < line && section.line + section.lines.length >= line)?.name ?? null;
@@ -167,7 +168,7 @@ export function parseForeshadows(text, file = 'bible/foreshadows.md') {
       subplots: splitList(row.支线).map(value => idOf(value, SUBPLOT_ID, '支线 ID')),
       characters: splitList(row.人物), note, source_anchor: anchor,
     }, line);
-  });
+  }, { location });
   return result.finish();
 }
 

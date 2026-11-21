@@ -1,9 +1,9 @@
 import {
-  directMain, EXIT, failLevel, finding, formatFinding, integer, lexical, runCli, sortFindings,
+  directMain, EXIT, failLevel, finding, formatFinding, lexical, runCli, sortFindings,
 } from './cli.mjs';
 import { aliasesOf, parseCharacters, parseForeshadows } from './bible.mjs';
 import { requireConfig } from './config.mjs';
-import { parseAdaptationMap, parseEpisode, parseSeries } from './drama.mjs';
+import { parseAdaptationMap, parseEpisode, parseSeries, selectedEpisodeRange } from './drama.mjs';
 import { HOOK_ORDER } from './md.mjs';
 import { listChapters, readOptional, seriesEpisodeFiles } from './project.mjs';
 
@@ -13,14 +13,53 @@ function read(root, file, parser, options) {
   return parser(text, file, options);
 }
 
-function selectedEpisodeRange(value) {
-  if (value === undefined) return null;
-  const match = /^(\d+)(?:-(\d+))?$/.exec(value);
-  if (!match) throw new Error(`--ep 值非法：${value}`);
-  const start = integer(match[1], '集号', 1);
-  const end = integer(match[2] ?? match[1], '集号', 1);
-  if (start > end) throw new Error(`--ep 范围倒序：${value}`);
-  return [start, end];
+const negativeAction = '否定句拍不出来，改成看得见的动作';
+const unshootable = [
+  ['UA01', /(看|瞧|瞥|理)都(没|不)(看|瞧|瞥|理)/u, negativeAction],
+  ['UA02', /连[^，。；！？]{1,8}都(没|不)(抬|动|回|眨|扫)/u, negativeAction],
+  ['UA03', /非但(没有?|不)/u, negativeAction],
+  ['UA04', /(没有?|并未|未曾)(察觉|注意到|发觉|意识到)/u, '“没注意到”没有画面，写他正在做的事'],
+  ['UA11', /眼神(微动|一闪|闪烁|复杂|一暗)/u, '微动作镜头里看不清，换成手上或身体的动作'],
+  ['UA12', /(心中|心里|心头|内心)[^，。；！？]{0,12}(想|觉得|明白|清楚|知道|一(紧|沉|震|暖|酸))/u, '心理活动不能写在动作行里'],
+];
+
+function checkShootability(item, config, findings) {
+  const counts = { os: 0, vo: 0 };
+  const add = (rule, row, message, hint, options) => findings.push(finding(rule, item.file, message,
+    { line: row.line, excerpt: row.excerpt, hint, level: 'suggest', ...options }));
+  for (const scene of item.scenes) {
+    let run = 0;
+    for (const [i, row] of scene.content.entries()) {
+      if (row.kind !== 'dialogue') {
+        run = 0;
+        if (row.kind === 'action') {
+          for (const [id, pattern, hint] of unshootable) {
+            const match = pattern.exec(row.text);
+            if (!match) continue;
+            const offset = row.excerpt.indexOf(row.text, 1) + match.index;
+            add('unshootable', row, '动作行命中不可拍模式', hint,
+              { id, column: Array.from(row.excerpt.slice(0, offset)).length + 1, excerpt: match[0] });
+          }
+        }
+        continue;
+      }
+      run++;
+      if (config.dialogue_run_max !== null && run - 1 === config.dialogue_run_max) {
+        add('dialogue-run', row, `连续对白超过 ${config.dialogue_run_max} 行`, '考虑加入动作或镜头');
+      }
+      if (scene.number === 1 && i === 0 && (row.os || row.vo)) {
+        add('voiceover-open', row, '场景 1 的第一条内容是 OS 或 VO', '考虑用可见动作开场');
+      }
+      for (const kind of ['os', 'vo']) {
+        if (!row[kind]) continue;
+        const max = config.voiceover[`${kind}_max`];
+        if (counts[kind]++ === max) {
+          add('voiceover-quota', row, `${kind.toUpperCase()} 超过单集 ${max} 行`, '检查这条旁白或独白能否用画面替代');
+        }
+      }
+    }
+  }
+  return counts;
 }
 
 function checkEpisode(item, series, config, findings) {
@@ -34,7 +73,8 @@ function checkEpisode(item, series, config, findings) {
   if (range && (est_seconds < range[0] || est_seconds > range[1])) {
     findings.push(finding('length', file, `估算时长 ${est_seconds} 秒不在 ${range[0]}-${range[1]} 秒内`, { level: config.length_level }));
   }
-  return { episode, file, title, scenes, chars, est_seconds, tier, range, hook: item.hook, paywall: item.paywalls.length > 0 };
+  const { os, vo } = checkShootability(item, config, findings);
+  return { episode, file, title, scenes, chars, est_seconds, tier, range, hook: item.hook, paywall: item.paywalls.length > 0, os, vo };
 }
 
 function checkSeriesSize(episodes, series, findings) {
@@ -178,7 +218,7 @@ function render(result) {
   return [
     `# 短剧检查：${series}`,
     ...episodes.map(item => `第${item.episode}集 ${item.title ?? ''}：${item.scenes} 场，${item.chars} 字，`
-      + `估算 ${item.est_seconds} 秒（${item.tier ?? '无档位'}）`),
+      + `估算 ${item.est_seconds} 秒（${item.tier ?? '无档位'}），OS ${item.os} 行，VO ${item.vo} 行`),
     `首个卡点：${paywall.first === null ? '（无）' : `第${paywall.first}集`}`,
     ...findings.map(formatFinding),
     `检查 ${summary.episodes} 集：阻断 ${summary.block}，建议 ${summary.suggest}。`,

@@ -1,5 +1,5 @@
 import path from 'node:path';
-import { finding, sortFindings } from './cli.mjs';
+import { finding, integer, sortFindings } from './cli.mjs';
 import { parseAction, singleChapter, tableRows } from './bible.mjs';
 import { cell, HOOK_ORDER, linesOf, maskComments, parseChapterList, parseFields, parseMarkers, splitList } from './md.mjs';
 
@@ -75,7 +75,7 @@ export function parseAdaptationMap(text, file = 'adaptation-map.md') {
     const source_chapters = original ? [] : parseChapterList(row.来源章);
     if (!original && !source_chapters.length) throw new Error('来源章须为章号、范围、列表或「原创」');
     output.add({
-      episode, original, source_chapters, plot: cell(row.剧情点), characters: splitList(row.人物),
+      episode, original, source_chapters, source_text: row.来源章, plot: cell(row.剧情点), characters: splitList(row.人物),
       foreshadow_actions: splitList(row.伏笔).map(parseAction), changes: cell(row.改动),
     }, line);
   });
@@ -84,7 +84,33 @@ export function parseAdaptationMap(text, file = 'adaptation-map.md') {
 
 const sceneHeader = /^## 场景(\d+)：(.+)·(内|外|内外)·(日|夜|晨|昏)$/;
 const dialogue = /^([^\s：:△【<（(#]{1,16})(（[^）]{1,20}）)?：(.+)$/u;
-const countChars = text => Array.from(text.replace(/\s/gu, '')).length;
+export const withoutWhitespace = text => text.replace(/\s/gu, '');
+export const countChars = text => Array.from(withoutWhitespace(text)).length;
+const episodeStatuses = new Map([['初稿', 'draft'], ['修改', 'revised'], ['定稿', 'final'],
+  ['draft', 'draft'], ['revised', 'revised'], ['final', 'final']]);
+export const episodeStatus = value => episodeStatuses.get(value) ?? null;
+
+/** 短剧入口共用的集号闭区间。 */
+export function selectedEpisodeRange(value) {
+  if (value === undefined) return null;
+  const match = /^(\d+)(?:-(\d+))?$/.exec(value);
+  if (!match) throw new Error(`--ep 值非法：${value}`);
+  const start = integer(match[1], '集号', 1);
+  const end = integer(match[2] ?? match[1], '集号', 1);
+  if (start > end) throw new Error(`--ep 范围倒序：${value}`);
+  return [start, end];
+}
+
+/** 保留对白原文及行号；比较、计时与旁白判断共用同一解析口径。 */
+export function parseDialogue(line, number) {
+  const speech = dialogue.exec(line);
+  if (!speech) return null;
+  const role = speech[1];
+  const tags = (speech[2]?.slice(1, -1) ?? '').toLowerCase().split(/[，,、/\s]+/u);
+  const text = speech[3].trimStart().replace(/^（[^）]*）/, '');
+  return { kind: 'dialogue', role, text, line: number, excerpt: line,
+    os: role !== '字幕' && tags.includes('os'), vo: role !== '字幕' && (role === '旁白' || tags.includes('vo')) };
+}
 
 function lineDetails(line, lineNo, scene, output) {
   if (!line.trim()) return;
@@ -97,6 +123,7 @@ function lineDetails(line, lineNo, scene, output) {
   }
   if (line.startsWith('△')) {
     const text = line.slice(1).trim();
+    scene.content.push({ kind: 'action', text, line: lineNo, excerpt: line });
     if (!text) output.rule('bad-line', lineNo, '动作行须填写动作描述', { excerpt: line, column: 1 });
     else {
       scene.actions++;
@@ -104,11 +131,14 @@ function lineDetails(line, lineNo, scene, output) {
     }
     return;
   }
-  if (/^【[^】]+】/.test(line)) return;
-  const speech = dialogue.exec(line);
+  if (/^【[^】]+】/.test(line)) {
+    scene.content.push({ kind: 'camera', text: line, line: lineNo, excerpt: line });
+    return;
+  }
+  const speech = parseDialogue(line, lineNo);
   if (speech) {
-    const text = speech[3].trimStart().replace(/^（[^）]*）/, '');
-    scene.chars += countChars(text);
+    scene.content.push(speech);
+    scene.chars += countChars(speech.text);
     return;
   }
   output.rule('bad-line', lineNo, '场景内行格式非法', { excerpt: line, column: 1 });
@@ -127,7 +157,11 @@ export function parseEpisode(text, file = 'ep001.md', { hookRequired = true } = 
   }
   const firstScene = visible.findIndex(line => /^ {0,3}##(?:[ \t]|$)/.test(line));
   const before = firstScene < 0 ? visible : visible.slice(0, firstScene);
-  const metadata = parseFields(before).filter(field => field.key === '目标时长');
+  const fields = parseFields(before);
+  const statusFields = fields.filter(field => field.key === '状态');
+  const status = statusFields.length === 0 ? 'draft'
+    : statusFields.length === 1 ? episodeStatus(statusFields[0].value) : null;
+  const metadata = fields.filter(field => field.key === '目标时长');
   let target_seconds = null;
   for (const [i, field] of metadata.entries()) {
     const value = positive(field.value);
@@ -144,7 +178,7 @@ export function parseEpisode(text, file = 'ep001.md', { hookRequired = true } = 
     if (/^ {0,3}##(?:[ \t]|$)/.test(line)) {
       const header = sceneHeader.exec(line);
       const sceneNumber = header && Number.isSafeInteger(Number(header[1])) ? Number(header[1]) : null;
-      current = { number: sceneNumber, line: number, chars: 0, people: [], actions: 0 };
+      current = { number: sceneNumber, line: number, chars: 0, people: [], actions: 0, content: [] };
       if (!header) output.rule('scene-header', number, '场景头格式非法', { excerpt: line, column: 1 });
       scenes.push(current);
     } else if (current) lineDetails(line.trimEnd(), number, current, output);
@@ -178,7 +212,7 @@ export function parseEpisode(text, file = 'ep001.md', { hookRequired = true } = 
   }
   output.add({
     episode, title: title?.[2] ?? null, scenes, chars: scenes.reduce((count, scene) => count + scene.chars, 0),
-    target_seconds, hook: hooks[0]?.value ?? null, hooks, paywalls,
+    status, target_seconds, hook: hooks[0]?.value ?? null, hooks, paywalls,
   }, 1);
   return output.finish();
 }

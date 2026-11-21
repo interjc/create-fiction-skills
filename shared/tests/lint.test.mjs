@@ -124,3 +124,13 @@ test('seal all drafts, detect changed/deleted and newly added drafts, force rese
   assert.equal(invalidPattern.status, 2);
   assert.match(JSON.parse(invalidPattern.stdout).error, /lint-patterns.txt:5/);
 });
+test('lint findings distinguish the observation from the suggested edit', () => {
+  const { findings } = lintFile('手里夹着 note.md。一丝不易察觉的笑。');
+  const ref = findings.find(item => item.id === 'IR01');
+  const tone = findings.find(item => item.id === 'AT01');
+  assert.match(ref.message, /出现文件名/);
+  assert.match(ref.hint, /删掉文件名/);
+  assert.match(tone.message, /陈词套话/);
+  assert.equal(tone.hint, '换成具体动作或物件');
+  assert.ok(!findings.some(item => item.hint && item.message.includes(item.hint)));
+});

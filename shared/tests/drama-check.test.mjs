@@ -18,7 +18,7 @@ test('drama exact JSON key sets, count, duration and paywall', () => {
   assert.equal(proc.status, 0, proc.stderr);
   const data = JSON.parse(proc.stdout);
   keys(data, 'tool spec_version root ok series episodes paywall findings summary');
-  keys(data.episodes[0], 'episode file title scenes chars est_seconds tier range hook paywall');
+  keys(data.episodes[0], 'episode file title scenes chars est_seconds tier range hook paywall os vo');
   keys(data.paywall, 'first all total ratio');
   keys(data.summary, 'episodes block suggest');
   assert.deepEqual(data.paywall, { first: 1, all: [1], total: 2, ratio: 0.5 });
@@ -71,4 +71,40 @@ test('series rules still use all episodes when --ep limits episode rules', t => 
   const all = checkSeries(book, 'stopped-clock');
   for (const rule of ['episode-total', 'bad-line', 'paywall-missing']) assert.ok(all.findings.some(item => item.rule === rule), rule);
   assert.equal(all.findings.some(item => item.rule === 'map-unresolved'), false);
+});
+
+test('new §7 rules: action-only UA patterns, run resets, and OS/VO boundaries', t => {
+  const book = mkdtempSync(path.join(tmpdir(), 'fiction-drama-'));
+  t.after(() => rmSync(book, { recursive: true, force: true }));
+  cpSync(root, book, { recursive: true });
+  const base = path.join(book, 'drama/stopped-clock/episodes/ep001.md');
+  const { config } = loadConfig(book);
+  config.drama.dialogue_run_max = 2;
+  config.drama.voiceover = { os_max: 1, vo_max: 1 };
+  const lines = [
+    '# 第1集：盒底有盐', '## 场景1：钟表铺·内·晨', '人物：林砚、唐七',
+    '林砚（急，oS / vO）：（低声）看都没看。', '', '<!-- 暂停 -->',
+    '字幕（OS、VO）：第二声。', '旁白：第三声。', '唐七（想,OS）：第四声。',
+    '【远景】门开了。', '唐七：敲过了。', '林砚：知道。', '△ 他看都没看。',
+    '△ 连头都不抬。', '△ 非但没有吭声。', '△ 她并未注意到。', '△ 他眼神微动。',
+    '△ 她心里已经明白。', '【近景】眼神一闪。', '△ 他的手扶住门框。',
+    '唐七：拿稳。', '## 场景2：纸窗·内·晨', '唐七（OS）：此处不算开场。', '△ 他推窗。',
+    '<!-- hook: A -->', '<!-- paywall -->',
+  ];
+  writeFileSync(base, lines.join('\n'));
+  const report = checkSeries(book, 'stopped-clock', { config });
+  const by = rule => report.findings.filter(finding => finding.rule === rule);
+  assert.deepEqual(by('unshootable').map(({ id }) => id), ['UA01', 'UA02', 'UA03', 'UA04', 'UA11', 'UA12']);
+  assert.deepEqual(by('unshootable').map(({ line }) => line), [13, 14, 15, 16, 17, 18]);
+  assert.deepEqual(by('dialogue-run').map(({ line }) => line), [8]);
+  assert.deepEqual(by('voiceover-open').map(({ line }) => line), [4]);
+  assert.deepEqual(by('voiceover-quota').map(({ line }) => line), [8, 9]);
+  const { os, vo, chars, est_seconds } = report.episodes[0];
+  assert.deepEqual({ os, vo, est_seconds }, { os: 3, vo: 2, est_seconds: Math.round(chars * 60 / 250) });
+  config.drama.voiceover = { os_max: null, vo_max: null };
+  config.drama.dialogue_run_max = null;
+  writeFileSync(base, lines.toSpliced(3, 0, '【远景】窗开着。').join('\n'));
+  const disabled = checkSeries(book, 'stopped-clock', { config });
+  assert.ok(disabled.findings.every(f => !['dialogue-run', 'voiceover-quota', 'voiceover-open'].includes(f.rule)));
+  assert.deepEqual([disabled.episodes[0].os, disabled.episodes[0].vo], [3, 2]);
 });

@@ -35,7 +35,15 @@ export const DEFAULT_CONFIG = {
     ],
     max_scenes: 5, hook: { required: true },
     paywall: { first_at: [8, 15], free_ratio: [0.05, 0.25], hook_min: 'A' },
+    dialogue_run_max: 6, voiceover: { os_max: 2, vo_max: 1 },
   },
+  visual: { aspect_ratio: '9:16' },
+  storyboard: { segment: { max_seconds: 15 }, shot: { seconds: [2, 5] }, duration_tolerance: 0.15, max_people: 3 },
+  prompts: {
+    image: { dialect: 'generic', max_chars: 1000 }, video: { dialect: 'generic', max_chars: 1500 },
+    dialogue_check: true, dialects: {},
+  },
+  workflow: { target: null },
 };
 
 const object = x => x !== null && typeof x === 'object' && !Array.isArray(x);
@@ -43,6 +51,7 @@ const string = x => typeof x === 'string';
 const nonempty = x => string(x) && x.trim().length > 0;
 const int = Number.isSafeInteger;
 const number = Number.isFinite;
+const nonnegativeNumber = x => number(x) && x >= 0;
 const nonnegative = x => int(x) && x >= 0;
 const positive = x => int(x) && x > 0;
 const bool = x => typeof x === 'boolean';
@@ -52,6 +61,13 @@ const array = check => x => Array.isArray(x) && x.every(check);
 const pair = check => x => array(check)(x) && x.length === 2 && x[0] <= x[1];
 const hook = oneOf(...HOOK_ORDER);
 const level = oneOf('block', 'suggest');
+export const DIALECT_ID = /^[a-z0-9][a-z0-9.-]*$/;
+const dialectId = x => string(x) && DIALECT_ID.test(x);
+const date = x => string(x) && /^\d{4}-\d{2}-\d{2}$/.test(x);
+const dialectSettings = {
+  max_chars: nullable(nonnegative), max_seconds: nullable(nonnegativeNumber),
+  max_refs: nullable(nonnegative), forbid: array(nonempty), confirmed_at: nullable(date),
+};
 const term = x => nonempty(x) || (object(x) && nonempty(x.term) && string(x.hint));
 const projectPath = x => nonempty(x) && !path.isAbsolute(x) && !x.includes('\\')
   && !x.split('/').includes('..') && !x.includes('\0');
@@ -84,7 +100,7 @@ const schema = {
     ai_disclosure: nullable(oneOf('yes', 'no')), detection_mode: nullable(oneOf('basic', 'full')),
     typo_prompt: nullable(oneOf('submit', 'stop')), scheduled: nullable(bool),
     preview_keyword: nullable(string), log_file: string,
-    confirmed_at: nullable(x => string(x) && /^\d{4}-\d{2}-\d{2}$/.test(x)),
+    confirmed_at: nullable(date),
   },
   drama: {
     chars_per_minute: positive, length_level: level,
@@ -94,7 +110,21 @@ const schema = {
         && x[i - 1].max_seconds <= (y.max_seconds ?? Infinity))),
     max_scenes: nonnegative, hook: { required: bool },
     paywall: { first_at: pair(positive), free_ratio: pair(x => number(x) && x >= 0 && x <= 1), hook_min: hook },
+    dialogue_run_max: nullable(nonnegative), voiceover: { os_max: nullable(nonnegative), vo_max: nullable(nonnegative) },
   },
+  visual: { aspect_ratio: x => string(x) && /^\d+:\d+$/.test(x) },
+  storyboard: {
+    segment: { max_seconds: nonnegativeNumber }, shot: { seconds: pair(nonnegativeNumber) },
+    duration_tolerance: nonnegativeNumber, max_people: nonnegative,
+  },
+  prompts: {
+    image: { dialect: dialectId, max_chars: nullable(nonnegative) },
+    video: { dialect: dialectId, max_chars: nullable(nonnegative) },
+    dialogue_check: bool,
+    dialects: x => object(x) && Object.entries(x).every(([id, entry]) => dialectId(id) && object(entry)
+      && Object.entries(dialectSettings).every(([key, check]) => !Object.hasOwn(entry, key) || check(entry[key]))),
+  },
+  workflow: { target: nullable(oneOf('novel', 'script', 'storyboard', 'prompts')) },
 };
 
 function merge(defaults, overrides) {
