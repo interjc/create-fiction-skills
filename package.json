@@ -1,0 +1,14 @@
+{
+  "name": "create-fiction-skills",
+  "private": true,
+  "description": "Agent Skills for writing Chinese web novels and vertical short dramas",
+  "license": "MIT",
+  "engines": {
+    "node": ">=22.5"
+  },
+  "scripts": {
+    "validate": "node tools/validate.mjs",
+    "sync": "node tools/sync-shared.mjs",
+    "test": "node --test shared/tests/ tools/tests/ skills/*/scripts/tests/"
+  }
+}

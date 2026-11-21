@@ -1,0 +1,334 @@
+# debook-terms.txt -- terms that must NOT appear in public skills (outside [allow-paths]).
+# Format: UTF-8, one term per line, '#' comments, blank lines ignored, [section] headers.
+# Parser rule (authoritative: docs/spec/scripts.md §9): a line whose first non-space char is '#' is a
+# comment; on a live line, everything from the first " #" (space + '#') onward is an inline comment;
+# the remaining text, trimmed, is the term ('re:' prefix = regex; pure-ASCII terms match case-insensitively
+# with word boundaries, others as case-sensitive substrings).
+# Trailing "# borderline: ..." = live term reviewed and kept by the director (2026-11-21).
+# "# 候选..." lines are NOT live: generic words demoted to avoid false positives in public prose.
+# Terms only; no prose copied from the source project.
+
+[names]
+# --- 主角与家人 ---
+周伟
+苏叶
+# --- 核心配角 ---
+肖队
+鲁队
+赵行简
+许怀诚
+沈遥
+赵青清
+温慎行
+罗砺
+许观川
+程见秋
+杜平生
+余见山
+秦掌柜
+邵岚
+梅守拙
+郑行戈
+贺存炉
+顾川
+沈秋禾
+闻青梧
+韩砺
+陆明远
+李文韬
+赵松庭
+青莲子
+赵承远
+陈思凝
+# --- 执法队 / 断云会 / 散修配角 ---
+韩志远
+宋铮
+何劲松
+石海峰
+徐鹤鸣
+苏雨桐
+陈博文
+钱大勇
+许掌柜
+温执事
+梁老修士
+谢临川
+岑雨桐
+方国平
+杨树林
+孟广义
+方启明
+杜师傅
+裴照临
+苏问渠
+贺岳平
+# --- 地方接口(卷二十二) ---
+柳师傅
+葛岚
+裴师傅
+韩肃
+陆管事
+# --- 卷十至卷十九 外国/外地人物 ---
+雨宫玄
+久世晴彦
+神原澄也
+柳原真守
+莲见觉真
+风间怜司
+相马千寻
+相原澪
+藤岛佑真
+普拉吉
+阿南德
+露琪亚
+本内德托
+克拉拉
+玛尔塔
+埃米尔
+马蒂亚斯
+玛特奥
+卢西亚
+塞莱斯特
+托马斯
+阿玛鲁
+格兰特
+# --- 全球同时代筑基者 ---
+程艾登
+田中哲也
+施明雅
+恩科维
+林小北
+# --- 昵称 / 句柄 / 称呼 ---
+TaiXu
+# 候选(总监降级 2026-11-21): 太虚  # borderline: 太虚 is also generic Daoist vocabulary; here it is the guide character's Chinese handle
+# 候选(总监降级 2026-11-21): Elaine  # borderline: common English given name; here it is Shen Yao's GitHub ID
+# 候选(总监降级 2026-11-21): 赵经理  # borderline: workplace-boss label for a minor character
+# 候选: 林晓 周敏 刘岩 方晓 季诚 执法队二字名, 易与普通人名撞车
+# 候选: 马骁 梁策 裴照 韩朔 (断云会选手, 二字名)
+# 候选: 森田 桥本 白石 高梨 (日本姓氏, 常见)
+# 候选: 老丁 老张 老马 小陶 何嫂 王阿姨 (泛称式称呼)
+# 候选: 颂 米拉 拉维 里奥 艾达 莱恩 西蒙 诺拉 海斯 伊莱 伊娜 索伦 (外国人物, 短/常见)
+# 候选: 柳 于衡 乔成 闻启 (地方接口人物, 二字名)
+# 候选: 宋女士 顾姓带路人 (泛称)
+
+[orgs]
+赵家  # borderline: bare 3-char family label; here it is the central cultivating family of the book
+# 候选(总监降级 2026-11-21): 陈家  # borderline: common surname+家; here a secondary family
+# 候选(总监降级 2026-11-21): 方家  # borderline: common surname+家; here a secondary family
+赵家别墅
+赵家分舵
+赵家分公司
+赵家当地合作公司
+断云会
+青岫门
+清溪门
+归璞堂
+砺甲坊
+散修盟  # borderline: could read as generic "loose cultivators' league"
+# 候选(总监降级 2026-11-21): 天文俱乐部  # borderline: generic club name
+北坡洞府
+北路旧火房
+北边旧工坊  # borderline: descriptive location phrase used as a named node
+上河旧票库
+河口旧函排
+九源
+九源传承派
+九源大神
+# 候选(总监降级 2026-11-21): 太初  # borderline: generic Daoist term; here the nine-source god TaiXu is a digital avatar of
+道源之境
+冰流星
+宇宙大道联合会
+天道议会
+飞升者联盟
+昆仑派长老
+# 候选(总监降级 2026-11-21): 守旧派  # borderline: generic phrase; here a named antagonist faction
+# 候选(总监降级 2026-11-21): 顺其自然派  # borderline: generic phrase; here the antagonist faction's name
+全国修炼事务执法部  # borderline: generic bureaucratic name; here the semi-official body of this book
+执法部外派  # borderline: coined role phrase
+家族联合体  # borderline: coined faction type
+旧社神道系  # borderline: Japan-arc school label
+合气呼吸系  # borderline: Japan-arc school label
+隐行系  # borderline: Japan-arc school label
+# 候选(总监降级 2026-11-21): 悬赏系  # borderline: Japan-arc school label
+# 候选(总监降级 2026-11-21): 治疗系  # borderline: Japan-arc school label
+# 候选(总监降级 2026-11-21): 材料会  # borderline: Japan-arc coined body
+# 候选(总监降级 2026-11-21): 段位会  # borderline: Japan-arc coined body
+伪课程事故  # borderline: volume-10 event label
+# 候选: 终南山 昆仑山 (真实名山, 通用仙侠常用; 只在 dual-line 示例中出现)
+# 候选: 拍卖所 (通用词, 本书作为高价值寄拍渠道使用)
+# 候选: 散修大会 (通用词, 本书里指断云会)
+# 候选: 执法队 执法部 (通用词, 本书里是核心制度机构; 见 [terms] 的 borderline)
+
+[terms]
+开源筑基丹
+OpenSource-Foundation-Pill
+Foundation-Pill
+净琉璃
+空青髓
+回脉化灵诀
+宿灵结络
+沉鳞衣
+校三桥
+突破篇
+叠脉丹
+# 候选(总监降级 2026-11-21): 培元丹  # borderline: 培元丹 is also a stock xianxia pill name
+玄照镜
+银茶针
+银茶具
+玉衡柱
+寒芒锥
+裂雷锥
+藏息戒
+借风梭
+封灵瓶
+玄纹护具套
+青铜残钥
+覆甲诀
+玄元归一镇灵封
+梦域术
+三透刺
+凝海丹方
+筑基行功要诀
+白链
+白箱
+白页
+联席白页
+白页不落地头
+后路签
+后问空白版
+分名册
+床号表
+路线签收
+承接四问
+补后场
+翻空口
+双口现到
+不得单飞
+辅填 / 评注 / 带写
+熟口不上空表
+空白可发
+现例不出
+等价回流
+post-core
+local-validation
+# 候选(总监降级 2026-11-21): contribution.md  # borderline: filename is generic in GitHub but is a coined element of the in-book private repo rules
+出门托底 / 环球问法
+环球问法  # borderline: the book's name for its world-tour phase
+地图循环  # borderline: author's structural template name (入图限制→引路NPC→...); method may be genericised
+入图限制
+# 候选(总监降级 2026-11-21): 引路 NPC  # borderline: part of the 地图循环 template
+# 候选(总监降级 2026-11-21): 控制台  # borderline: common word; here the protagonist's hidden debug interface
+# 候选(总监降级 2026-11-21): 日志  # borderline: common word; here in-world 控制台 log format
+# 候选(总监降级 2026-11-21): 执法队  # borderline: generic word; here the central enforcement institution
+# 候选(总监降级 2026-11-21): 蓝光  # borderline: common word; here the first-signal plot beat
+# 候选(总监降级 2026-11-21): 引子  # borderline: common word; here the starter-pill preparation
+# 候选(总监降级 2026-11-21): 古法  # borderline: common word; here the in-book label for the traditional system
+# 候选(总监降级 2026-11-21): 蒸馏  # borderline: common word; here TaiXu's "distilled" cultivation path
+修炼公开化  # borderline: coined framing for the book's social premise
+灵石≈1000元  # borderline: book-specific exchange rate phrase (written as 1灵石≈1000元 in source)
+1灵石≈1000元
+我有城市但没有房屋
+# 候选: 私有仓库 开源修仙 公开仓库 (通用 GitHub 词汇, 但与本书设定强绑定; 若校验要求更严再启用)
+# 候选: 宇宙危机 暗线 明线 (题材通用, 不列)
+# 候选: 仙体 渡劫 (通用, 不列)
+
+[book]
+《开源筑基丹》
+open-cultivation
+interjc
+chapter1_immortal_recipe
+character_design
+# 卷名
+天机初现
+引雷为劫
+执法者之路
+风起断云
+断云立名
+借雷成丹
+丹成立身
+养丹归家
+东海诸法
+恒河诸身
+尼罗星沙
+地中海遗火
+欧陆炉火
+北境旧甲
+白链冷库
+白箱回路
+石历日轮
+安第斯梦火
+归来护劫
+万法归炉
+丹进中流
+九州问门
+执法新途
+北炉分火
+诸门索页
+争门立界
+断册分名
+后路开价
+空表不卖
+变故立约
+血战断局
+惨胜立门
+# 候选: 修仙世界 (第三卷卷名, 太通用)
+# 候选: 番茄 番茄小说 fanqie (发布平台名; 见 [params])
+
+[params]
+第 1-266 章
+第1-266章
+1-266 章
+第 267 章
+第267章
+267 章及以后
+# 候选(总监降级 2026-11-21): 超过 2500
+# 候选(总监降级 2026-11-21): 超过 `2500`
+# 候选(总监降级 2026-11-21): 必须超过 2500
+# 候选(总监降级 2026-11-21): 2500 字
+# 候选(总监降级 2026-11-21): 不高于 `3500`
+严格大于 4000
+严格大于4000
+每日平台正文字数
+# 候选(总监降级 2026-11-21): 每天2章
+# 候选(总监降级 2026-11-21): 每天 2 章
+# 候选(总监降级 2026-11-21): 日常更新 = 每天2章
+# 候选(总监降级 2026-11-21): 首秀爆更期
+# 候选(总监降级 2026-11-21): 10万字达标后
+pnpm review:length
+review:length
+fanqie-publish-log
+publish-to-fanqie
+# 候选(总监降级 2026-11-21): 番茄小说  # borderline: public platform name; adaptable publish pack may legitimately name it
+番茄发布节奏  # borderline: heading naming the platform
+ch1-200
+ch199-200
+ch84-85
+ch84
+ch85
+ch119
+ch68
+ch55
+ch56
+ch34
+ch27
+ch25
+ch23-27
+ch16-22
+ch38-40
+ch36-37
+ch4-7
+ch8-10
+181+
+卷五 ch84-85
+# 候选(总监降级 2026-11-21): 13:00  # borderline: default scheduled-publish time in source; may collide with ordinary times
+# 候选(总监降级 2026-11-21): .data/story.db
+# 候选(总监降级 2026-11-21): story.db
+
+[allow-paths]
+docs/plan.md
+AGENTS.md
+CLAUDE.md
+docs/agent-team/**
+docs/spec/debook-terms.txt
+README.md
+README.en.md
