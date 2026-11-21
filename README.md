@@ -4,7 +4,7 @@
 
 方法来自一部 600 多章长篇网文连载的实际写作流程，内容已通用化。作者主导，AI 负责查资料、起草、审校和记账。
 
-English version: `README.en.md`（待补充，补上后改为链接）
+English version: [README.en.md](README.en.md)
 
 ## 特点
 
