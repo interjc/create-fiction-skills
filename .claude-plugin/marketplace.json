@@ -1,0 +1,39 @@
+{
+  "name": "create-fiction-skills",
+  "owner": { "name": "Justin Chen" },
+  "description": "网文与竖屏短剧写作 skills：从创意到网文、分集剧本、分镜和图片 / 视频提示词。Agent Skills for Chinese web novels and vertical short dramas, from idea to novel, episode script, storyboard and image / video prompts.",
+  "plugins": [
+    {
+      "name": "create-fiction",
+      "source": "./",
+      "description": "核心 10 个 skill：建书、策划、写章、审校、设定一致性、技法、总入口、短剧改编、分镜、视觉提示词。Core skills: project setup, planning, chapters, review, continuity, craft, workflow, short drama, storyboard, visual prompts.",
+      "version": "0.1.0",
+      "license": "MIT",
+      "strict": false,
+      "skills": [
+        "./skills/fiction-init",
+        "./skills/fiction-planner",
+        "./skills/fiction-chapter",
+        "./skills/fiction-review",
+        "./skills/fiction-continuity",
+        "./skills/fiction-craft",
+        "./skills/fiction-workflow",
+        "./skills/fiction-short-drama",
+        "./skills/fiction-storyboard",
+        "./skills/fiction-visual-prompts"
+      ]
+    },
+    {
+      "name": "create-fiction-extras",
+      "source": "./",
+      "description": "可选：长篇故事索引（node:sqlite）与实验性的平台定时发布。Optional: story index for long books and experimental scheduled publishing.",
+      "version": "0.1.0",
+      "license": "MIT",
+      "strict": false,
+      "skills": [
+        "./skills/fiction-story-db",
+        "./skills/fiction-publish"
+      ]
+    }
+  ]
+}
