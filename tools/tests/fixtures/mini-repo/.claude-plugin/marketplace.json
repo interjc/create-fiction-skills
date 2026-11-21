@@ -1,0 +1,5 @@
+{
+  "plugins": [
+    { "name": "fixture", "nested": { "sources": ["./skills/fiction-notes"] } }
+  ]
+}

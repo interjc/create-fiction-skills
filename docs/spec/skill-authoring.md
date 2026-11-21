@@ -92,7 +92,7 @@ metadata:
 
 - [ ] `node tools/validate.mjs` 通过（frontmatter、行数、链接、双语 description、零依赖、词表 grep）
 - [ ] skill-creator 的 `quick_validate.py` 通过
-- [ ] `node --test skills/<name>/scripts/tests/` 通过（有脚本时）
+- [ ] `node --test 'skills/<name>/scripts/tests/*.test.mjs'` 通过（有脚本时）
 - [ ] 来源映射（plan.md §4.1）里该 skill 对应的通用方法都有落点，舍弃的写明理由
 - [ ] 流程每一步的读写路径都与 story-bible.md 一致
 - [ ] 凡是写机读文件的步骤，都链接到了 `references/formats/` 里对应的摘录，并标了 “SB §x”；正文没有指向 `docs/spec/` 的引用

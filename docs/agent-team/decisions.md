@@ -46,3 +46,8 @@ Back to the [board](README.md). Append new decisions at the end. Never rewrite o
 - Motivation and evidence: 契约 1061 行无法整份放进单个 reference；手写摘要会漂移；把格式写进书里依赖 fiction-init。摘录与 `scripts/lib/` 副本同步更新，`shared-drift` 拦漏同步。草案：`.agent-team/drafts/formats-shipping.md`。
 - Rejected options: 每个 skill 手写精简示例（B）；fiction-init 往书里写格式摘要（C）。
 - Status: spec landed（本次提交）；实现排进 T2.c 的第一个子任务（T2.b 验收后立即派）；`shared/formats.json` 在 T2.a 交付后由总监建
+
+### D-06: 未埋即弃的伏笔，埋设章可写 `?` (2026-11-21)
+- Decision: SB §6.2 `埋设章` 在状态为放弃且从未埋下时也允许 `?`。由 T2.c2 改 `bible.mjs` 与测试。
+- Decided by: director（示例书 F009 在真实脚本下报 invalid；这是作者常见的合法情况，不是示例书写错）
+- Status: spec landed; parser pending (T2.c2)

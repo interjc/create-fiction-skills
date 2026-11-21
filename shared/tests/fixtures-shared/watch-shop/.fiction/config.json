@@ -1,0 +1,12 @@
+{
+  "book": { "title": "逆走一格" },
+  "length": { "min": 12 },
+  "frozen": { "ranges": ["2"] },
+  "lint": {
+    "banned_terms": ["ACME-7", { "term": "门牌原稿", "hint": "删掉制作备注" }],
+    "desensitize": { "places": [{ "term": "铜湾市", "hint": "改成河对岸" }] }
+  },
+  "appearance": { "gap_warn": 1 },
+  "subplot": { "stall_after": 2, "max_span": 3 },
+  "drama": { "paywall": { "first_at": [1, 2], "free_ratio": [0.2, 0.8] } }
+}

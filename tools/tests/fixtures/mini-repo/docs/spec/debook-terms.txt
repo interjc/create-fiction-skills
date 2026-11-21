@@ -1,0 +1,12 @@
+# Invented test-only terms.
+[names]
+MurmurRivet-73 # an invented label
+
+[terms]
+瓷雾铃钮
+re:fixture-sigil-\d{2}
+
+[allow-paths]
+exempt/**/item?.txt
+notes/safe-*.txt
+decoys/

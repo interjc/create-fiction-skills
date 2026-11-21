@@ -13,7 +13,7 @@
 - 脚本零依赖（只用 `node:` 内置模块），Node 22.5+；共用代码只在 `shared/lib/` 维护，用 `node tools/sync-shared.mjs` 复制进各 skill。不要直接改 skill 里的副本。
 - 不得出现《开源筑基丹》的书专属内容（人名、组织、书内术语、作者个人发布参数），以 `docs/spec/debook-terms.txt` 为准。
 - 不搬运原书正文；示例只用 `examples/demo-book/` 里的原创内容。
-- 提交前跑：`node tools/validate.mjs` 和 `node --test skills/*/scripts/tests/`。
+- 提交前跑：`node tools/validate.mjs` 和 `node --test 'skills/*/scripts/tests/*.test.mjs'`。
 
 ## Subagent team
 <!-- Policy for the subagent-team skill. Edit freely; the skill reads it at the start of each task. -->
@@ -46,6 +46,6 @@
 - Hard design problems: consult Fable 5.2 (in-house principal expert) first; ask the author only when that cannot settle it (user, 2026-11-21)
 - Never outsourced: `docs/spec/` (contracts), `docs/plan.md`, final acceptance of every SKILL.md
 - Shared files (director only): `AGENTS.md`, `docs/plan.md`, `docs/spec/*`, `.claude-plugin/*`, `docs/agent-team/README.md`
-- Acceptance commands: `node tools/validate.mjs`; `node --test skills/*/scripts/tests/`; skill-creator `quick_validate.py` per skill
+- Acceptance commands: `node tools/validate.mjs`; `node --test 'skills/*/scripts/tests/*.test.mjs'`; skill-creator `quick_validate.py` per skill
 - Commit / push / deploy: commit locally at every key milestone (each accepted task or sub-task, each frozen contract, each board transition worth keeping), after its checks pass; push only when asked (user, 2026-11-21)
 - Lessons and user adjustments: docs/agent-team/lessons.md

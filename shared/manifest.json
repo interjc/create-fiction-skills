@@ -1,0 +1,12 @@
+{
+  "skills": {
+    "fiction-init": ["lint", "length"],
+    "fiction-planner": ["foreshadow-scan"],
+    "fiction-chapter": ["brief", "length", "lint"],
+    "fiction-review": ["length", "lint"],
+    "fiction-continuity": ["foreshadow-scan", "brief"],
+    "fiction-short-drama": ["drama-check", "lint"],
+    "fiction-story-db": [],
+    "fiction-publish": ["length"]
+  }
+}

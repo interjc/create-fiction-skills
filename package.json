@@ -9,6 +9,6 @@
   "scripts": {
     "validate": "node tools/validate.mjs",
     "sync": "node tools/sync-shared.mjs",
-    "test": "node --test shared/tests/ tools/tests/ skills/*/scripts/tests/"
+    "test": "node --test 'shared/tests/*.test.mjs' 'tools/tests/*.test.mjs' 'skills/*/scripts/tests/*.test.mjs'"
   }
 }

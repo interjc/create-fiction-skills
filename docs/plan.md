@@ -150,7 +150,7 @@ OpenCode 与 Codex：两者都跑 gpt-6.2-sol。按作者 2026-11-21 的指示�
 
 ```bash
 node tools/validate.mjs            # frontmatter、行数、链接可达、双语 description、零依赖、词表 grep = 0
-node --test skills/*/scripts/tests/
+node --test 'skills/*/scripts/tests/*.test.mjs'
 python3 <skill-creator>/scripts/quick_validate.py skills/<name>   # 逐个 skill
 ```
 

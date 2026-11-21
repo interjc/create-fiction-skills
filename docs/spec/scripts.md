@@ -56,7 +56,7 @@ Finding（lint、drama-check、foreshadow-scan 的 `invalid`、validate 共用�
 - `shared/tests/<module>.test.mjs`（`node:test` + `node:assert/strict`），共用 fixtures 放 `shared/tests/fixtures-shared/`：一本原创迷你书，覆盖 SB 每种机读格式的合法与非法样例（不得出现 debook-terms 词）。
 - `tools/tests/*.test.mjs` 测 validate 与 sync-shared，用 `tools/tests/fixtures/` 下的迷你仓库。
 - 必测：§3.3 的计数向量；`DEFAULT_CONFIG` 与 SB §8 表一致；每条 lint 规则与默认模式至少一个命中、一个不命中样例；每个 JSON 形状的键集合。
-- 验收：`node --test shared/tests/ tools/tests/` 与 `node --test skills/*/scripts/tests/` 都通过。
+- 验收：`node --test 'shared/tests/*.test.mjs' 'tools/tests/*.test.mjs'` 与 `node --test 'skills/*/scripts/tests/*.test.mjs'` 都通过（Node 26 起 `--test` 不接受目录参数，用带引号的 glob）。
 - `fixtures-shared/` 的迷你书增加一部短剧的 `visual/`、`storyboards/`、`prompts/` 样例，覆盖 SB §9.4–§9.9 每种格式的合法与非法情况（图片文件用 0 字节占位即可）。
 - 必测补充：SB §9.6 例子的派生量（5 镜、14 秒、两句台词全部对上、3 条动作行全部被 `依据` 引用）；`current` / `allowed` / `usable_from` 各至少一个边界用例；§7、§11、§12 每条规则至少一个命中、一个不命中样例。
 - `tools/tests/` 必测：§8.1 三种章节号的取法各一例；围栏内的 `## ` 行不被当成标题（含 4 个反引号的围栏）；相对链接被替换、带协议的链接保留；章节号找不到与超过 400 行各返回退出码 2。
