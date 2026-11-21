@@ -104,7 +104,7 @@ node <本 skill 目录>/scripts/lint.mjs --series <series>
 
 - 补全 `drama/{series}/adaptation-map.md` 本批各行：`人物` 按实际出场、`伏笔` 按实际动作、`改动` 写合并 / 删减 / 改序理由（[SB §9.2](references/formats/drama.md)）。
 - 模式 B 原创短剧同步按实际埋设、揭示与兑现更新 `series.md` 的 `## 悬念账`（含 `实际兑现集` 与 `状态`），并复核未泄出 `幕后真相`。
-- 新增短剧专属人物：在 `bible/characters.md` 追加块并标 `- 范围：短剧:{series}`（[SB §6.4](references/formats/bible.md)）。仅短剧生效的调整记入 `series.md` 的 `## 改编口径`；动到共享 canon 时停下，请作者拍板并交 `fiction-continuity` 写入 `bible/canon.md`。
+- 新增短剧专属人物：在 `bible/characters.md` 追加块并标 `- 范围：短剧:{series}`（[SB §6.4](references/formats/bible.md)）。仅短剧生效的调整记入 `series.md` 的 `## 改编口径`。按 `fiction-continuity` 的冲突优先级（[SB §3](references/formats/project.md)），只将作者在本流程明确确认且无冲突的共享设定裁决写入 `bible/canon.md`，未确认或有冲突的交 `fiction-continuity`。
 - 绝不修改小说章节、`bible/foreshadows.md` 或已有共享人物条目。原书来源章后续修订时，列出受影响集号供作者重查。
 - **回写与返修后必须重跑步骤 5 的两个脚本**，防止回写引入 `map-foreshadow`、`map-order` 或 `parse` 阻断；验收只认最新一次脚本结果。
 
@@ -114,7 +114,7 @@ node <本 skill 目录>/scripts/lint.mjs --series <series>
 
 ### 8. 交接 `fiction-storyboard`
 
-交接须同时满足四项（以回写和返修后的最终文件为准）：(1) 最新一次 `drama-check.mjs` 与 `lint.mjs --series` 均成功执行且**退出码均为 0**；(2) 本批目标集号全部出现在 `drama-check.mjs` 的 `episodes[]` 中；(3) `adaptation-map.md` 对应行已补齐（分镜需靠埋 / 收集防剧透）；(4) 作者已把剧本 `状态` 改为 `定稿` `[作者]`。
+交接须同时满足四项（以回写和返修后的最终文件为准）：(1) 最新一次 `drama-check.mjs` 与 `lint.mjs --series` 均成功执行且**退出码均为 0**，把本剧两项结果一并交给分镜；(2) 本批目标集号全部出现在 `drama-check.mjs` 的 `episodes[]` 中；(3) `adaptation-map.md` 对应行已补齐（分镜需靠埋 / 收集防剧透）；(4) 作者已把剧本 `状态` 改为 `定稿` `[作者]`。
 
 若已有分镜的集数日后修订剧本，按 [SB §4.2](references/formats/project.md) 把受影响集号与改动清单先交给 `fiction-storyboard` 重检并同步分镜，再交 `fiction-visual-prompts` 更新提示词，顺序不可反；本 skill 不触碰 `storyboards/` 或 `prompts/`。缺任一下游 skill 时，交付最终文件、待办与未跑检查。
 

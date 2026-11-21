@@ -23,7 +23,7 @@
 - 叙述距离：{{narrative_distance}}
 - 正文及对外文案的脱敏尺度：{{public_desensitization}}
 - 目标发布平台（仅意向）：{{target_platform}}
-- 本次产出终点：{{pipeline_endpoint}}
+- 流水线终点见 `.fiction/config.json` 的 `workflow.target`。
 
 完整人物档案和人物秘密在 `bible/characters.md`；已裁定的设定在 `bible/canon.md`。精确时间记入 `bible/timeline.md`，现实原型留在对应内部档案；正文与外宣按本书口径使用泛称、虚构名和相对时间，机器词表与年份开关查 `.fiction/config.json`。
 
@@ -49,7 +49,7 @@
 
 1. 先查 `bible/sources.md`，每类信息只在一份主写文件更新，别处最多留摘要和指向。按任务读必要文件：先查设定与校时的权威层，再看规划/人物/伏笔等追踪文件，缺信息才查专题索引；讨论稿和早期原材只作参考。
 2. `fiction-planner` 定全书及卷级规划，交付卷表、节奏、钩子、日更分组；区域卷另在卷纲自由正文注明每章的区域循环步次、新增的区域理解和结算收益。改卷规划先写 `bible/volumes/{vol}.md`，再更新 `bible/plot-outline.md` 与卷摘要。`fiction-chapter` 读卷摘要、卷规划、设定、简报及上章结尾，备资料 → 写单章 `outline.md` → 写正文 → 检查。
-3. `fiction-chapter` 写完按事件回写：出场每章记，伏笔和支线按实际推进更新，时间、关系、物品或规则变化写各自入口，卷完结补复盘；细则找 `fiction-continuity`。技法找 `fiction-craft`，编辑审校找 `fiction-review`；初稿未回写时标「待回写」，完稿或返修后回写再验收。章后衔接点记在交付汇报或下章 `resources.md`，不在支线文件另起标题块。冻结正文不改，矛盾记入 `bible/canon.md` 或留给后续章节解释。
+3. `fiction-chapter` 写完按事件回写：出场每章记，伏笔和支线按实际推进更新，时间、关系、物品或规则变化写各自入口；卷完结交 `fiction-continuity` 补复盘。技法找 `fiction-craft`，编辑审校找 `fiction-review`；初稿未回写时标「待回写」，完稿或返修后回写再验收。章后衔接点记在交付汇报或下章 `resources.md`，不在支线文件另起标题块。冻结正文不改，口径冲突交 `fiction-continuity`。
 4. 文案由 `fiction-planner` 拟 `publish/blurb.md`、`fiction-review` 审校、`fiction-publish` 确认参数后提交；改书名时核对 `book.title`。新增章节实际公开后，交 `fiction-init` 的「更新冻结清单」模式。
 5. 需要改编时按所选终点找 `fiction-short-drama` → `fiction-storyboard` → `fiction-visual-prompts`，到目标就停；用 `fiction-workflow` 路由。未安装相应 skill 时交接文件、待办和未运行的检查，不代做。
 

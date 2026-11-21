@@ -1,8 +1,8 @@
 ---
 name: fiction-workflow
 description: >-
-  网文与竖屏短剧全流水线总入口与阶段路由：查看项目当前阶段、逐集进度与已设终点，协助作者选定或切换终点（只写网文、到分集剧本、到分镜或到图片与视频提示词），按阶段门槛把下一步与具体章集交给负责的兄弟 skill，并在上游改动后按契约顺序回退重跑。仅在作者询问“从哪开始写”“下一步做什么”“项目进行到哪了”“帮我看看整体进度”“从创意到短剧的完整流程”“只写小说不做短剧”“切换终点”时使用。已经点名具体制作任务的请求（如“写第5章”“把第3章改成短剧”“给第2集画分镜”）直接交给对应 skill，不由本 skill 接手；本 skill 只做进度判读、终点确认与路由，绝不代做兄弟 skill 的工作。
-  Front door and stage router for the web-novel and vertical short-drama pipeline: reports project stage, per-episode progress, and current endpoint, helps the author set or switch workflow.target (novel, script, storyboard, or prompts), routes the next step with exact chapters or episodes by entry gates, and enforces rollback order after upstream edits. Use only when asked where to start, what to do next, overall progress, full pipeline overview, novel-only mode, or changing the endpoint. Concrete production requests (such as writing chapter 5, adapting chapter 3 into a short drama, or storyboarding episode 2) belong directly to the owning skill, not here; routing and progress only.
+  网文与竖屏短剧流水线路由：查看阶段与逐集进度，选定或切换终点（网文、剧本、分镜或提示词），按门槛交接具体章集，上游改动后按顺序回退。作者问“进行到哪了”“下一步做什么”“该走哪一步”，或说“设定终点”“切换终点”“跑完整条流水线”时使用。具体的单阶段制作请求直接交给负责的 skill。
+  Route the web-novel and vertical short-drama pipeline. Use for “where am I?”, “what next?”, “which step?”, “set or change the endpoint”, or “run the whole pipeline”. Report project and episode progress, set workflow.target, and route specific chapters or episodes through gates and upstream rechecks. Use the owning skill for a concrete single-stage task.
 license: MIT
 compatibility: Agent Skills standard; tested on Claude Code, also readable by Codex and OpenCode. Scripts need Node.js 22.5+.
 metadata:
@@ -55,22 +55,24 @@ node <本 skill 目录>/scripts/status.mjs --root <书根> --json
 
 ### 3. 定终点与定界 `[作者]`
 
-- **选定终点**：当 `target` 为 `null` 时，一次性请作者选择终点（[SB §8](references/formats/config.md)）：`novel`（只写网文）/ `script`（到分集剧本）/ `storyboard`（到分镜）/ `prompts`（到图片与视频提示词）。明确告知：不写网文直接做原创短剧（`fiction-short-drama` 模式 B）完全合法，跳过网文不算失败。
+- **选定终点**：`fiction-init` 已写入终点时直接沿用；当 `target` 为 `null` 且作者尚未回答时，一次性请作者选择终点（[SB §8](references/formats/config.md)）：`novel`（只写网文）/ `script`（到分集剧本）/ `storyboard`（到分镜）/ `prompts`（到图片与视频提示词）。原创短剧可直接走 `fiction-short-drama` 模式 B。
 - **写入 `workflow.target`**：
-  - 书项目骨架（含 `.fiction/config.json` 或书根）已存在时，**在作者明确回答之后**，由**本 skill 自己**先打开 [SB §8](references/formats/config.md)，写入并核对 `.fiction/config.json` 的 `workflow.target`（保留其余键不变）；书根已有 `bible/` 但还没有 `.fiction/config.json` 时，只按 SB §8 新建仅含 `{"workflow":{"target":…}}` 的最小配置，这是本 skill 唯一可新建的文件。
-  - 书项目尚未建骨架时，先把作者已答的终点随交接传递，待 `fiction-init` 建好骨架后，再由本 skill 打开配置摘录写入并核对 `workflow.target`（不依赖 `fiction-init` 代写该键）。若因缺少 `fiction-init` 而仅建了最小降级骨架（无 `.fiction/config.json`），在汇报中注明「`workflow.target` 待写入配置」并保留作者已确认值。
+  - 书项目骨架已存在时，只在 `workflow.target` 仍为 `null` 且作者已确认终点时，由本 skill 按 [SB §8](references/formats/config.md) 写入并核对（保留其余键不变）；书根已有 `bible/` 但还没有 `.fiction/config.json` 时，只按 SB §8 新建仅含 `{"workflow":{"target":…}}` 的最小配置，这是本 skill 唯一可新建的文件。
+  - 书项目尚未建骨架时，把作者已答的终点交给 `fiction-init` 写入，建好后重读配置；仍为 `null` 才按上一条补写。若因缺少 `fiction-init` 而仅建了最小降级骨架（无 `.fiction/config.json`），在汇报中注明「`workflow.target` 待写入配置」并保留作者已确认值。
 - **切换终点与终点定界**：作者随时可调高或降低终点（同样须作者确认后再改 `workflow.target`）。**本次工作范围以当前 `workflow.target` 为上限**：机械 `stage` 高于 `target` 完全正常（已有下游文件留在原地即可，不越过 `target` 推进）；即使存在短剧文件，只要本次任务是网文写作，网文连载路线始终可用。
 
 ### 4. 按「终点定界 → 逐集门槛」路由
 
 先用当前 `target` 限定本次路由上限；进入短剧链路后，先选定 `series` 与 `episode`（结合 `adaptation-map.md` 与作者批次找缺口，不靠总数相减猜集号），再**按同一集从上游到下游逐道查门槛**：任一门槛未过或该文件有 `warnings` 解析异常，一律退回该门槛的负责 skill（完整字段条件、降终点路径与案例见 [路由详表与案例](references/routing.md)）。
 
+小说章节的「定稿」指选用的稿件文件，作者审批另行确认；分集剧本与分镜的 `状态：定稿` 表示作者已确认。
+
 | 当前状态 / 场景 | 入口条件与门槛 | 交给哪个 skill | 交接输入与说明 |
 |---|---|---|---|
 | 无书根 / `empty`（网文意向，点子模糊） | 尚无故事定位与卖点 | `fiction-planner` | 模糊想法、题材意向；先收敛定位再建书 |
-| 无书根 / `empty`（网文意向，创意已定） | 方向已定，缺项目骨架 | `fiction-init` | 书根路径与作者已确认终点；建骨架后由本 skill 写 `workflow.target` |
+| 无书根 / `empty`（网文意向，创意已定） | 方向已定，缺项目骨架 | `fiction-init` | 书根路径与作者已确认终点；由 `fiction-init` 建骨架并写 `workflow.target` |
 | 无书根 / `empty` / 仅有规范旧稿无档案 | `novel.bible === false`，有外部旧稿或无档案手稿 | `fiction-init`（作者要求反抽档案时请它先确认导入范围） | 旧稿路径、章卷意向与公开状态待核清单；改短剧（模式 C）也先走此步 |
-| 无书根 / `empty`（仅原创短剧意向，不写网文） | `target` 非 `novel`，不需要写小说 | `fiction-init` → `fiction-short-drama`（模式 B） | 搭最小骨架后由 `fiction-short-drama` 自行完成短剧立项（无需先走 `fiction-planner`） |
+| 无书根 / `empty`（仅原创短剧意向，不写网文） | `target` 为 `script` / `storyboard` / `prompts` | `fiction-init` → `fiction-short-drama`（模式 B） | 交书根与已确认终点，搭最小骨架后由 `fiction-short-drama` 自行完成短剧立项（无需先走 `fiction-planner`） |
 | 已有短剧目录但尚无分集 | `series[].stage === null`（`stage` 可为 `empty`/`bible`/`novel`），`target` 非 `novel` | `fiction-short-drama` | `series`、`series.md` 与 `adaptation-map.md`；缺基础档案先补最小骨架 |
 | `bible`（走网文路线） | `novel.bible === true && novel.chapters === 0`；卷规划缺目标章职责 | `fiction-planner` | 书根与 `bible/`；补齐全书大纲、卷规划表与目标起始章（可从第 0 或第 1 章起） |
 | `bible`（走网文路线） | 卷规划已确认起始章与本章职责 | `fiction-chapter` | 书根、已确认卷号与规划表给出的章号（不写死第 1 章） |
@@ -78,9 +80,9 @@ node <本 skill 目录>/scripts/status.mjs --root <书根> --json
 | 网文提交平台 | **仅在作者要求提交/排期/查状态时** | `fiction-publish`（实验 extras） | 目标平台（当前仅适配番茄 `fanqie`）、作品、作者确认的定稿或获准提交的 `publish/blurb.md` 及授权范围；未适配或缺已登录会话时只做本地准备交付 |
 | 新增章节已公开发布 | 作者核实已公开章号与采用稿 | `fiction-init`（更新冻结清单模式） | 书根、已公开全局章号与采用稿（仅此 skill 负责封存） |
 | 启动小说改短剧（模式 A） | `target` 非 `novel`，`novel.bible === true` 且已有定稿（无档案手稿走模式 C 先交 `fiction-init`） | `fiction-short-drama`（模式 A） | 书根、`bible/` 与已定稿范围 |
-| 剧本门槛未过（任意高于 `novel` 的 `target`） | 目标集 `script !== "final"`（含 `null`/`draft`/`revised`）、映射缺行、或 `drama-check` / `lint --series` 未清阻断 | `fiction-short-drama` | **点名 `series` 与具体集号**、`episodes/`、`adaptation-map.md` 与相关 `warnings` |
+| 剧本门槛未过（任意高于 `novel` 的 `target`） | 目标集 `script !== "final"`（含 `null`/`draft`/`revised`）、映射缺行、或缺 `drama-check` / `lint --series` 通过报告 | `fiction-short-drama` | **点名 `series` 与具体集号**、`episodes/`、`adaptation-map.md` 与相关 `warnings` |
 | 到达 `script` 终点 | `target: script` 且目标集均过剧本门槛（即使磁盘已有更高阶段文件） | 停在剧本终点 | 已达当前终点；不推进分镜，按需可交 `fiction-review` 精修台词 |
-| 进分镜 / 分镜门槛未过 | `target` 为 `storyboard` 或 `prompts`；**已过剧本门槛**（`script: final` + 映射完整 + `drama-check` 零阻断），但 `storyboard !== "final"` 或 `assets === false` | `fiction-storyboard` | **点名 `series` 与具体集号**、已定稿剧本、映射表与 `visual/` |
+| 进分镜 / 分镜门槛未过 | `target` 为 `storyboard` 或 `prompts`；**已过剧本门槛**（`script: final` + 映射完整 + `drama-check` 与 `lint --series` 通过），但 `storyboard !== "final"` 或 `assets === false` | `fiction-storyboard` | **点名 `series` 与具体集号**、已定稿剧本、映射表与 `visual/` |
 | 到达 `storyboard` 终点 | `target: storyboard` 且目标集均过分镜与资产门槛（即使磁盘已有提示词文件） | 停在分镜终点 | 已达当前终点；不推进提示词 |
 | 提示词阶段（`target: prompts`） | **已过剧本门槛且已过分镜与资产门槛**（`storyboard: final` + `assets: true` + `storyboard-check` 零阻断） | `fiction-visual-prompts` | **点名 `series` 与具体集号**、分镜、`visual/assets.md`、`refs` 与块状态；由其核对镜段覆盖、参考图就绪与当前批次确认。本 skill 绝不授权生成；提示词交付后停下即合法终点，作者在套件外生成后可按需回 `fiction-visual-prompts` 回填 |
 
@@ -135,7 +137,7 @@ node <本 skill 目录>/scripts/status.mjs --root <书根> --json
 
 ## 产出
 
-默认只读项目状态并输出路由汇报；仅在书项目存在且作者明确选定或切换终点后，才按 [SB §8](references/formats/config.md) 更新 `.fiction/config.json` 中的 `workflow.target`（保留其余键不变）。
+默认只读项目状态并输出路由汇报；书项目存在时，按步骤 3 在 `workflow.target` 仍为 `null` 时写入作者选定的终点，或应作者明确请求切换终点（[SB §8](references/formats/config.md)）。
 
 ## 参考文档
 

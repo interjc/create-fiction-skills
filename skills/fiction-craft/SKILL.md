@@ -3,12 +3,12 @@ name: fiction-craft
 description: >-
   小说与网文写作技法库及风格指南构建工具：提供场景构建、场景-反应节奏、欲扬先抑、对话潜台词、信息分层、双线结构、氛围营造、混搭题材写法及准备/行动/分赃/交易/规则册子等章型剧本，并指导新建或从样章反向提炼项目
   bible/style-guide.md。当用户询问具体怎么写某类场景、解决对话像话剧/节奏发闷/信息说太满/氛围不够等问题、设计题材混搭口径、或制定本书文风指南时使用，即使没提“技法”二字。只提供技法与风格校准：完整写新章用
-  fiction-chapter，审校改稿用 fiction-review，卷纲与爽点规划用 fiction-planner，设定与伏笔维护用
+  fiction-chapter，技法问答或示范用本 skill，具体已有稿件的回修用 fiction-review，卷纲与爽点规划用 fiction-planner，设定与伏笔维护用
   fiction-continuity。Web-novel craft library and style-guide builder: covers
   scene craft, scene-sequel pacing, dialogue, layered information, dual-line
   structure, atmosphere, genre-blend voice, chapter playbooks, and building
-  bible/style-guide.md. Use when solving craft problems or codifying a book's
-  voice; hand off drafting to fiction-chapter, auditing to fiction-review,
+  bible/style-guide.md. Use for technique questions, demos, or codifying a book's
+  voice. Use fiction-chapter for drafting, fiction-review for fixes to an existing draft,
   plotting to fiction-planner, and bible tracking to fiction-continuity.
 license: MIT
 compatibility: Agent Skills standard; tested on Claude Code, also readable by Codex and OpenCode. No scripts required.
@@ -68,7 +68,8 @@ metadata:
 2. **只读命中的参考文档**：按文末路由表读取 1–2 份对应 `references/*.md`；若 `.fiction/config.json` 的 `book.genres` 有值，同步读取对应的 `references/genres/<genre>.md`。不要全量读取无关文档。
 3. **对齐本书口径**：把参考文档的通用规则与 `AGENTS.md`「本书口径」、`bible/style-guide.md` 逐项对照，过滤掉与本书相悖的默认项（例如本书故意采用第一人称或高密度冷幽默时，服从本书口径）。
 4. **输出可执行方案**：给出具体改法（如压缩哪一段、拆哪句总结、按哪几步重排场景）或定向示范片段。
-   - **已冻结章节为只读事实**（见 [SB §3](references/formats/project.md)）：对冻结章只做技法分析与问题报告，绝不重写、不补句、不覆盖；若发现既定事实冲突需要善后，转交 `fiction-continuity` 按兼容口径（记入 `canon.md`）或在后续新章补解释处理。
+   - **已冻结章节为只读事实**（见 [SB §3](references/formats/project.md)）：对冻结章只做技法分析与问题报告，绝不重写、不补句、不覆盖。
+   - 按 `fiction-continuity` 的冲突优先级（[SB §3](references/formats/project.md)），只将作者在本流程明确确认且无冲突的设定裁决写入 `bible/canon.md`，未确认或有冲突的交 `fiction-continuity`。
    - **非冻结章节**：涉及改动既定设定或覆盖作者已有正文时，先停下来问作者；整章结构性重写交回 `fiction-chapter`。
 
 ### 模式 B：构建或校准 `bible/style-guide.md`

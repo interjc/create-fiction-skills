@@ -1,8 +1,8 @@
 ---
 name: fiction-continuity
 description: >-
-  维护长篇故事档案：找唯一主写入口，查伏笔与支线，核对人物、时间、物品和规则，处理跨章矛盾、章后回写、卷末复盘和讨论稿合并。作者说“这个设定在哪记”“帮我查伏笔”“前后矛盾了”“更新人物关系”“整理时间线”“卷完结复盘”“合并讨论稿”“伏笔是不是该收了”或要做一致性审计时就用，即使没提故事档案。写正文用 fiction-chapter，重排剧情用 fiction-planner，审文风用 fiction-review。
-  Maintain a long serial's story bible. Use when asked where to record a fact, check or pay off a clue, resolve a contradiction, update relationships, reconcile dates, recap a volume, merge discussion drafts, or audit continuity. Use fiction-chapter for drafting prose, fiction-planner for replanning the story, and fiction-review for editorial review.
+  维护长篇故事档案：找唯一主写入口，查伏笔与支线，核对人物、时间、物品和规则，处理跨章矛盾、章后回写的复核、卷末复盘和讨论稿合并。作者说“这个设定在哪记”“帮我查伏笔”“前后矛盾了”“更新人物关系”“整理时间线”“卷完结复盘”“合并讨论稿”“伏笔是不是该收了”或要做一致性审计时就用，即使没提故事档案。写正文及写完一章时回写该章追踪表用 fiction-chapter，重排剧情用 fiction-planner，审文风用 fiction-review。
+  Maintain a long serial's story bible. Use when asked where to record a fact, check or pay off a clue, resolve a contradiction, update relationships, reconcile dates, verify chapter write-back, recap a volume, merge discussion drafts, or audit continuity. Use fiction-chapter to draft prose and update tracking tables right after writing a chapter, fiction-planner to replan the story, and fiction-review for editorial review.
 license: MIT
 compatibility: 遵循 Agent Skills 规范；脚本需要 Node.js 22.5+，无需数据库。
 metadata:
@@ -91,7 +91,8 @@ node <本 skill 目录>/scripts/foreshadow-scan.mjs --at N
 | 新设定拍板，或冻结正文与设定不一致 | `bible/canon.md`，记录已确认的结论与兼容口径。 |
 | 新时间锚点、窗口或期限 | `bible/timeline.md`，并给相对时间的正文口径。 |
 | 卷结构或章节规划变动 | 将受影响条目交给 `fiction-planner`，依次同步 `bible/volumes/{vol}.md` → `bible/plot-outline.md` → `chapters/{vol}/vol-info.md` 摘要（[SB §7.4](references/formats/chapter.md)、[SB §7.5](references/formats/chapter.md)）；受影响的章纲交给 `fiction-chapter`。 |
-| 每章写完 | 按实际正文给 `bible/appearances.md` 加一行；核准章纲动作后回写 `bible/foreshadows.md` 和 `bible/subplots.md`。实际明暗线推进、关系或个人弧线变化、物品状态变化分别更新 `bible/storylines.md`、`bible/character-dynamics.md`、`bible/inventory.md`，没有变化不造记录。 |
+| 收到 `fiction-planner` 的伏笔／支线待入账清单 | 按 [伏笔计划](references/plot-threads.md#伏笔埋下时就知道怎样回来) 将新 F-ID 以 `计划中` 登记到 `bible/foreshadows.md`；按 [支线排期](references/plot-threads.md#支线先挂主线再排六步) 将新支线 ID 登记到 `bible/subplots.md`，只填计划章，实际章留空。 |
+| 复核单章回写 | 核对 `fiction-chapter` 已按实际正文在 `bible/appearances.md` 加一行、按章纲实际动作回写 `bible/foreshadows.md` 和 `bible/subplots.md`，并按实际变化更新 `bible/storylines.md`、`bible/character-dynamics.md`、`bible/inventory.md`。 |
 | 新人物出场 / 规则变化 | 分别写 `bible/characters.md` / `bible/world-rules.md`。先立新人物档案再安排首秀，章后核实首次出场；规则变化时再刷新受影响的专题引用。 |
 | 整卷完结 | 按 [SB §7.4](references/formats/chapter.md) 写 `chapters/{vol}/summary.md`（可剧透，只供审校复盘），同步 `chapters/{vol}/vol-info.md` 正文状态。 |
 | 章节进入公开范围 | 把书根、作者确认公开的全局章号和对应发布稿交给 `fiction-init` 的「更新冻结清单」模式。本 skill 不封存。没装时请作者先确认有可用的 `lint.mjs` 入口，再两步处理：① 按 [SB §8](references/formats/config.md) 在 `.fiction/config.json` 的 `frozen.ranges` 追加已确认公开的章，保留旧范围；② 从书根用该入口执行 `--freeze`，核对清单覆盖。没有入口就报待封存；不手改 `.fiction/frozen.json`，不强制覆盖。 |

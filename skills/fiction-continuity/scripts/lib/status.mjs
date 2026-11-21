@@ -104,7 +104,7 @@ function render({ target, stage, novel, series, warnings }) {
   const status = value => ({ draft: '初稿', revised: '修改', final: '定稿' })[value] ?? '—';
   const prompt = value => value === null ? '—' : `${value.blocks} 块（已确认 ${value.approved}，已出 ${value.done}）`;
   const lines = [`阶段：${stage}（目标：${target ?? '未设定'}）`,
-    `小说：设定库${novel.bible ? '已建' : '未建'}，定稿 ${novel.chapters} 章，末章 ${novel.last_chapter ?? '—'}，冻结 ${novel.frozen} 章。`];
+    `小说：故事档案${novel.bible ? '已建' : '未建'}，定稿 ${novel.chapters} 章，末章 ${novel.last_chapter ?? '—'}，冻结 ${novel.frozen} 章。`];
   for (const item of series) {
     lines.push('', `### ${item.title ?? item.series}（${item.stage ?? '未开始'}；总集数 ${item.total ?? '未设定'}）`,
       `视觉资产：${item.assets ? '已建' : '未建'}；参考图：已出 ${item.refs.done}/${item.refs.total}。`, '',

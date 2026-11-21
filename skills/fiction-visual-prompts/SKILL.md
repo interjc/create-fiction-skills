@@ -26,16 +26,16 @@ metadata:
 
 ## 流程
 
-1. **分镜无阻断才开工。** 先确认 `storyboards/ep{NNN}.md` 存在，再运行两条命令（参数见 `storyboard-check.mjs --help`）：
+1. **分镜定稿且无阻断才开工。** 先确认 `storyboards/ep{NNN}.md` 存在，再运行两条命令（参数见 `storyboard-check.mjs --help`）：
 
    ```sh
-   node <本 skill 目录>/scripts/storyboard-check.mjs <series> --ep N
+   node <本 skill 目录>/scripts/storyboard-check.mjs <series> --ep N --json
    node <本 skill 目录>/scripts/storyboard-check.mjs <series> --ep N --brief
    ```
 
-   把普通检查的 `block` 清零。用 `--brief` 汇总的「本集不得画出的真相」「人物秘密」「尚不可用的资产」「连戏现状」逐镜标出可见范围、连戏造型和道具状态，同集揭示也要守到剧本指定的镜头。[SB §9.5](references/formats/storyboard.md)、[SB §9.9](references/formats/storyboard.md)
+   确认普通检查零 `block`，且 `episodes[]` 中目标集的 `status` 为 `final`（分镜为 `状态：定稿`，[SB §9.6](references/formats/storyboard.md)）。用 `--brief` 汇总的「本集不得画出的真相」「人物秘密」「尚不可用的资产」「连戏现状」逐镜标出可见范围、连戏造型和道具状态，同集揭示也要守到剧本指定的镜头。[SB §9.5](references/formats/storyboard.md)、[SB §9.9](references/formats/storyboard.md)
 
-   分镜有阻断、缺失或报 `va-missing`（缺资产库，部分检查没运行）时，交给 `fiction-storyboard`，附剧本和分镜路径、场次／段镜、问题及未跑的提示词检查。没装该 skill 时，请作者按 [SB §9.4–§9.6](references/formats/storyboard.md) 用本集剧本手工建修分镜、补最小资产条目和必要的连戏记录，再跑普通检查至零阻断。若剧本也缺失或需修改且未装 `fiction-short-drama`，请作者先按 [SB §9.1–§9.3](references/formats/drama.md) 补正系列资料、映射和本集剧本。
+   分镜未定稿、有阻断、缺失或报 `va-missing`（缺资产库，部分检查没运行）时，交给 `fiction-storyboard`，附剧本和分镜路径、场次／段镜、问题及未跑的提示词检查。没装该 skill 时，请作者按 [SB §9.4–§9.6](references/formats/storyboard.md) 用本集剧本手工建修分镜、补最小资产条目和必要的连戏记录，定稿后再跑普通检查至零阻断。若剧本也缺失或需修改且未装 `fiction-short-drama`，请作者先按 [SB §9.1–§9.3](references/formats/drama.md) 补正系列资料、映射和本集剧本。
 
 2. **定方言再起草。** 方言是目标模型接收提示词的写法。未选厂商时用 `generic`，无需写入 `prompts.dialects` 或登记 `confirmed_at`。一块可用 `方言` 单独指定。同一部剧的默认值写在 `visual/assets.md` 的 `图片方言`／`视频方言`，整个项目的默认值写在 `.fiction/config.json` 的 `prompts.image.dialect`／`prompts.video.dialect`。按块、剧、项目的顺序取第一个有值的设置。[SB §9.4](references/formats/storyboard.md)、[SB §9.7](references/formats/prompts.md)、[SB §8](references/formats/config.md)
 
@@ -70,7 +70,7 @@ metadata:
 
 ## 检查
 
-- 普通分镜检查与提示词检查不剩阻断。结构、引用、有效块的唯一性与已出文件的存在性通过检查。[脚本]
+- 普通分镜检查确认目标集分镜为 `final`，且分镜检查与提示词检查均无阻断。结构、引用、有效块的唯一性与已出文件的存在性通过检查。[脚本]
 - 模型围栏未命中内部编号、禁用词、脱敏词或禁画锁定词。启用台词检查时，视频围栏逐字包含需检查的台词。[脚本]
 - 核对锁定词字面出现及挂图豁免，比较长度提示线与已登记的方言时长、参考图张数和禁用写法，提示未登记的厂商方言。检查已确认或已出块引用的图是否已出。[脚本]
 - 逐条结合画面、实际入口和作者方案处置全部 `suggest`。记录已修项、暂缓项及保留理由。生成前手查实际挂图、可选时长档位和首尾帧角色。[模型]

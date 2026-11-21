@@ -46,7 +46,7 @@ metadata:
 **按任务补读最小集**（[SB §4.1](references/formats/project.md)，不因怕漏而全量扫 `bible/`）：
 - 讨论全书方向或重排卷：`bible/canon.md` → `bible/timeline.md` → `chapters/{vol}/vol-info.md` → `bible/volumes/{vol}.md` → `bible/plot-outline.md` → `bible/storylines.md` → `bible/subplots.md`；按需补读 `bible/foreshadows.md`。
 - 若安装了 `fiction-craft` 且 `book.genres` 非空，先查看对应题材包 `references/genres/<id>.md`，对齐爽点偏好与雷区。
-- 若重排范围触及 `frozen.ranges` 中的已公开冻结章（[SB §7.1](references/formats/chapter.md)），冻结章正文只读，只调整未冻结章节或在 `canon.md` 记录口径说明；若需追加公开冻结范围，转交 `fiction-init`。
+- 若重排范围触及 `frozen.ranges` 中的已公开冻结章（[SB §7.1](references/formats/chapter.md)），冻结章正文只读，只调整未冻结章节，涉及冻结章的口径冲突交 `fiction-continuity`；若需追加公开冻结范围，转交 `fiction-init`。
 
 **缺失文件处理**：若作者从零构思新书、项目文件尚未建立，提示作者可随时运行 `fiction-init` 初始化骨架；当前先按 [SB §8](references/formats/config.md) 默认值构思，并在输出开头注明“当前使用默认参数”。
 
@@ -60,7 +60,7 @@ metadata:
 2. 按 [references/ideation-and-blurb.md](references/ideation-and-blurb.md) 产出 `2-3` 个前提变体，每个变体写清：核心卖点、主角优势 / 金手指（主角独有的破局能力或信息差，若题材需要）及其**代价、限制与成长空间**、目标读者画像、一句话卖点（One-line pitch）。
 3. 竞品对照：**向作者询问 `2-3` 部参考作品**，只拆解结构、基调与卖点差异；绝不编造销量、订阅、点击或榜单数据。
 4. 做“为什么继续读”五问校验，并起草定位概览（一句话定位、氛围参考、双线结构、核心人设草稿）。
-5. **停下来请作者拍板**：选定前提变体与边界后再继续。未定稿留在 `bible/drafts/`；已拍板设定提示回写 `bible/canon.md` 与 `AGENTS.md`（仅在作者同意后落地）。
+5. **停下来请作者拍板**：选定前提变体与边界后再继续，未定稿留在 `bible/drafts/`。按 `fiction-continuity` 的冲突优先级（[SB §3](references/formats/project.md)），只将作者在本流程明确确认且无冲突的设定裁决写入 `bible/canon.md`，未确认或有冲突的交 `fiction-continuity`。
 
 ### 步骤 2：对外包装文案起草（`publish/blurb.md`）
 

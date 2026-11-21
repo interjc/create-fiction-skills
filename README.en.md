@@ -34,12 +34,6 @@ The method is generalized from the actual production workflow of a serialized we
 /plugin install create-fiction-extras@create-fiction-skills
 ```
 
-On Claude Code 2.1.275+, you can also install in one step:
-
-```text
-/plugin install create-fiction --marketplace interjc/create-fiction-skills
-```
-
 Two plugins:
 
 - `create-fiction`: The 10 core skills.
@@ -62,7 +56,7 @@ Inside your book project directory, just talk to the AI.
 > 我想写一本都市悬疑网文，主角是个修钟表的，帮我开书。  
 > *I want to write an urban suspense web novel with a watchmaker protagonist—help me start the book.*
 
-`fiction-init` sets up the project skeleton, `fiction-planner` builds the selling points, synopsis, and volume outline, and `fiction-chapter` writes chapter by chapter.
+Start with `fiction-planner` to sharpen a vague idea into a premise with clear selling points, then use `fiction-init` to set up the project, return to `fiction-planner` for the blurb and volume plan, and use `fiction-chapter` to write chapter by chapter.
 
 **2. Import an existing manuscript and continue writing**
 

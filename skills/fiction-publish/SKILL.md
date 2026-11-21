@@ -50,6 +50,8 @@ metadata:
 
 读 `book.title` 和本书口径。作者确认新书名时，核对 `.fiction/config.json` 的 `book.title` 是否已同步，未同步就请作者确认修正；遇到线上书名不符时核对作品身份，不擅改线上书名。只发简介时转步骤 6，不走章节排期。发布章节时另读目标章的 `chapters/{vol}/{ch}/outline.md`、定稿和 `chapters/{vol}/vol-info.md`，按 [SB §7.1](references/formats/chapter.md) 选稿（优先用 `## 定稿` 指定的稿次，未指定才取最大稿次）。按目录确认卷号，按作者确认的卷名匹配平台。书名、稿次、卷名、章号或文件有冲突、缺稿时，停下核清，不自行替稿或跳章。
 
+小说章节的「定稿」指按 [SB §7.1](references/formats/chapter.md) 选用的稿件文件，作者审批另行确认；分集剧本与分镜的 `状态：定稿` 表示作者已确认。
+
 **授权闸口**：章节批次先列出作品、平台、章号范围及定稿、卷、定时/即时、允许的日期范围与时间、日累计规则，以及是否包含建卷、改期或草稿纠正；简介提交列出作品、要改的字段及获准文案。每个会话在首次不可逆点击（最终确认、发布、落地建卷等）前请作者确认这一批，除非作者已明确预授权该范围和操作；每次点击仍要校验落在授权内，范围或操作变化就先停。配置、旧日志和打开的编辑页都不构成授权。编辑页可能自动保存，作者没授权填稿时，不先写线上内容等发布确认。
 
 ### 2. 读日志，恢复到上一处未决
@@ -101,7 +103,7 @@ node <本 skill 目录>/scripts/length.mjs "<源稿路径>" --root "<书根>" --
 
 对照授权范围、CSV 和章节管理，检查缺章、重复、待核验、受阻、遗留草稿、错卷、错期；以新核验结果修正记录。按每个已安排的发布日期单独重算总量，改期重算原日和目标日，删重后也重算受影响日期。不用提交操作日、核验日或跨日平均代替。说明库存是否还有定稿、最后安排日期和不足的日期；不要为用完批次而开空卷、写新章或发布范围外稿件。
 
-对核实已进入公开发布范围的新增章节，按 [SB §4.2](references/formats/project.md) 把已公开的章号、日志路径和核验证据交给 `fiction-init` 的「更新冻结清单」模式。本 skill 不改冻结配置、不运行冻结命令；排期提交或审核中不等于已公开。若未安装 `fiction-init`，交还上述资料并标明冻结尚未执行，请作者按顺序完成两步：① 确认章号并更新 `.fiction/config.json` 的 `frozen.ranges`（[SB §8](references/formats/config.md)）；② 在书根通过`fiction-review`、`fiction-chapter` 或 `fiction-init` 附带的 `lint.mjs` 入口运行 `--freeze`，生成或更新 `.fiction/frozen.json`。没有可用入口，待安装 `fiction-init` 后完成第二步，不手写哈希清单。
+对核实已进入公开发布范围的新增章节，按 [SB §4.2](references/formats/project.md) 把已公开的章号、对应发布稿路径、日志路径和核验证据交给 `fiction-init` 的「更新冻结清单」模式。本 skill 不改冻结配置、不运行冻结命令；排期提交或审核中不等于已公开。若未安装 `fiction-init`，交还上述资料并标明冻结尚未执行，请作者按顺序完成两步：① 确认章号并更新 `.fiction/config.json` 的 `frozen.ranges`（[SB §8](references/formats/config.md)）；② 在书根通过`fiction-review`、`fiction-chapter` 或 `fiction-init` 附带的 `lint.mjs` 入口运行 `--freeze`，生成或更新 `.fiction/frozen.json`。没有可用入口，待安装 `fiction-init` 后完成第二步，不手写哈希清单。
 
 ### 6. 按授权提交已定稿的简介
 

@@ -1,7 +1,7 @@
 ---
 name: fiction-init
 description: >-
-  初始化网文书项目：从创意建书，导入旧稿并反抽故事档案，或为新公开章更新冻结清单。作者说“开新书”“导入旧稿”“补齐书项目骨架”“更新冻结清单”“这几章已公开”时就用，即使没说初始化。只建骨架、导入已确认事实和冻结已公开稿；全书及卷级规划交 fiction-planner，单章提纲、正文及章后回写交 fiction-chapter，审校交 fiction-review。 Set up a web novel project from an idea or import an existing manuscript. Use when asked to start a book, import chapters, fill missing project files, or update the freeze manifest after chapters go public. Leave book and volume planning to fiction-planner, chapter outlines, drafting, and write-back to fiction-chapter, and review to fiction-review.
+  初始化网文或原创短剧项目：从已定创意建骨架，导入旧稿并反抽故事档案，或为新公开章更新冻结清单。作者说“开新书”“导入旧稿”“补齐书项目骨架”“更新冻结清单”“这几章已公开”时就用，即使没说初始化。点子还没定时先用 fiction-planner 孵化，全书及卷级规划也交给它；单章提纲、正文及章后回写交 fiction-chapter，审校交 fiction-review。 Set up a web novel or original short-drama project, import a manuscript, or update the freeze manifest for newly published chapters. Use when asked to start a book, import chapters, fill missing project files, or freeze published chapters. Use fiction-planner first for vague ideas and for book or volume plans, fiction-chapter for chapter outlines, drafting and write-back, and fiction-review for review.
 license: MIT
 compatibility: Agent Skills standard; scripts require Node.js 22.5+.
 metadata:
@@ -15,7 +15,7 @@ metadata:
 
 ## 何时用 / 不用
 
-- 从一句创意开书、导入已有稿件、补齐项目基础文件，或给新公开章更新冻结清单时使用。首次导入与后续冻结都归本 skill。
+- 从已定创意开书、为原创短剧搭骨架、导入已有稿件、补齐项目基础文件，或给新公开章更新冻结清单时使用。网文点子还没定时先用 `fiction-planner` 孵化。首次导入与后续冻结都归本 skill。
 - 不替作者推演剧情、写新章或改旧章。全书及卷级规划交 `fiction-planner`；单章提纲、正文、结构重写及章后回写交 `fiction-chapter`；编辑审校交 `fiction-review`。相应 skill 未安装时，交付文件、待办与未运行的检查，不代做。
 
 ## 开始前
@@ -28,7 +28,9 @@ metadata:
 
 ### 1. 识别模式，先列读写范围
 
-查看书根是否已有 `## 本书口径`、`.fiction/config.json`、`bible/`、冻结清单或符合路径约定的章节。作者明确要求「更新冻结清单」，或收到 `fiction-publish`、`fiction-continuity`、`fiction-review` 转交的新增公开章事件时，直接走步骤 8，不重新初始化。
+查看书根是否已有 `## 本书口径`、`.fiction/config.json`、`bible/`、冻结清单或符合路径约定的章节。作者明确要求「更新冻结清单」，或收到任一兄弟 skill 转交的新增公开章事件时，直接走步骤 8，不重新初始化。
+
+项目是原创短剧、没有小说且终点为 `script`、`storyboard` 或 `prompts` 时，走原创短剧分支（新建走步骤 2 → 3 → 7，已有项目只补本分支缺项）。终点未定时在步骤 2 确认；已明确不写小说时跳过章长、日更与首卷范围。
 
 其余情况，发现既有项目就先列缺项与已存在项，提供「仅补缺失文件」。选此项只执行步骤 3 的缺项创建：从现有配置、书规和可核实的章节路径取值，不重问已答项；不改任何已有文件，不导入、不重冻。若无缺项，报告无需改动。已有 `AGENTS.md` 缺本书口径、已有 `.gitignore` 缺忽略项等情况单列，等作者同意再局部补写。
 
@@ -36,7 +38,7 @@ metadata:
 
 ### 2. 同批问清要填的值
 
-从[建书问答](references/interview.md)一次发出八组短问题：书名与一句话梗概、题材包、视角与叙述距离、主角口径、脱敏、章长、日更、目标平台与短剧终点。每组附建议值，允许「全用默认」或只答要改的项。导入时先用手稿和已有文件预填可核实的答案，同批附上来源、章卷映射、采用稿和已发布范围的问题；不能从样稿猜已发布范围。时代、基调等未拍板项先留待定，不延长首轮访谈。
+从[建书问答](references/interview.md)一次发出适用的短问题：书名与一句话梗概、题材包、视角与叙述距离、主角口径、脱敏、章长、日更、目标平台与流水线终点（原创短剧跳过章长和日更）。每组附建议值，允许「全用默认」或只答要改的项。导入时先用手稿和已有文件预填可核实的答案，同批附上来源、章卷映射、采用稿和已发布范围的问题；不能从样稿猜已发布范围。时代、基调等未拍板项先留待定，不延长首轮访谈。
 
 把配置覆盖项、写入书规的值和待定项列给作者；「全用默认」等明确答复可直接作为对应取值的确认，不重复询问。若答案相互矛盾、作者未确认操作书根，或目标与已有文件冲突，则只问受影响的项，停在写入前。
 
@@ -44,10 +46,12 @@ metadata:
 
 按 [SB §2](references/formats/project.md) 的目录生成下表文件。保护现有文件，未经作者确认不改。导入时先建空骨架，不提前写入提取结果。
 
+原创短剧分支只按下表建 `AGENTS.md`、`.fiction/config.json`、`bible/sources.md`、`bible/characters.md` 和空表 `bible/foreshadows.md`（只留表头，无数据行），跳过其余模板和卷范围设置。
+
 | 书根产物 | 用法 |
 |---|---|
-| `AGENTS.md` | 渲染 [书规模板](assets/AGENTS.template.md)。将视角、年龄措辞、行为底线、平台意向和短剧终点写进 `## 本书口径`；题材、章长和日更阈值以配置为准，不复制数值。 |
-| `.fiction/config.json` | 参照 [SB §8](references/formats/config.md) 和[配置示例](assets/config.example.json)，只写作者更改的键，全部采用脚本默认值时写 `{}`。不写平台意向到 `publish.platform`，初建不写任何 `publish.*`；参数由 `fiction-publish` 首次询问。未安装也保持未配置，不试发。 |
+| `AGENTS.md` | 渲染 [书规模板](assets/AGENTS.template.md)。将视角、年龄措辞、行为底线和平台意向写进 `## 本书口径`；终点、题材、章长和日更阈值以配置为准。 |
+| `.fiction/config.json` | 参照 [SB §8](references/formats/config.md) 和[配置示例](assets/config.example.json)，写入作者在问答中提供且偏离契约默认值的配置键（如 `book.title`、`book.genres`、`workflow.target`），默认键省略，无覆盖项时写 `{}`。终点未问时省略，读取为 `null`。不写平台意向到 `publish.platform`，初建不写任何 `publish.*`；参数由 `fiction-publish` 首次询问。未安装也保持未配置，不试发。 |
 | `bible/sources.md` | 原样复制[注册表模板](assets/bible/sources.md)的 [SB §5](references/formats/project.md) 默认行；保留 `{vol}`、`{ch}`、`{series}` 这类契约占位，不当成模板变量。不整表覆盖现有注册表。 |
 | `bible/` 其余基础文件 | 用 [bible 模板](assets/bible/)一对一生成 `canon.md`、`timeline.md`、`world-rules.md`、`style-guide.md`、`characters.md`、`character-dynamics.md`、`appearances.md`、`plot-outline.md`、`storylines.md`、`subplots.md`、`foreshadows.md`、`inventory.md`。按 [SB §6](references/formats/bible.md) 保留表头和字段名，不添示例数据行。没有专题或讨论材料时，不造 `indexes/*.md` 或 `drafts/*.md`；专题文件要先在 `sources.md` 登记。 |
 | 卷规划与卷摘要 | 新书渲染[卷规划模板](assets/bible/volumes/volume.template.md)到 `bible/volumes/1.md`、[卷摘要模板](assets/chapters/vol-info.template.md)到 `chapters/1/vol-info.md`；导入则为已确认的卷补缺项。卷名未定可写「待定」，新书正文状态写「未开写」。两个文件的范围按下段处理。 |
@@ -90,9 +94,11 @@ node <本 skill 目录>/scripts/length.mjs "<被跳过的导入章号或范围>"
 
 ### 7. 交接下一步
 
-新书把书根、已确认口径、暂定项和首卷空规划交给 `fiction-planner`。由它交付全书与卷级规划，包括卷表、节奏、钩子、日更分组；区域卷另在卷纲自由正文中传递本章推进的区域循环步次、新增的区域理解和结算收益。`fiction-chapter` 据此写 `outline.md` 和正文，并负责章后回写。初稿审校交 `fiction-review` 时把未回写项记为「待回写」；完稿或返修后回写再验收，章后衔接点放交付汇报或下章 `resources.md`，不在支线文件另起标题块。
+原创短剧分支把书根、已确认的创意与终点交给 `fiction-short-drama`（模式 B）立项；原创悬念由它记在 `series.md` 的 `## 悬念账`，`bible/foreshadows.md` 保持空表。未安装时交付骨架和待办。
 
-新书文案由 `fiction-planner` 拟 `publish/blurb.md`，`fiction-review` 审校，`fiction-publish` 提交；书名变更也要核对 `book.title`。旧稿把已确认档案、基线和待决项交给 `fiction-continuity`，如需审校另用 `fiction-review`；只有作者授权且确认章节未冻结、发布状态已知时才可编辑，结构重写交 `fiction-chapter`。未装相应 skill 时只交付文件、待办及未运行的检查。短剧终点只记录，不在本步制作下游产物。
+网文新书把书根、已确认口径、暂定项和首卷空规划交给 `fiction-planner`。由它交付全书与卷级规划，包括卷表、节奏、钩子、日更分组；区域卷另在卷纲自由正文中传递本章推进的区域循环步次、新增的区域理解和结算收益。`fiction-chapter` 据此写 `outline.md` 和正文，并负责章后回写。初稿审校交 `fiction-review` 时把未回写项记为「待回写」；完稿或返修后回写再验收，章后衔接点放交付汇报或下章 `resources.md`，不在支线文件另起标题块。
+
+网文新书文案由 `fiction-planner` 拟 `publish/blurb.md`，`fiction-review` 审校，`fiction-publish` 提交；书名变更也要核对 `book.title`。旧稿把已确认档案、基线和待决项交给 `fiction-continuity`，如需审校另用 `fiction-review`；只有作者授权且确认章节未冻结、发布状态已知时才可编辑，结构重写交 `fiction-chapter`。未装相应 skill 时只交付文件、待办及未运行的检查。短剧终点只记录，不在本步制作下游产物。
 
 ### 8. 更新冻结清单：确认公开稿 → 追加范围 → 封存报告
 
@@ -110,7 +116,7 @@ node <本 skill 目录>/scripts/length.mjs "<被跳过的导入章号或范围>"
 ## 检查
 
 - [ ] 已确认书根、操作模式、现有文件改动许可；涉及导入或冻结时，确认映射、采用稿和实际公开范围。[作者]
-- [ ] 建书时本书口径、起始卷有效范围、注册表和机读骨架齐全；配置只写覆盖项，没有未填的模板变量。[模型]
+- [ ] 本书口径、注册表和所选分支的机读骨架齐全（网文核对起始卷有效范围，原创短剧核对空伏笔表）；配置只写覆盖项，没有未填的模板变量。[模型]
 - [ ] 初建未代填 `publish.*`；导入原稿保留原位，更新冻结清单未修改或新增正文稿次。[模型]
 - [ ] `lint.mjs --freeze` 核对旧登记文件的哈希，并据范围登记稿次。[脚本]
 - [ ] 导入的冻结哈希、有效字符数、脱敏词表命中和格式问题按脚本判定。[脚本]

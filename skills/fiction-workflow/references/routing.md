@@ -13,7 +13,7 @@
 
 | JSON 字段 | 含义 | 路由判读要点 |
 |---|---|---|
-| `target` | `workflow.target`：`novel` / `script` / `storyboard` / `prompts` / `null` | `null` 时先问作者；书项目已存在时由本 skill 打开 [SB §8](formats/config.md) 写入并核对。当前 `target` 限定本次路由上限。 |
+| `target` | `workflow.target`：`novel` / `script` / `storyboard` / `prompts` / `null` | `fiction-init` 已写则沿用；书项目已存在且仍为 `null` 时，本 skill 按 [SB §8](formats/config.md) 写入作者选定值。当前 `target` 限定本次路由上限。 |
 | `stage` | 全书最高机械阶段：`empty` / `bible` / `novel` / `script` / `storyboard` / `prompts` | 取所有小说与短剧文件显示的最高阶段。可高于当前 `target`（作者降终点后常见），**绝不代表前序集数或内容合格**。 |
 | `novel.bible` | `bible/` 下是否至少有一份 `.md` | `false` 时项目无故事档案。若 `chapters > 0` 而 `bible: false`，属无档案手稿，改短剧须先走 `fiction-init` 导入（模式 C），不可直接走模式 A。 |
 | `novel.chapters` / `last_chapter` / `frozen` | 有定稿的章数、最大定稿章号（`chapters === 0` 时为 `null`）、其中冻结章数 | 冻结章只读（[SB §3](formats/project.md)）；`chapters` 约 300+ 时可提示可选 `fiction-story-db`。 |
@@ -32,15 +32,15 @@
 | 场景 / 机械 `stage` | `status --json` 与门槛条件 | `target` | 交给哪个 skill | 交接输入与说明 |
 |---|---|---|---|---|
 | 无书根 / `empty`（网文点子模糊） | 无书根，或 `novel.bible === false && novel.chapters === 0 && series.length === 0`；只想先磨网文前提 | 先问定 | `fiction-planner` | 模糊想法与题材意向；卖点拍板后再建书。 |
-| 无书根 / `empty`（网文创意已定） | 同上；准备从零建书 | 任意 | `fiction-init` | 书根路径与作者已确认终点；建好骨架后由本 skill 写并核对 `workflow.target`。 |
+| 无书根 / `empty`（网文创意已定） | 同上；准备从零建书 | 任意 | `fiction-init` | 书根路径与作者已确认终点；由 `fiction-init` 建骨架并写 `workflow.target`，仍为 `null` 才由本 skill 补写。 |
 | 无书根 / `empty` / 无档案旧稿 | 外部散稿，或 `novel.chapters > 0 && novel.bible === false` | 任意 | `fiction-init`（作者要求反抽档案时请它先确认导入范围） | 旧稿路径、章卷映射意向、已公开章待核范围；改短剧（模式 C）也先走此步反抽档案。 |
-| 无书根 / `empty`（仅原创短剧意向） | 不写网文，直接做原创短剧 | `script` / `storyboard` / `prompts` | `fiction-init` → `fiction-short-drama`（模式 B） | 搭最小骨架后由 `fiction-short-drama` 自行立项（不强走 `fiction-planner`）；缺 `fiction-init` 时按降级注明 `workflow.target` 待写入配置。 |
+| 无书根 / `empty`（仅原创短剧意向） | 不写网文，直接做原创短剧 | `script` / `storyboard` / `prompts` | `fiction-init` → `fiction-short-drama`（模式 B） | 交书根与已确认终点，搭最小骨架后由 `fiction-short-drama` 自行立项（不强走 `fiction-planner`）；缺 `fiction-init` 时按降级注明 `workflow.target` 待写入配置。 |
 | 已建剧目录尚无分集 | `series[].stage === null`（全书 `stage` 可为 `empty`/`bible`/`novel`） | `script` / `storyboard` / `prompts` | `fiction-short-drama` | `series`、`series.md`、`adaptation-map.md`；若 `novel.bible === false` 先补最小档案骨架。 |
 | `bible`（走网文路线，缺章规划） | `novel.bible === true && novel.chapters === 0`；卷规划缺目标章职责 | 任意（含写网文） | `fiction-planner` | 书根与 `bible/`；补齐大纲、卷规划与确认的起始章号（可为第 0 或第 1 章）。 |
 | `bible`（走网文路线，规划就绪） | 同上；已确认卷规划含起始章职责 | 任意（含写网文） | `fiction-chapter` | 书根、卷号与卷规划确定的章号。 |
 | `novel`（或 `script`/`storyboard`/`prompts` 切回写网文） | 常规网文连载；无论是否存在短剧目录 | `novel`（或本次任务为写网文） | `fiction-chapter` → `fiction-review` → 回 `fiction-chapter` | 缺下一章规划先交 `fiction-planner`；`fiction-chapter` 管起草、修稿与章后回写；跨章治理交 `fiction-continuity`。`target: novel` 已达终点，不推进已有或新建短剧。 |
 | `novel`（启动小说改编模式 A） | `novel.bible === true && novel.chapters > 0 && series.length === 0` | `script` / `storyboard` / `prompts` | `fiction-short-drama`（模式 A） | 书根、`bible/` 与已定稿范围；从故事档案直通立项与映射。 |
-| 任一短剧阶段：剧本门槛未过 | 目标集在 `episodes[]` 缺失（计划未写），或 `script !== "final"`（`null`/`draft`/`revised`），或映射缺行，或剧本侧有 `warnings` / `drama-check` 未过 | `script` / `storyboard` / `prompts` | `fiction-short-drama` | **即使同集已有 `storyboard: final` 或 `prompts` 块，也必须先退回本 skill**；交 `series`、具体 `episode`、`episodes/`、`adaptation-map.md` 与 `warnings`。 |
+| 任一短剧阶段：剧本门槛未过 | 目标集在 `episodes[]` 缺失（计划未写），或 `script !== "final"`（`null`/`draft`/`revised`），或映射缺行，或剧本侧有 `warnings`，或缺 `drama-check` / `lint --series` 通过报告 | `script` / `storyboard` / `prompts` | `fiction-short-drama` | **即使同集已有 `storyboard: final` 或 `prompts` 块，也必须先退回本 skill**；交 `series`、具体 `episode`、`episodes/`、`adaptation-map.md` 与 `warnings`。 |
 | `script` / `storyboard` / `prompts` × `target: script` | 目标集均已过剧本门槛（`script: final` + 映射完整 + `drama-check` 与 `lint --series` 零阻断） | `script` | 停在剧本终点 | 已达当前终点；即使磁盘已有更高阶段文件也不推进分镜（按需可用 `fiction-review` 精修台词）。 |
 | 进分镜 / 分镜门槛未过 | 目标集**已过剧本门槛**，但 `storyboard !== "final"`（`null`/`draft`/`revised`）、或 `assets === false`、或分镜/资产侧有 `warnings` | `storyboard` / `prompts` | `fiction-storyboard` | **点名 `series` 与具体 `episode`**、已定稿剧本、`adaptation-map.md`、`visual/` 与 `warnings`。 |
 | `storyboard` / `prompts` × `target: storyboard` | 目标集均已过剧本门槛与分镜/资产门槛（`storyboard: final` + `assets: true` + `storyboard-check` 零阻断） | `storyboard` | 停在分镜终点 | 已达当前终点；即使磁盘已有提示词文件也不推进提示词。 |
@@ -69,7 +69,7 @@
 ### 案例 1：纯创意起步，选定「只写网文」
 
 - **现状**：无书根。作者问「我想写修旧钟表的悬疑网文，只写小说不做短剧，现在只有林砚和旧表铺的点子，该从哪开始？」
-- **路由**：状态脚本「未运行（无书根）」；终点由作者定为 `novel`；点子尚模糊，先交 **`fiction-planner`** 收敛前提与卖点，拍板后再交 **`fiction-init`** 建骨架；骨架落盘后由本 skill 打开 [SB §8](formats/config.md) 写入并核对 `workflow.target: "novel"`。开写时章号取自卷规划（不写死第 1 章）；进入连载后走 `fiction-chapter` → `fiction-review` → 回 `fiction-chapter`，不推销短剧。
+- **路由**：状态脚本「未运行（无书根）」；终点由作者定为 `novel`；点子尚模糊，先交 **`fiction-planner`** 收敛前提与卖点，拍板后再交 **`fiction-init`** 建骨架并写入 `workflow.target: "novel"`。开写时章号取自卷规划（不写死第 1 章）；进入连载后走 `fiction-chapter` → `fiction-review` → 回 `fiction-chapter`，不推销短剧。
 
 ### 案例 2：已有下游文件，但作者把终点降回 `novel`
 
@@ -79,7 +79,7 @@
 ### 案例 3：不写网文，直接做原创短剧
 
 - **现状**：无书根。作者问「不写小说，直接用《钟表铺夜账》的点子做原创短剧，做到分镜为止，怎么开局？」
-- **路由**：状态脚本「未运行（无书根）」，确认 `target: "storyboard"`，跳过网文合法。交 **`fiction-init`** 搭最小骨架，骨架建好后由本 skill 写入 `workflow.target: "storyboard"`，再交 **`fiction-short-drama`（模式 B）**自行完成短剧立项与首批分集（不绕道 `fiction-planner`）。若缺 `fiction-init`，按降级行注明 `workflow.target` 待写入配置并保留作者已确认值。
+- **路由**：状态脚本「未运行（无书根）」，确认 `target: "storyboard"`，跳过网文合法。交 **`fiction-init`** 搭原创短剧最小骨架并写入 `workflow.target: "storyboard"`，再交 **`fiction-short-drama`（模式 B）**自行完成短剧立项与首批分集（不绕道 `fiction-planner`）。若缺 `fiction-init`，按降级行注明 `workflow.target` 待写入配置并保留作者已确认值。
 
 ### 案例 4：同一集上游未过门槛（含 `warnings` 与跨集混进度）
 

@@ -1,8 +1,8 @@
 ---
 name: fiction-chapter
 description: >-
-  网文单章写作六步闭环：查前文和设定、摘资料、定章纲、写正文、机检审改、回写追踪表。作者说“写新章”“接着写”“出下一章”“改这一段正文”时就用，即使没说“章”。重排卷纲或设计连载节拍用 fiction-planner；只审不写或做深度审校用 fiction-review。
-  Write, continue, or revise one web novel chapter, from continuity checks and outlining through drafting, validation, and story bible updates. Use when asked to write a new chapter, pick up where the draft left off, write the next installment, or revise existing prose. Use fiction-planner for volume planning and serial cadence, and fiction-review for editorial-only or deep review.
+  网文单章写作六步闭环：查前文和设定、摘资料、定章纲、写正文、机检审改、回写追踪表。作者说“写新章”“接着写”“出下一章”“重写这一章”或要求重排单章结构时就用。重排卷纲或设计连载节拍用 fiction-planner；审校及已有章节获授权的局部回修、润色和去 AI 味用 fiction-review。
+  Write, continue, rewrite, or restructure one web novel chapter, from continuity checks and outlining through drafting, validation, and story bible updates. Use when asked to write a new chapter, pick up where the draft left off, write the next installment, or rewrite a chapter. Use fiction-planner for volume planning and serial cadence, and fiction-review for editorial review or authorized local fixes, polishing, and removing AI-like prose in an existing chapter.
 license: MIT
 compatibility: 遵循 Agent Skills 规范；脚本需要 Node.js 22.5+。
 metadata:
@@ -16,9 +16,9 @@ metadata:
 
 ## 何时用 / 不用
 
-- 写新章、续写半章、按反馈修改未冻结正文：用本 skill。
+- 写新章、续写半章、重写或重排未冻结章节的结构：用本 skill。
 - 改全书方向、重排卷纲、定爽点节拍、钩子级别或日更组合：交给 `fiction-planner`。`fiction-init` 只搭骨架，`fiction-planner` 定卷级计划，本 skill 按该计划写单章章纲并负责章后回写。没有规划 skill 时只执行已有卷纲；必须改规划时，交现状和待定项，等作者确认并同步卷规划再动正文。
-- 只审不写，或要深查跨章矛盾、叙事与文风：交给 `fiction-review`。若仅请求深审而未安装，交现有稿件、待办和未做检查，不以轻审替代。
+- 只审不写、深查跨章矛盾、叙事与文风，或已有章节获授权的局部回修、润色和去 AI 味：交给 `fiction-review`。若仅请求深审而未安装，交现有稿件、待办和未做检查，不以轻审替代。
 - 起草 `publish/blurb.md` 交 `fiction-planner`，审校交 `fiction-review`，对外提交交 `fiction-publish`；新书名确认后提醒作者核对配置的 `book.title`（[SB §8](references/formats/config.md)）。
 
 缺下游 skill 时，交付已有文件、下一步待办及未做的检查，不代做其职责或报为已通过。
@@ -37,9 +37,9 @@ metadata:
 
 ### 1. 核对上下文：先判断能不能写
 
-确认章号与所属卷（[SB §2](references/formats/project.md)、[SB §7.5](references/formats/chapter.md)）。章号全书唯一、不补零；已有章按 `chapters/{vol}/{ch}/`，新章先查 `bible/volumes/{vol}.md` 的范围，再用 `chapters/{vol}/vol-info.md` 补查。卷归属有歧义就停下来问作者。**若章号落在 `frozen.ranges`，不动该章文件，不改写、不补句、不格式化、不新开稿**（[SB §7.1](references/formats/chapter.md)）。报告问题，建议在后续未冻结章补解释，或经作者拍板将读者口径记入 `bible/canon.md`；不倒改读者已见正文。
+确认章号与所属卷（[SB §2](references/formats/project.md)、[SB §7.5](references/formats/chapter.md)）。章号全书唯一、不补零；已有章按 `chapters/{vol}/{ch}/`，新章先查 `bible/volumes/{vol}.md` 的范围，再用 `chapters/{vol}/vol-info.md` 补查。卷归属有歧义就停下来问作者。**若章号落在 `frozen.ranges`，不动该章文件，不改写、不补句、不格式化、不新开稿**（[SB §7.1](references/formats/chapter.md)）。报告问题，建议在后续未冻结章补解释，或交 `fiction-continuity` 裁决档案口径；不倒改读者已见正文。
 
-作者确认已有新章公开时，把章号交给 `fiction-init` 的「更新冻结清单」模式，不在写章流程里封存。没装 `fiction-init`，请作者两步处理：先在 `.fiction/config.json` 的 `frozen.ranges` 追加已确认的公开章（[SB §8](references/formats/config.md)），再从书根运行 `node <本 skill 目录>/scripts/lint.mjs --freeze`（[SB §4.2](references/formats/project.md)）。不要手改哈希或强制覆盖已有清单。
+作者确认已有新章公开时，把章号和对应采用稿路径交给 `fiction-init` 的「更新冻结清单」模式，不在写章流程里封存。没装 `fiction-init`，请作者两步处理：先在 `.fiction/config.json` 的 `frozen.ranges` 追加已确认的公开章（[SB §8](references/formats/config.md)），再从书根运行 `node <本 skill 目录>/scripts/lint.mjs --freeze`（[SB §4.2](references/formats/project.md)）。不要手改哈希或强制覆盖已有清单。
 
 读卷摘要 `chapters/{vol}/vol-info.md`、详细卷规划 `bible/volumes/{vol}.md`、`bible/canon.md`，再运行：
 
@@ -112,10 +112,11 @@ node <本 skill 目录>/scripts/lint.mjs <ch>
 | `bible/appearances.md` | 每章一行，按正文区分在场与提及；返修更新原行，不叠加。 |
 | `bible/foreshadows.md`、`bible/subplots.md` | 核对章纲中的实际动作和步骤，写章号与状态；触及不等于推进步骤。伏笔分记读者已知与作者真相，未收写清未来如何回来；新埋不拖到下一章再登记。 |
 | `bible/storylines.md`、`bible/character-dynamics.md`、`bible/inventory.md` | 有变化才同步：明暗线实际进展、人物关系/自身弧线、物品消耗、损坏、外借或易手等；不抄剧情流水账。 |
-| `bible/timeline.md`、`bible/canon.md` | 记新硬锚、窗口、期限或确认的顺序变动；设定有新裁决或冻结正文有口径冲突时，记作者已拍板的结论。 |
+| `bible/timeline.md` | 记新硬锚、窗口、期限或确认的顺序变动。 |
+| `bible/canon.md` | 按 `fiction-continuity` 的冲突优先级（[SB §3](references/formats/project.md)），只写入作者在本流程明确确认且无冲突的裁决，未确认或有冲突的交 `fiction-continuity`。 |
 | `bible/characters.md`、`bible/world-rules.md` | 新人物补静态档案，规则有变更新对应细则。 |
 
-把本章留下的衔接点放在章后汇报的「写了什么」里；写下章时再按 [SB §7.4](references/formats/chapter.md) 摘入下章 `resources.md`。不在 `bible/subplots.md` 加非支线 ID 的三级标题（[SB §6.3](references/formats/bible.md)），也不把可能的接法记成已发生。返修若与后续定稿冲突，先请作者裁决。若恰好完卷，按 [SB §7.4](references/formats/chapter.md) 同步 `chapters/{vol}/summary.md` 与 `chapters/{vol}/vol-info.md` 的正文状态；复盘不反推规划。确认的本书写法放到 `bible/style-guide.md`。Markdown 是权威；使用 `fiction-story-db` 的项目可在回写后更新索引，没装则跳过索引。
+把本章留下的衔接点放在章后汇报的「写了什么」里；写下章时再按 [SB §7.4](references/formats/chapter.md) 摘入下章 `resources.md`。不在 `bible/subplots.md` 加非支线 ID 的三级标题（[SB §6.3](references/formats/bible.md)），也不把可能的接法记成已发生。返修若与后续定稿冲突，先请作者裁决。若恰好完卷，交 `fiction-continuity` 写 `chapters/{vol}/summary.md` 并同步 `chapters/{vol}/vol-info.md` 的正文状态（[SB §7.4](references/formats/chapter.md)）；复盘不反推规划。确认的本书写法交 `fiction-craft` 更新 `bible/style-guide.md`。Markdown 是权威；使用 `fiction-story-db` 的项目可在回写后更新索引，没装则跳过索引。
 
 确认目标章有可读的定稿和章纲，再从本 skill 直接运行：
 

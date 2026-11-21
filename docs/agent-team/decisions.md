@@ -65,3 +65,10 @@ Back to the [board](README.md). Append new decisions at the end. Never rewrite o
 - Motivation and evidence: T1.b 草案 H.3 已预见特写的外套不入画，故 `pr-lock` 定为 suggest；`备注` 会连带关掉 `sb-people` 与 `sb-continuity`；§9.7 按段派生地点，给地点加锁会让每个特写都报。
 - Rejected options: 允许 `X@本体` 键（以后若作者反馈频繁再议）；给特写 / 大特写免检地点锁（多一条例外，收益小）。
 - Status: fiction-storyboard references 已改（本次提交）；fiction-visual-prompts 待其返工完成后补同样两句
+
+### D-09: 跨 skill 的四条归属口径 (2026-11-21)
+- Decision: (1) 流水线终点只存在 `.fiction/config.json` 的 `workflow.target`：`fiction-init` 在问答中拿到就写；`fiction-workflow` 只在仍为 `null` 或作者明确要求切换时写；`AGENTS.md ## 本书口径` 不再复制终点。(2) `bible/canon.md`：任一 skill 只可写入作者在本流程明确确认且无冲突的裁决，按 SB §3 冲突优先级；未确认或有冲突的交 `fiction-continuity`。(3) `bible/style-guide.md` 归 `fiction-craft`，`chapters/{vol}/summary.md` 归 `fiction-continuity`；`fiction-chapter` 只转交。(4) 小说章节的「定稿」是选用稿件（SB §7.1），剧本 / 分镜的 `状态：定稿` 才是作者确认；下游入口门槛：分镜要求 `lint --series` 通过报告，提示词要求分镜 `final`。
+- Decided by: director（T8 集成审查 11 项 + T7 评测设计者 8 条反馈）
+- Motivation and evidence: 审查发现 init 把终点写进 AGENTS.md、workflow 却只读配置，demo 书上 `status.mjs` 显示「未设定」；canon 有五个 skill 各写各的规则；分镜与提示词入口门槛比上游交接条件松。
+- Rejected options: 终点同时写 AGENTS.md 与配置（双头）；canon 只许 continuity 写（会让 planner / review 在作者当场拍板后还要再转一手）。
+- Status: 已落地（Codex 修复 + 内部验收，本次提交）

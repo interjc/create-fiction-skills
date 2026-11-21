@@ -34,12 +34,6 @@ English version: [README.en.md](README.en.md)
 /plugin install create-fiction-extras@create-fiction-skills
 ```
 
-Claude Code 2.1.275+ 也可以一步完成：
-
-```text
-/plugin install create-fiction --marketplace interjc/create-fiction-skills
-```
-
 两个插件：
 
 - `create-fiction`：核心 10 个 skill。
@@ -61,7 +55,7 @@ Claude Code 2.1.275+ 也可以一步完成：
 
 > 我想写一本都市悬疑网文，主角是个修钟表的，帮我开书。
 
-`fiction-init` 建项目骨架，`fiction-planner` 做卖点、简介和卷纲，之后 `fiction-chapter` 逐章写。
+点子还模糊时先用 `fiction-planner` 磨卖点，拍板后由 `fiction-init` 建骨架，再用 `fiction-planner` 做简介和卷纲，最后交 `fiction-chapter` 逐章写。
 
 **2. 已有手稿，导入接着写**
 

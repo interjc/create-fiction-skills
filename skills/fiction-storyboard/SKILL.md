@@ -52,7 +52,7 @@ metadata:
 node <本 skill 目录>/scripts/drama-check.mjs <series> --ep <N>
 ```
 
-须**退出码为 0**，且**系列级与目标集均零 `block`**（退出码 2 为参数、配置或读取错误，不算通过）。以上任一项不满足，**停下并退回 `fiction-short-drama`**（未装则列明缺口与报错行号请作者手修）。若存在 `unshootable`、`dialogue-run` 等 `suggest`，能靠拆镜化解的继续，实在拍不出的请作者先改剧本。
+须**退出码为 0**，且**系列级与目标集均零 `block`**（退出码 2 为参数、配置或读取错误，不算通过）；同时核对 `fiction-short-drama` 已报告本剧最新 `lint --series` 退出码为 0。任一项不满足，**停下并退回 `fiction-short-drama`**，缺 lint 报告就请它运行并回报（未装则列明缺口与报错行号请作者手修）。若存在 `unshootable`、`dialogue-run` 等 `suggest`，能靠拆镜化解的继续，实在拍不出的请作者先改剧本。
 
 入口门槛通过后，跑分镜简报（用法见 `storyboard-check.mjs --help`）：
 
@@ -105,10 +105,10 @@ node <本 skill 目录>/scripts/storyboard-check.mjs <series> --ep <N> --json
 ```
 
 - **确认真正跑过全量检查**：不仅要求退出码 0、零 `block`，还须在输出里核实 **`assets.exists` 为 `true`**（无 `va-missing`，否则资产、防剧透与连戏检查会被跳过）且 **目标集 `N` 出现在 `episodes[]` 中**（确认目标集分镜已被实际校验）。退出码 2 不算通过。
-- **逐条处置 `suggest`**：决定修改或保留并记明理由。注意任何非空 `备注` 都会静默豁免该镜的 `sb-people` 与 `sb-continuity`，因此凡带 `备注` 的镜头须人工复核连戏是否真的正确（[跨集连戏指南](references/continuity.md)）。
+- **逐条处置 `suggest`**：决定修改或保留并记明理由。任何非空 `备注` 都会跳过该镜的 `sb-people` 与 `sb-continuity` 检查；有实际理由才写 `备注`，并逐镜人工复核入画人数与连戏（[跨集连戏指南](references/continuity.md)）。[模型]
 - **定稿与失败回退**：清零全部 `block`、核实场景与台词无漏认领、取得作者对存疑项与定稿的确认后，才将 `状态` 改为 `定稿` 并最后重跑一次 `storyboard-check.mjs`。`定稿` 下 `sb-dialogue-missing` 与 `sb-scene-uncovered` 会升为 `block`；**若重跑出现任何 `block` 或非零退出码，立即把 `状态` 退回 `初稿` 或 `修改`**，修完重验，绝不带错交接。
 - **剧本后期修订时的同步流程**：
-  1. 先按步骤 1 确认修订后的剧本已重新定稿、映射行已更新，并跑 `node <本 skill 目录>/scripts/drama-check.mjs <series> --ep <N>` 确认退出码 0 且零阻断。
+  1. 修订后的剧本重新定稿并更新映射行后，重新核对步骤 1 的全部入口门槛。
   2. 跑 `node <本 skill 目录>/scripts/storyboard-check.mjs <series> --ep <N>` 定位过期的台词与 `依据`，**先修分镜并保持未动编号稳定**。
   3. 若剧本改动影响了跨集状态，先修订 `drama/{series}/visual/continuity.md`（[SB §9.5](references/formats/storyboard.md)）中该集原行，再对受影响的后续集跑 `node <本 skill 目录>/scripts/storyboard-check.mjs <series> --ep <N>-<末集>` 并同步修正。
   4. 全部过检后，把本集及受影响后续集的变动 `SEG` / `SH` 清单交接给 `fiction-visual-prompts` 同步提示词（[SB §4.2](references/formats/project.md)），顺序不可颠倒。
@@ -120,12 +120,13 @@ node <本 skill 目录>/scripts/storyboard-check.mjs <series> --ep <N> --json
 ## 交付检查
 
 - [ ] `drama-check.mjs <series> --ep N` 退出码 0、系列级与目标集零 `block`，`adaptation-map.md` 本集行完整（无 `map-missing`）。 `[脚本]`
+- [ ] 已收到 `fiction-short-drama` 的本剧最新 `lint --series` 退出码 0 报告。 `[模型]`
 - [ ] 目标集剧本已由作者定稿（`状态：定稿`）。 `[作者]`
 - [ ] 本 skill 未改动任何剧本台词、动作或剧情；需改剧本已退回上游。 `[模型]`
 - [ ] 开工前已跑 `storyboard-check.mjs --ep N --brief` 并读完全部五节；修改揭示字段后已刷新简报；原创剧已手工核对 `series.md` `## 悬念账`。 `[模型]`
 - [ ] `visual/assets.md` 已为本集入画人物（规范名）、地点、道具与必要变体建最小条目，未代写 `锁定词`。 `[模型]`
 - [ ] `storyboard-check.mjs <series> --ep N` 退出码 0、零 `block`，且输出确认 `assets.exists: true`、目标集在 `episodes[]` 内；定稿后重跑通过。 `[脚本]`
-- [ ] 所有 `suggest` 已逐条处置；带 `备注` 的镜头已人工复核连戏；本集跨集净变化已写入 `visual/continuity.md`，未回写小说 `inventory.md` 或 `foreshadows.md`。 `[模型]`
+- [ ] 所有 `suggest` 已逐条处置；带 `备注` 的镜头已人工复核入画人数与连戏；本集跨集净变化已写入 `visual/continuity.md`，未回写小说 `inventory.md` 或 `foreshadows.md`。 `[模型]`
 - [ ] 第 1 镜有运动主体；景别与时长有起伏；每段非固定运镜 ≤2 次；剧本动作行真正落实为 `画面` 表演（不只挂 `依据`）；`画面` 按单瞬「起点 → 动作 → 终点」写成；竖屏纵深清晰。 `[模型]`
 - [ ] 已逐镜并连同段级字段对照禁画清单核对，无换说法泄底。 `[模型]`
 - [ ] 视觉基调、重头戏拍法、防剧透存疑、跨侧道具差异与分镜定稿均已由作者拍板。 `[作者]`

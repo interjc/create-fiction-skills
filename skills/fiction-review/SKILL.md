@@ -1,7 +1,7 @@
 ---
 name: fiction-review
 description: >-
-  网文章节审校、获准回修与去 AI 味闭环：先定目标类型与改稿授权，对网文章节读衔接并跑硬规则脚本（字数、脱敏、禁词、内部引用、冻结校验、AI 腔、总结句与伏笔回写），再按六步编辑阅读与蓝本八步法定位问题，仅在获授权且非冻结时修稿并复查；支持跨章复核及简介、短剧台词文笔审校。要求审校、review、回修、去 AI 味、查水剧情、跨章复核，或说“帮我看看这章”“读起来像报告”时使用。只审校及获准回修，不起草新章：写新章或结构重写用 fiction-chapter，维护 bible 用 fiction-continuity，短剧结构与卡点用 fiction-short-drama。Web-novel review, authorized revision, and de-AI-flavour loop: verifies target type and edit authorization, checks seams, runs length/lint/foreshadow-scan scripts, performs six-step editorial review, eight-step blueprint audit, cross-chapter checks, and authorized fixes on unfrozen drafts; also reviews blurbs and episode scripts as prose. Trigger on review, revise, de-AI-flavour, filler check, or "reads like a report". Reviews and applies authorized revisions—never drafts: use fiction-chapter to draft or rewrite, fiction-continuity for bible updates, fiction-short-drama for drama checks.
+  网文章节审校、获准回修与去 AI 味闭环：先定目标类型与改稿授权，对网文章节读衔接并跑硬规则脚本（字数、脱敏、禁词、内部引用、冻结校验、AI 腔、总结句与伏笔回写），再按六步编辑阅读与蓝本八步法定位问题，仅在获授权且非冻结时修稿并复查；支持跨章复核及简介、短剧台词文笔审校。要求审校、review、回修、去 AI 味、查水剧情、跨章复核，或说“帮我看看这章”“读起来像报告”时使用。具体已有稿件的对白回修用本 skill，技法问答或示范用 fiction-craft；写新章或结构重写用 fiction-chapter，维护 bible 用 fiction-continuity，短剧结构与卡点用 fiction-short-drama。Web-novel review, authorized revision, and de-AI-flavour loop: verifies target type and edit authorization, checks seams, runs length/lint/foreshadow-scan scripts, performs six-step editorial review, eight-step blueprint audit, cross-chapter checks, and authorized fixes on unfrozen drafts; also reviews blurbs and episode scripts as prose. Trigger on review, revise, de-AI-flavour, filler check, or "reads like a report". Use this skill to fix dialogue in an existing draft, fiction-craft for technique questions or demos, fiction-chapter to draft or rewrite, fiction-continuity for bible updates, and fiction-short-drama for drama checks.
 license: MIT
 compatibility: Agent Skills standard; tested on Claude Code, also readable by Codex and OpenCode. Scripts need Node.js 22.5+.
 metadata:
@@ -41,7 +41,7 @@ metadata:
 
 - **建议在独立新上下文中运行**：与起草分离的干净会话能明显减少对自己句子的盲区；若仍在原起草会话内运行，开始前须重读 `bible/style-guide.md` 与校准样章以重置手感。
 - **两轮回修上限**：审改闭环最多自动执行两轮修改与复查；两轮后仍有分歧或口味取舍时停下，整理为待决项交给作者，防止越改越碎。
-- **冻结章与未知状态保护**：落在 `.fiction/config.json` 中 `frozen.ranges` 内的章节为读者已见事实，永远只审不改（[SB §3](references/formats/project.md)、[SB §7.1](references/formats/chapter.md)）。若缺配置文件或无法确认该章是否已公开，一律按只审不改处理，先向作者确认状态。
+- **冻结章与未知状态保护**：落在 `.fiction/config.json` 的 `frozen.ranges` 内或已登记在 `.fiction/frozen.json` 的章节一律只审不改（[SB §3](references/formats/project.md)、[SB §7.1](references/formats/chapter.md)）。若两处均无该章记录且作者未说明是否已公开，按公开状态未知只审不改，回修前先向作者确认。
 
 ## 开始前
 
@@ -118,11 +118,12 @@ metadata:
 2. **改后先对照正文与 `outline.md`，再按事件表处理沉淀**（[SB §4.2](references/formats/project.md)）：
    - 局部修辞也可能无意删掉出场人物、改变伏笔措辞或变动规则/物品。改完后先将新正文与 `outline.md` 核对，再按变化分类：
      - **章后必核项**（已完成章后回写时）：`appearances.md`、`foreshadows.md`、`subplots.md`。
-     - **按实际变化写回项**：设定拍板 → `canon.md`；时间锚点/期限 → `timeline.md`；体系规则 → `world-rules.md`；明/暗线进展 → `storylines.md`；新人物 → `characters.md`；关系/弧线变化 → `character-dynamics.md`；物品变动 → `inventory.md`；卷级规划变动须按 `volumes/{vol}.md` → `plot-outline.md` → `vol-info.md` 顺序并先经作者确认。
+     - **按实际变化写回项**：时间锚点/期限 → `timeline.md`；体系规则 → `world-rules.md`；明/暗线进展 → `storylines.md`；新人物 → `characters.md`；关系/弧线变化 → `character-dynamics.md`；物品变动 → `inventory.md`；卷级规划变动须按 `volumes/{vol}.md` → `plot-outline.md` → `vol-info.md` 顺序并先经作者确认。
+     - 按 `fiction-continuity` 的冲突优先级（[SB §3](references/formats/project.md)），只将作者在本流程明确确认且无冲突的设定裁决写入 `bible/canon.md`，未确认或有冲突的交 `fiction-continuity`。
    - 涉及跨章或全局 bible 同步、冲突裁决时，**委托 `fiction-continuity`**（未安装时交付具体变更清单与目标文件，改机读文件前必读 `references/formats/bible.md`）。
    - **短剧分集修改**若引起人物/伏笔/剧情点变动，**转交 `fiction-short-drama`** 同步 `adaptation-map.md`，绝不回写小说 `foreshadows.md`。
    - **派生索引**：全部 Markdown 同步完成后，若项目启用 `fiction-story-db`，委托其更新索引；未安装则跳过。
-3. **何时停下来问作者**：涉及设定拍板、冻结章冲突的兼容口径（**必须先经作者批准**再记入 `canon.md`，见 [SB §3](references/formats/project.md)）、改动核心人物底线或剧情走向、或存在方向取舍时，暂停并给 2–3 个选项。
+3. **何时停下来问作者**：涉及设定拍板、冻结章冲突的兼容口径、改动核心人物底线或剧情走向、或存在方向取舍时，暂停并给 2–3 个选项。
 
 ### 步骤 5：二次复查与闭环收口（仅审改闭环模式）
 
