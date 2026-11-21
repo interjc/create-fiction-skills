@@ -1,6 +1,6 @@
 # Skill 写作规范
 
-> 契约文件，已冻结（T1，作者确认 2026-11-21），外部起草者照此执行。改动须由总监批准，并同步 `tools/validate.mjs`。
+> 契约文件，已冻结（T1，作者确认 2026-11-21；格式摘录随 skill 发布的规则由 Fable 5.2 设计、总监验收 2026-11-21），外部起草者照此执行。改动须由总监批准，并同步 `tools/validate.mjs`。
 > 相关契约：[story-bible.md](story-bible.md)（作者项目的目录与格式）、[scripts.md](scripts.md)（脚本接口）、[debook-terms.txt](debook-terms.txt)（去书专属化词表）。
 
 ## 1. 目录
@@ -9,6 +9,7 @@
 skills/<name>/
 ├── SKILL.md              # 必需
 ├── references/           # 按需加载的细节文档
+│   └── formats/          # 契约摘录，由 sync-shared 生成，禁止手改（scripts.md §8.1）
 ├── assets/               # 模板（会被复制进作者项目的文件）
 └── scripts/              # 只在本 skill 用到脚本时存在
     ├── *.mjs             # 入口脚本
@@ -61,7 +62,7 @@ metadata:
 ## 4. 篇幅与分层
 
 - SKILL.md ≤500 行，目标 ≤300 行。超出的细节下沉到 `references/`。
-- reference 只从 SKILL.md 直接链接，最多一层，不做 reference 之间的链式跳转。单份 ≤400 行；超过 100 行的在开头加目录。
+- reference 只从 SKILL.md 直接链接，最多一层，不做 reference 之间的链式跳转。单份 ≤400 行；超过 100 行的在开头加目录。`references/formats/` 下的生成文件不计入“目标 ≤300 行”的篇幅考虑，但同样受单份 ≤400 行的限制（由同步脚本保证）。
 - 所有链接都用相对路径，并且必须能打开（validate 会检查）。
 
 ## 5. 内容规则
@@ -69,7 +70,12 @@ metadata:
 - **方法要具体**：保留来源里能直接照做的操作，比如场景五要素、删除测试、总结句搜索词、准备章六步、钩子分级、伏笔六步生命周期。不要把它们改写成“注意节奏”“保持一致”这类空话。
 - **书专属规则不进 skill**：人物口径、书内体系、发布参数、冻结章节范围都属于作者项目。skill 只写“去哪里读”（项目 `AGENTS.md` 的“本书口径”或 `config.json`），以及读不到时的默认做法。优先级：项目规则 > skill 默认。
 - **题材差异进题材包**：`fiction-craft/references/genres/<genre>.md`。其他 skill 需要题材知识时，只引用题材包，不各自另写一份。
-- **格式只在契约里定义**：伏笔表的列、钩子标记、分集格式等以 story-bible.md 为准。skill 正文引用契约，不重新定义。如果确实需要新格式，上报总监修改契约。
+- **格式只在契约里定义，随 skill 发布的是契约的摘录**：伏笔表的列、钩子标记、分集格式等以 story-bible.md 为准。装好的 skill 读不到 `docs/spec/`，所以 `tools/sync-shared.mjs` 会把相关章节原文生成到本 skill 的 `references/formats/<主题>.md`（章节号不变，主题分配见 `shared/formats.json`）。写法：
+  - 正文提到格式时写 “SB §7.3” 并链接到对应的摘录文件，如 `[SB §7.3](references/formats/chapter.md)`；不写 `docs/spec/...` 路径，不写 “见 story-bible.md”。
+  - “开始前”一节加一句：要写或要改任何机读文件之前，先打开对应的摘录文件，照里面的格式写，不凭印象。
+  - “参考文档”表里列出本 skill 的每份摘录文件，以及写哪类文件时读它。
+  - 正文可以放从契约**原样照抄**的短例子（如 outline 的伏笔行），旁边标明出处的章节号；不得增加、改写或省略规则。
+  - 需要的章节不在本 skill 的主题里：报总监改 `shared/formats.json`。确实需要新格式：上报总监修改契约。
 - **示例必须原创**：不出现 debook-terms.txt 里的任何词，也不复述来源小说的情节。
 - **写法**：用祈使句，说明原因（“这样做是为了……”），少用大写的“必须”，多给判断依据。中文术语首次出现时附一句白话解释。
 - **宿主中立**：正文不写某个宿主独有的工具名。确实需要时，放到文末“宿主差异”小节。
@@ -89,6 +95,7 @@ metadata:
 - [ ] `node --test skills/<name>/scripts/tests/` 通过（有脚本时）
 - [ ] 来源映射（plan.md §4.1）里该 skill 对应的通用方法都有落点，舍弃的写明理由
 - [ ] 流程每一步的读写路径都与 story-bible.md 一致
+- [ ] 凡是写机读文件的步骤，都链接到了 `references/formats/` 里对应的摘录，并标了 “SB §x”；正文没有指向 `docs/spec/` 的引用
 - [ ] 每条检查都标了 `[脚本]`、`[模型]` 或 `[作者]`
 - [ ] 没有书专属内容；需要书专属值的地方都指向项目口径或 config
 - [ ] description 的触发边界与兄弟 skill 不重叠（T7 用评测验证）

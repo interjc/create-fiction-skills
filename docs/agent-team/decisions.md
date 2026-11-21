@@ -32,3 +32,17 @@ Back to the [board](README.md). Append new decisions at the end. Never rewrite o
 - Rejected options: 见草案 F 节（JSON 主源、LOCK 编号、IMG/PLAN/REF 三态、行号溯源、指纹过期、厂商数字内置等）。
 - Overturn if: T2.c 实现或 T5.b 手写分镜时发现格式写不出来或规则误报过多。
 - Status: landed in docs/spec（本次提交）；plan.md 的插件与两 skill 分工描述同步
+
+### D-04: 冻结（`lint.mjs --freeze`）统一归 fiction-init (2026-11-21)
+- Decision: 首次导入的冻结和此后“新章节进入公开范围”的追加冻结都由 `fiction-init` 负责：它有一个独立的“更新冻结清单”模式（改 `frozen.ranges` → `lint.mjs --freeze` → 报告）。`fiction-publish`、`fiction-continuity`、`fiction-review` 遇到这一事件一律交给 `fiction-init`；未安装时给出两步命令请作者执行。
+- Decided by: director（agy 交叉审查 R-gpt 跨 skill 第 2 条）
+- Motivation and evidence: 草稿里 publish 交 init、continuity 交 review，而 init 拒绝对既有项目重冻、review 没有冻结流程，形成断链。init 在核心插件里且已带 `lint`，不用改清单；publish 在 extras 插件里，不能当唯一入口。
+- Rejected options: 归 fiction-publish（extras 插件，很多作者不装）；归 fiction-continuity（需加 lint 入口，且它管事实不管发布状态）。
+- Status: planned（随 wave 1 返工落地）
+
+### D-05: 契约格式以原文摘录随 skill 发布 (2026-11-21)
+- Decision: 采纳 Fable 5.2 方案 A：`tools/sync-shared.mjs` 按 `shared/formats.json`（8 个主题、12 个 skill 的分配）把 story-bible.md 指定章节原文摘进 `skills/<s>/references/formats/<topic>.md`，保留章节号；validate 新增 `spec-ref`（skill 里不得出现 `docs/spec` / 契约文件名；`SB §x` 必须落在本 skill 的主题内）。scripts.md 新增 §8.1，skill-authoring.md 第 5 节“格式只在契约里定义”一条改写。
+- Decided by: L2 expert (Fable 5.2) 设计，director 验收（agy 交叉审查指出单独安装时格式无处可查）
+- Motivation and evidence: 契约 1061 行无法整份放进单个 reference；手写摘要会漂移；把格式写进书里依赖 fiction-init。摘录与 `scripts/lib/` 副本同步更新，`shared-drift` 拦漏同步。草案：`.agent-team/drafts/formats-shipping.md`。
+- Rejected options: 每个 skill 手写精简示例（B）；fiction-init 往书里写格式摘要（C）。
+- Status: spec landed（本次提交）；实现排进 T2.c 的第一个子任务（T2.b 验收后立即派）；`shared/formats.json` 在 T2.a 交付后由总监建
