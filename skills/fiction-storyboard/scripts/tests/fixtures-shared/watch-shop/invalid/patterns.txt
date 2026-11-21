@@ -1,0 +1,7 @@
+段外文字
+[custom:severe]
+没有有效段头
+[custom:block]
+re:[
+[disable]
+UNKNOWN
