@@ -20,9 +20,9 @@ The director (L1) maintains this file. Each card under `tasks/` has exactly one 
 | [T3](tasks/T3.md) | fiction-story-db（node:sqlite） | outsource | Codex gpt-6.2-sol (OpenCode quota ran out mid-run) | committed (49a6774) |
 | [T4](tasks/T4.md) | SKILL.md 起草与验收 | designed+outsource | director | all 12 skills committed (7b42fde … dc66130) |
 | [T5](tasks/T5.md) | 原创示例书 + 埋雷测试稿 | outsource | agy neon (worktree) | committed (63ca67a) |
-| [T6](tasks/T6.md) | 打包：marketplace / README 中英 | direct | director; README zh in-house writer | in progress (marketplace.json validated) |
-| [T7](tasks/T7.md) | 小规模评测 | designed | in-house L2 eval designer | in progress |
-| [T8](tasks/T8.md) | 集成与全量验收 | solo | director | planned |
+| [T6](tasks/T6.md) | 打包：marketplace / README 中英 | direct | director; README zh in-house writer | done (311384d, cb2e52c) |
+| [T7](tasks/T7.md) | 小规模评测 | designed | in-house L2 eval designer | done (609d493) |
+| [T8](tasks/T8.md) | 集成与全量验收 | solo | director | done (2ceaf01) |
 | [T9](tasks/T9.md) | 开源短剧/分镜/提示词项目调研 | outsource | liaison-agy-research | accepted |
 | [T1.b](tasks/T1.b.md) | 契约扩展：分镜/提示词/视觉资产 | consult | director | committed |
 | T5.b | 示例书：视觉资产、3 集分镜与提示词 | outsource | agy neon (worktree) | committed (5618de8) |

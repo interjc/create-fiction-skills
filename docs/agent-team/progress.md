@@ -5,6 +5,7 @@ Back to the [board](README.md). Dates are absolute (YYYY-MM-DD). Acceptance numb
 ## Status snapshot
 
 <!-- newest first: one entry per recently accepted, committed or in-flight task -->
+- 2026-11-21: 一期全部完成。T6（marketplace + README 中英）、T7（30 个任务用例 + 12 组触发评测）、T8（集成审查 11 项 + 评测反馈 8 条，Codex 修复，D-09）均已提交。validate 0 错误、301 测试通过、12 个 skill quick_validate 通过、`claude plugin validate .` 通过。未推送；评测尚未真跑（需作者用 skill-creator 运行）。
 - 2026-11-21: 12 个 skill 全部验收提交；示例书走完分镜与提示词（T5.b）；validate 0 错误、skill 测试 145 通过。进行中：T6（marketplace.json 已过 `claude plugin validate`，README 中文起草中）、T7（评测集设计中）。OpenCode 的 ChatGPT 额度约 22:25 JST 用尽，gpt-6.2-sol 工作改走 Codex。
 - 2026-11-21: T9 accepted; T1.b in design with Fable 5.2. Wave 1 dispatched: OpenCode gpt-6.2-sol (T2.a, T2.b, T4.a/c/e/h, main checkout, disjoint leases); agy (T4.b/d/f neon-high, T4.f2 hydrogen-high, T5 neon-high, each in its own git worktree under ../cfs-wt/).
 - 2026-11-21: T1 契约冻结并提交（a4b600d）；范围扩展为创意→网文→剧本→分镜→提示词全流程（e7de357）。
@@ -27,12 +28,14 @@ Back to the [board](README.md). Dates are absolute (YYYY-MM-DD). Acceptance numb
 | T4.j visual-prompts、T3 story-db | D-08 | 49a6774 | 方言卡联网核对；未核实项删除；story-db 11 tests、query_only |
 | T5.b | SB §9.4–§9.9 | 5618de8 | 三个检查器 0 block；内部内容审查 9 条修正（含一处剧透） |
 | T4.k workflow | D-04 | dc66130 | GPT 审 13 条 → agy 返工 → 内部验收 |
+| T6 | plan §6 | 311384d, cb2e52c | 两插件 marketplace 过 `claude plugin validate`；README 致谢逐条核对来源；英文版 agy hydrogen |
+| T7 | skill-creator schema | 609d493 | 30 例 217 条断言、12×18 触发查询；prepare/diff 真跑；抽查 continuity 与 review 用例对上扫描结果和答案表 |
+| T8 | D-09 | 2ceaf01 | 集成审查 11 项 + T7 反馈 8 条 → Codex 修复 → 内部逐条审 diff；301 tests、12× quick_validate、plugin validate |
 
 ## Next-up queue
 
-1. T6：README 中文（内部）→ README.en.md（agy hydrogen）→ 提交 marketplace.json
-2. T7：评测集（evals/<skill>/evals.json、trigger-eval.json）验收
-3. T8：跨 skill 一致性、全量验收、提交
+1. 作者：决定 Q3（看板是否随公开仓库提交）与何时推送
+2. 作者 / 后续：用 skill-creator 真跑评测，按结果调 description 与 SKILL.md
 
 ## Channel quota
 
