@@ -15,6 +15,10 @@ Back to the [board](README.md). Dates are absolute (YYYY-MM-DD). Acceptance numb
 |---|---|---|---|
 | T1 | docs/spec/* | a4b600d | 三份契约 + 词表，作者确认后冻结 |
 | T9 | T9 brief | (no files) | 调研报告 5 节齐全，结论进入 T1.b |
+| T1.b | D-03 | be17ab6 | Fable 5.2 设计，总监并入 SB §9.4–§9.9、scripts §11–§13 |
+| 格式随 skill 发布 | D-05 | f913db6 | scripts §8.1、validate `spec-ref`、skill-authoring §5 |
+| T2.a/T2.b | scripts §1–§10 | 62064a2 | 117 tests pass；示例书真跑通过；测试命令改为带引号 glob（Node 26） |
+| T5 | SB 全文 | 63ca67a | 3 章 2279/2574/2349 字、lint 0；埋雷章 7 处脚本项全部检出 |
 
 ## Next-up queue
 

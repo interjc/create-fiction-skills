@@ -16,10 +16,10 @@ The director (L1) maintains this file. Each card under `tasks/` has exactly one 
 | Task | Title | Flow | Holder | Status |
 |---|---|---|---|---|
 | [T1](tasks/T1.md) | 契约：story-bible / skill-authoring / 词表 / 骨架 | designed | director | committed |
-| [T2](tasks/T2.md) | 共用零依赖脚本 + validate + sync-shared | outsource | liaison-T2 (OpenCode gpt-6.2-sol: T2.a, T2.b) | dispatched |
-| [T3](tasks/T3.md) | fiction-story-db（node:sqlite） | outsource | liaison-T3 | planned |
-| [T4](tasks/T4.md) | SKILL.md 起草与验收 | designed+outsource | director; wave 1 liaisons (OpenCode: a/c/e/h; agy: b/d/f/f2) | wave 1 dispatched |
-| [T5](tasks/T5.md) | 原创示例书 + 埋雷测试稿 | outsource | liaison-T5 (agy neon, worktree) | dispatched |
+| [T2](tasks/T2.md) | 共用零依赖脚本 + validate + sync-shared | outsource | OpenCode gpt-6.2-sol (T2.a/b committed 62064a2; T2.c1/c2 dispatched) | in progress |
+| [T3](tasks/T3.md) | fiction-story-db（node:sqlite） | outsource | OpenCode gpt-6.2-sol (queued after T2.c) | dispatched |
+| [T4](tasks/T4.md) | SKILL.md 起草与验收 | designed+outsource | director; wave 1 rework round running (OpenCode a/c/e/h, agy b/d/f/f2) | wave 1 in rework |
+| [T5](tasks/T5.md) | 原创示例书 + 埋雷测试稿 | outsource | agy neon (worktree) | committed (63ca67a) |
 | [T6](tasks/T6.md) | 打包：marketplace / README 中英 | direct | director | planned |
 | [T7](tasks/T7.md) | 小规模评测 | designed | director | planned |
 | [T8](tasks/T8.md) | 集成与全量验收 | solo | director | planned |
