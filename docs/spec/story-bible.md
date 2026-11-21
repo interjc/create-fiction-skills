@@ -1,6 +1,6 @@
 # Story Bible 规范（作者项目结构）
 
-> 契约文件，`spec_version: 1`。状态：已审定、待作者确认后冻结（T1，2026-11-21），改动须总监批准，并同步 [scripts.md](scripts.md) 与 `shared/lib/`。
+> 契约文件，`spec_version: 1`。状态：已冻结（T1，作者确认 2026-11-21），改动须总监批准，并同步 [scripts.md](scripts.md) 与 `shared/lib/`。
 > 相关契约：[scripts.md](scripts.md)（脚本接口）、[skill-authoring.md](skill-authoring.md)（skill 写法）、[debook-terms.txt](debook-terms.txt)（去书专属化词表）。
 > 本文只定义“作者的书”这一侧：目录、每份文件的职责、脚本要解析的格式。skill 正文只引用本文，不另立格式；脚本只认本文。
 

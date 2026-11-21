@@ -1,6 +1,6 @@
 # Skill 写作规范
 
-> 契约文件，已审定、待作者确认后冻结（T1，2026-11-21），外部起草者照此执行。改动须由总监批准，并同步 `tools/validate.mjs`。
+> 契约文件，已冻结（T1，作者确认 2026-11-21），外部起草者照此执行。改动须由总监批准，并同步 `tools/validate.mjs`。
 > 相关契约：[story-bible.md](story-bible.md)（作者项目的目录与格式）、[scripts.md](scripts.md)（脚本接口）、[debook-terms.txt](debook-terms.txt)（去书专属化词表）。
 
 ## 1. 目录
