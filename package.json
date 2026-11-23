@@ -2,7 +2,7 @@
   "name": "create-fiction-skills",
   "private": true,
   "description": "Agent Skills for writing Chinese web novels and vertical short dramas",
-  "license": "MIT",
+  "license": "SEE LICENSE IN LICENSE",
   "engines": {
     "node": ">=22.5"
   },

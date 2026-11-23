@@ -2,7 +2,7 @@
 name: fiction-review
 description: >-
   网文章节审校、获准回修与去 AI 味闭环：先定目标类型与改稿授权，对网文章节读衔接并跑硬规则脚本（字数、脱敏、禁词、内部引用、冻结校验、AI 腔、总结句与伏笔回写），再按六步编辑阅读与蓝本八步法定位问题，仅在获授权且非冻结时修稿并复查；支持跨章复核及简介、短剧台词文笔审校。要求审校、review、回修、去 AI 味、查水剧情、跨章复核，或说“帮我看看这章”“读起来像报告”时使用。具体已有稿件的对白回修用本 skill，技法问答或示范用 fiction-craft；写新章或结构重写用 fiction-chapter，维护 bible 用 fiction-continuity，短剧结构与卡点用 fiction-short-drama。Web-novel review, authorized revision, and de-AI-flavour loop: verifies target type and edit authorization, checks seams, runs length/lint/foreshadow-scan scripts, performs six-step editorial review, eight-step blueprint audit, cross-chapter checks, and authorized fixes on unfrozen drafts; also reviews blurbs and episode scripts as prose. Trigger on review, revise, de-AI-flavour, filler check, or "reads like a report". Use this skill to fix dialogue in an existing draft, fiction-craft for technique questions or demos, fiction-chapter to draft or rewrite, fiction-continuity for bible updates, and fiction-short-drama for drama checks.
-license: MIT
+license: MIT with Commons Clause v1.0 (see LICENSE)
 compatibility: Agent Skills standard; tested on Claude Code, also readable by Codex and OpenCode. Scripts need Node.js 22.5+.
 metadata:
   version: "0.1.0"

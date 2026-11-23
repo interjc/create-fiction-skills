@@ -10,7 +10,7 @@ description: >-
   bible/style-guide.md. Use for technique questions, demos, or codifying a book's
   voice. Use fiction-chapter for drafting, fiction-review for fixes to an existing draft,
   plotting to fiction-planner, and bible tracking to fiction-continuity.
-license: MIT
+license: MIT with Commons Clause v1.0 (see LICENSE)
 compatibility: Agent Skills standard; tested on Claude Code, also readable by Codex and OpenCode. No scripts required.
 metadata:
   version: "0.1.0"

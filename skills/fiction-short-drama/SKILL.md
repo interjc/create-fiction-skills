@@ -3,7 +3,7 @@ name: fiction-short-drama
 description: >-
   竖屏短剧改编与原创剧本闭环：立项、分集大纲与章集映射、分批写分集剧本、前 3 秒钩子与付费卡点设计、机检与映射回写。涉及改编短剧、把小说改成竖屏短剧、写短剧剧本 / 分集剧本、分集大纲、章集映射、付费卡点、前 3 秒钩子、断章、原创短剧、续写下一集短剧、检查短剧格式与时长时使用。建项目用 fiction-init；小说策划用 fiction-planner；写小说用 fiction-chapter；改共享档案用 fiction-continuity；润色用 fiction-review；转分镜用 fiction-storyboard；路由用 fiction-workflow。
   Vertical short-drama adaptation and original scripting workflow: series setup, episode outlines, chapter-to-episode mapping, batched episode scripts, first-3-second hooks, cliffhangers, paywall breaks, and script checks. Use when adapting a novel into a vertical short drama, writing or continuing short-drama episodes, planning episode outlines or maps, placing paywalls, or checking script format and duration. Use fiction-init for setup, fiction-planner for novel planning, fiction-chapter for novel chapters, fiction-continuity for shared bible edits, fiction-review for polish, fiction-storyboard for storyboards, and fiction-workflow for routing.
-license: MIT
+license: MIT with Commons Clause v1.0 (see LICENSE)
 compatibility: 遵循 Agent Skills 规范；脚本需要 Node.js 22.5+。
 metadata:
   version: "0.1.0"

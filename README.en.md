@@ -1,6 +1,6 @@
 # create-fiction-skills
 
-An open, MIT-licensed suite of Agent Skills for writing **Chinese** web novels and vertical short dramas: **web novel → episodic script → storyboard → image / video prompts**. It includes 12 pipeline-split skills; any stage can serve as the stopping point—writing only the web novel is a complete workflow on its own.
+A source-available suite of Agent Skills (MIT with Commons Clause: free to use, including for commercial writing, but not for sale) for writing **Chinese** web novels and vertical short dramas: **web novel → episodic script → storyboard → image / video prompts**. It includes 12 pipeline-split skills; any stage can serve as the stopping point—writing only the web novel is a complete workflow on its own.
 
 The method is generalized from the actual production workflow of a serialized web novel of 600+ chapters. The author leads, while AI handles research, drafting, review, and bookkeeping.
 
@@ -181,4 +181,11 @@ The following open-source projects inspired parts of our approach. All borrowing
 
 ## License
 
-[MIT](LICENSE)
+Starting 2026-11-23, this project is licensed under [MIT with Commons Clause v1.0](LICENSE).
+
+- Free use, modification and redistribution are permitted, including use in commercial work, subject to the license terms.
+- Novels, scripts, storyboards and prompts you write with these skills are yours; this license does not restrict them.
+- You may not sell the project or a product or service whose value derives entirely or substantially from its functionality (for example, a paid skill bundle or a paid prompt pack). This includes paid hosting, consulting or support when that condition is met.
+- When redistributing the original or modified project, retain the copyright notice, the MIT permission notice and the Commons Clause notice.
+
+This is a source-available license, not an OSI-approved open-source license. Previously released MIT versions remain under MIT; this change does not revoke existing MIT grants. The full license text controls.

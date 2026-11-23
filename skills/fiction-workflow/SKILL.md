@@ -3,7 +3,7 @@ name: fiction-workflow
 description: >-
   网文与竖屏短剧流水线路由：查看阶段与逐集进度，选定或切换终点（网文、剧本、分镜或提示词），按门槛交接具体章集，上游改动后按顺序回退。作者问“进行到哪了”“下一步做什么”“该走哪一步”，或说“设定终点”“切换终点”“跑完整条流水线”时使用。具体的单阶段制作请求直接交给负责的 skill。
   Route the web-novel and vertical short-drama pipeline. Use for “where am I?”, “what next?”, “which step?”, “set or change the endpoint”, or “run the whole pipeline”. Report project and episode progress, set workflow.target, and route specific chapters or episodes through gates and upstream rechecks. Use the owning skill for a concrete single-stage task.
-license: MIT
+license: MIT with Commons Clause v1.0 (see LICENSE)
 compatibility: Agent Skills standard; tested on Claude Code, also readable by Codex and OpenCode. Scripts need Node.js 22.5+.
 metadata:
   version: "0.1.0"

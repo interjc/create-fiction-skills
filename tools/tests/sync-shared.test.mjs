@@ -344,3 +344,19 @@ test('format line limit counts the final file; exactly 400 works and 401 errors 
   sync(root, [], 2);
   assert.equal(get(root, file), original);
 });
+
+test('sync copies the root LICENSE into every skill with a SKILL.md and reports drift', t => {
+  const root = fixture(t);
+  const skill = path.posix.dirname(scripts);
+  sync(root, [], 0);
+  assert.equal(exists(root, `${skill}/LICENSE`), false);
+  put(root, 'LICENSE', 'MIT License with Commons Clause v1.0\n');
+  const created = sync(root, [], 0);
+  assert.ok(created.some(item => item.file === `${skill}/LICENSE` && item.action === 'create'));
+  assert.deepEqual(read(root, `${skill}/LICENSE`), read(root, 'LICENSE'));
+  put(root, 'LICENSE', 'changed\n');
+  const drift = sync(root, ['--check'], 1);
+  assert.ok(drift.some(item => item.file === `${skill}/LICENSE` && item.action === 'drift'));
+  sync(root, [], 0);
+  assert.deepEqual(sync(root, ['--check'], 0), []);
+});

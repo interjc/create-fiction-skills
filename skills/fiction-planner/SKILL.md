@@ -3,7 +3,7 @@ name: fiction-planner
 description: >-
   网文创意孵化、开篇定位与卷级规划：收敛模糊点子为卖点与金手指边界、起草书名简介标签（publish/blurb.md）、设计黄金三章、编排全书大纲与明暗双线节奏、制定卷纲与章节规划表、排布爽点节拍/欲扬先抑/情绪波形/S-A-B-C钩子/日更与爆更分组及区域循环结构，并结合伏笔扫描排期。当作者构思新书、拟书名写简介、磨开篇、列全书大纲、开新卷、重排卷次或调节奏钩子时触发。只管单章以上规划：建书与冻结交给 fiction-init，单章 outline 与写正文交给 fiction-chapter，文案与正文审校交给 fiction-review，平台提交交给 fiction-publish，改短剧交给 fiction-short-drama。
   Web-novel ideation, positioning, and volume-level planning: turn vague ideas into marketable hooks, draft publish/blurb.md, design golden first three chapters, whole-book and volume outlines, beat/emotion waves, S-A-B-C hook and daily groupings, region cycles, and foreshadow schedules. Use when brainstorming a book, drafting titles/blurbs, planning volumes, pacing, or scheduling payoffs; hand setup/freezing to fiction-init, chapter outlines/drafting to fiction-chapter, review to fiction-review, submission to fiction-publish, and adaptation to fiction-short-drama.
-license: MIT
+license: MIT with Commons Clause v1.0 (see LICENSE)
 compatibility: Agent Skills standard; tested on Claude Code, also readable by Codex and OpenCode. Scripts need Node.js 22.5+.
 metadata:
   version: "0.1.0"

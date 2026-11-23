@@ -8,7 +8,7 @@
       "source": "./",
       "description": "核心 10 个 skill：建书、策划、写章、审校、设定一致性、技法、总入口、短剧改编、分镜、视觉提示词。Core skills: project setup, planning, chapters, review, continuity, craft, workflow, short drama, storyboard, visual prompts.",
       "version": "0.1.0",
-      "license": "MIT",
+      "license": "MIT with Commons Clause v1.0",
       "strict": false,
       "skills": [
         "./skills/fiction-init",
@@ -28,7 +28,7 @@
       "source": "./",
       "description": "可选：长篇故事索引（node:sqlite）与实验性的平台定时发布。Optional: story index for long books and experimental scheduled publishing.",
       "version": "0.1.0",
-      "license": "MIT",
+      "license": "MIT with Commons Clause v1.0",
       "strict": false,
       "skills": [
         "./skills/fiction-story-db",

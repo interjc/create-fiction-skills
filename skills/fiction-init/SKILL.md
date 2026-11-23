@@ -2,7 +2,7 @@
 name: fiction-init
 description: >-
   初始化网文或原创短剧项目：从已定创意建骨架，导入旧稿并反抽故事档案，或为新公开章更新冻结清单。作者说“开新书”“导入旧稿”“补齐书项目骨架”“更新冻结清单”“这几章已公开”时就用，即使没说初始化。点子还没定时先用 fiction-planner 孵化，全书及卷级规划也交给它；单章提纲、正文及章后回写交 fiction-chapter，审校交 fiction-review。 Set up a web novel or original short-drama project, import a manuscript, or update the freeze manifest for newly published chapters. Use when asked to start a book, import chapters, fill missing project files, or freeze published chapters. Use fiction-planner first for vague ideas and for book or volume plans, fiction-chapter for chapter outlines, drafting and write-back, and fiction-review for review.
-license: MIT
+license: MIT with Commons Clause v1.0 (see LICENSE)
 compatibility: Agent Skills standard; scripts require Node.js 22.5+.
 metadata:
   version: "0.1.0"

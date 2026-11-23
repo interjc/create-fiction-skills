@@ -3,7 +3,7 @@ name: fiction-chapter
 description: >-
   网文单章写作六步闭环：查前文和设定、摘资料、定章纲、写正文、机检审改、回写追踪表。作者说“写新章”“接着写”“出下一章”“重写这一章”或要求重排单章结构时就用。重排卷纲或设计连载节拍用 fiction-planner；审校及已有章节获授权的局部回修、润色和去 AI 味用 fiction-review。
   Write, continue, rewrite, or restructure one web novel chapter, from continuity checks and outlining through drafting, validation, and story bible updates. Use when asked to write a new chapter, pick up where the draft left off, write the next installment, or rewrite a chapter. Use fiction-planner for volume planning and serial cadence, and fiction-review for editorial review or authorized local fixes, polishing, and removing AI-like prose in an existing chapter.
-license: MIT
+license: MIT with Commons Clause v1.0 (see LICENSE)
 compatibility: 遵循 Agent Skills 规范；脚本需要 Node.js 22.5+。
 metadata:
   version: "0.1.0"

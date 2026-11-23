@@ -2,7 +2,7 @@
 name: fiction-story-db
 description: >-
   为三百章以上的长篇建立可重建的本地 SQLite 故事索引。遇到“上次出场是哪章”“这条设定去哪份文件查”等跨章问题时使用，也可查章集映射。章节写作交给 fiction-chapter，连贯性核对、回写及“哪些伏笔该收了”等判断交给 fiction-continuity；只有索引已建且作者明确问索引结果时，才查索引中的到期伏笔。短篇优先直接读 Markdown。 Build a rebuildable SQLite story index for long serials. Use it for cross-chapter lookups such as “When did this character last appear?” and “Where is the authoritative record?”, or for chapter-to-episode lookups. Use fiction-chapter for drafting and fiction-continuity for continuity checks, updates, and payoff decisions. Query due setups only when the index exists and the author asks for its results. Read Markdown directly for short books.
-license: MIT
+license: MIT with Commons Clause v1.0 (see LICENSE)
 metadata:
   version: "0.1.0"
   suite: create-fiction-skills

@@ -86,3 +86,10 @@ Back to the [board](README.md). Append new decisions at the end. Never rewrite o
 - Motivation and evidence: `voiceover-open` 不受任何配置控制，旁白主导剧每集一条必留建议；`episode-writing.md` §二禁 OS/VO 开场与 §七允许“开篇一句立人设”自相矛盾。分批写集不带上一批全文，接续只靠「剧情点」列。`parseAdaptationMap` 按列名取值、多余列忽略，加可选列不破坏旧项目。
 - Rejected options: 规则主体放题材包（fiction-craft 可选、混搭题材无法裁决）；`drama.open_type` 配置键或机读字段（脚本判不了“克制、反差”）；完全不动脚本；VO 占比上限 0.3（来源自注未实测）；集末状态必填 / 写进分集文件 / 并入 continuity.md；完全不机检。
 - Status: 契约已改（本次提交）；脚本、正文、题材包、示例书由 T12 落地
+
+### D-12: 许可改为 MIT with Commons Clause v1.0 (2026-11-23)
+- Decision: 根 `LICENSE` 改为 MIT with Commons Clause v1.0，格式与 interjc/subagent-team-skills 一致（Software: Create Fiction Skills，Licensor 不变）；`tools/sync-shared.mjs` 把它复制成每个 skill 的 `LICENSE`；SKILL.md frontmatter 写 `MIT with Commons Clause v1.0 (see LICENSE)`，`package.json` 写 `SEE LICENSE IN LICENSE`，marketplace 两个插件写 `MIT with Commons Clause v1.0`；README 中英「许可」节照该仓库写法，另加“用 skill 写出的作品归用户”一条。不写联系方式（与该仓库一致）。
+- Decided by: user（“可以随便使用，但是不可以拿去转卖或者原样包装以后不署名就商用”；选方案 A；“联系方式可以跟 interjc/subagent-team-skills 使用一样的”；“你也可以参考他的协议”）
+- Motivation and evidence: MIT 已要求署名但允许转卖；Commons Clause 只禁“出售”，不限制商用写作与产出。条款原文核对自该仓库 LICENSE 与 n8n 早期 LICENSE（commonsclause.com 在本会话不可达）。
+- Rejected options: CC BY-NC-SA 4.0（禁一切商用，比作者要的严）；PolyForm Noncommercial / Shield；MIT + 自写中文附加条款（效力模糊）。
+- Status: 已落地（本次提交）。此前以 MIT 发布的提交仍适用 MIT。

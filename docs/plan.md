@@ -27,7 +27,7 @@
 | D10 | 保密边界 | 外部团队可读两个仓库的全部内容 |
 | D11 | 外包范围 | 尽量外发，包括 SKILL.md 正文起草；内部负责契约、规格冻结、验收和提交 |
 | D12 | 语言 | SKILL.md 与 references 用中文；frontmatter description 中英双语；README 中英两版 |
-| D13 | 许可 | MIT（仓库已有 LICENSE） |
+| D13 | 许可 | ~~MIT~~ → MIT with Commons Clause v1.0（2026-11-23 作者改定，见 decisions D-12）；根 `LICENSE` 由 sync-shared 复制进每个 skill |
 | D14 | 完整流水线（2026-11-21 扩展） | 创意 → 网文 → 分集剧本 → 场景脚本（分镜）→ 图片 / 视频生成提示词；任一阶段都可作为终点（只写网文也完整） |
 | D15 | 新增 skill | `fiction-storyboard`（剧本 → 场景脚本 / 分镜）、`fiction-visual-prompts`（分镜 → 图 / 视频提示词，含视觉资产库与连戏锁）、`fiction-workflow`（总入口与阶段路由）；“创意”阶段并入 `fiction-planner` |
 | D16 | 开源融合 | 剧本 / 分镜 / 提示词阶段先调研开源实现（MIT / Apache-2.0），融合其做法；复用的结构与思路在 README “参考与致谢”注明来源与许可，不整段搬运 |
