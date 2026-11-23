@@ -6,6 +6,7 @@
 - [二、解读 JSON 输出与人工留存口径](#二解读-json-输出与人工留存口径)
 - [三、`drama-check.mjs` 规则全表](#三drama-checkmjs-规则全表)
 - [四、`lint.mjs --series` 对剧本生效的规则](#四lintmjs---series-对剧本生效的规则)
+- [五、级别与问题分层](#五级别与问题分层)
 
 ---
 
@@ -116,3 +117,20 @@ node <本 skill 目录>/scripts/lint.mjs --series <series> [--fail-on block|sugg
 | `ai-tone` | `AT01–AT09` `block`；`AT21–AT29` `suggest` | 动作行命中陈词套话或空洞情绪词 | 清零全部 `block`，把套话换成可拍动作 |
 | `custom` | 按作者配置 | `.fiction/lint-patterns.txt` 的自定义规则 | 按作者自定义提示处理 |
 | `frozen-modified` / `frozen-unsealed` | `block` / `suggest` | 项目级冻结小说章检查（每次 lint 都会跑） | 均先交作者核实；`frozen-modified` 绝不改动冻结正文或强覆哈希；`frozen-unsealed` 经作者确认新公开范围后转 `fiction-init`「更新冻结清单」模式补封存（未安装时请作者两步处理：先更新 `.fiction/config.json` 的 `frozen.ranges`，再从书根运行 `node <本 skill 目录>/scripts/lint.mjs --freeze`，见 [SB §4.2](formats/project.md)） |
+
+---
+
+## 五、级别与问题分层
+
+脚本级别回答“脚本怎么报”，分层回答“这条问题有多严重、能不能挡住交接”。本节只是人工处置口径，不改变任何规则的级别与脚本行为；与 `fiction-review` 的审校分层同一套说法。
+
+| 层级 | 本 skill 里包括什么 | 处置 |
+| --- | --- | --- |
+| 硬约束 | 两个脚本的全部 `block`（格式、解析、钩子与卡点标记、映射 F-ID 与先埋后收、禁词、脱敏、精确年份、内部引用），以及 `AGENTS.md`「本书口径」里作者定的硬规则；`length` 级别取 `drama.length_level`，配成 `block` 即归此层 | 一律清零，不能写“已核对，保留”；未清不交接 |
+| 审定约束 | `[模型]` 复核里的事实、因果与连戏问题：站位、道具、在场名单、伤势前后不接，提前写出作者真相，破局或反转没有前文依据；以及关乎映射与规划一致性的 `suggest`：`map-missing`、核心或配角的 `map-character`、`map-unresolved`、`episode-total`、`paywall-plan` | 修，或经作者确认后保留；第三节表中「何时可保留」列允许保留的，按该行口径记「已核对，保留：理由」并写明作者已确认 |
+| 技法默认 | 多数写作类 `suggest`：`unshootable`、`dialogue-run`、`voiceover-quota`、`max-scenes`、`length`（默认 `suggest` 时）、`action-missing`；本 skill references 里的可调默认（四挡节奏、场数预算、对抗四步、跨批套路重复） | 逐条核对，改或记“已核对，保留：理由”；单独不构成返修理由 |
+| 口味选项 | 作者偏好的台词腔调、镜头取舍 | 只作备注 |
+
+- **严重度**沿用四档：阻断（硬约束，必须清）、重要（审定约束，须修，作者豁免除外）、次要（仅技法默认，不挡交接，不因数量多升级）、备注（技法默认或口味，拿不准的一律记备注交作者）。
+- **升级例外**：套路重复或技法问题同时违反了已立事实或因果（例如上一集立下的伤势、欠债、身份暴露这一集无解释地消失），按审定约束记“重要”，一次即可。
+- **汇报写法**：保留的技法类 `suggest` 照旧记「已核对，保留：理由」；`[模型]` 发现按 `位置 / 问题 / 修改方向 / 严重度·层级` 列出，先列阻断与重要。交接门槛不变：两个脚本最新一次退出码均为 `0`。
