@@ -5,6 +5,7 @@ Back to the [board](README.md). Dates are absolute (YYYY-MM-DD). Acceptance numb
 ## Status snapshot
 
 <!-- newest first: one entry per recently accepted, committed or in-flight task -->
+- 2026-11-23: 作者同意借鉴 drama-skills 第二轮（plan §10，606f824）。T10（审校分层 / 对抗戏破局 / 套路重复）派内部 L2 起草；T11（按题材开场、集末状态列）咨询 Fable 5.2。外部通道在云端会话不可用，全部内部。
 - 2026-11-22: 评测最小试跑通过（continuity/1，7/7）；清理 10 个 agy worktree 与 wt/agy 分支；Q3 由作者答复（看板公开），README 加 subagent-team-skills 安装说明，fiction-init 推荐安装（D-10）；推送到 origin/main。
 - 2026-11-21: 一期全部完成。T6（marketplace + README 中英）、T7（30 个任务用例 + 12 组触发评测）、T8（集成审查 11 项 + 评测反馈 8 条，Codex 修复，D-09）均已提交。validate 0 错误、301 测试通过、12 个 skill quick_validate 通过、`claude plugin validate .` 通过。未推送；评测尚未真跑（需作者用 skill-creator 运行）。
 - 2026-11-21: 12 个 skill 全部验收提交；示例书走完分镜与提示词（T5.b）；validate 0 错误、skill 测试 145 通过。进行中：T6（marketplace.json 已过 `claude plugin validate`，README 中文起草中）、T7（评测集设计中）。OpenCode 的 ChatGPT 额度约 22:25 JST 用尽，gpt-6.2-sol 工作改走 Codex。

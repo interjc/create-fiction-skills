@@ -26,6 +26,10 @@ The director (L1) maintains this file. Each card under `tasks/` has exactly one 
 | [T9](tasks/T9.md) | 开源短剧/分镜/提示词项目调研 | outsource | liaison-agy-research | accepted |
 | [T1.b](tasks/T1.b.md) | 契约扩展：分镜/提示词/视觉资产 | consult | director | committed |
 | T5.b | 示例书：视觉资产、3 集分镜与提示词 | outsource | agy neon (worktree) | committed (5618de8) |
+| [T10](tasks/T10.md) | 审校分层 / 对抗戏破局 / 套路重复（drama-skills 第二轮） | designed+direct | in-house L2 writer | dispatched |
+| [T11](tasks/T11.md) | 难题咨询：按题材开场 / 集末状态列 | consult | Fable 5.2 | dispatched |
+| T12 | 按 T11 结论落地 | designed+direct | director | waiting on T11 |
+| T13 | README 致谢补本轮借鉴项 | direct | director | waiting on T10/T12 |
 
 ## Files
 
