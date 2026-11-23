@@ -25,11 +25,13 @@ skills/<name>/
 
 只允许这些键：`name`、`description`、`license`、`compatibility`、`metadata`、`allowed-tools`（一般不用）。
 
+`license` 固定写 `MIT with Commons Clause v1.0 (see LICENSE)`。仓库根目录 `LICENSE` 由 `node tools/sync-shared.mjs` 复制成每个 skill 目录下的 `LICENSE`（skill 可单独安装，协议要随行），不要手改副本。
+
 ```yaml
 ---
 name: fiction-chapter
 description: 网文章节写作闭环：……（中文，先写做什么，再写何时触发）。Web-novel chapter workflow: ... (English, same content, trigger phrases included).
-license: MIT
+license: MIT with Commons Clause v1.0 (see LICENSE)
 compatibility: Agent Skills standard; tested on Claude Code, also readable by Codex and OpenCode. Scripts need Node.js 22.5+.
 metadata:
   version: "0.1.0"

@@ -1,6 +1,6 @@
 # create-fiction-skills
 
-An open, MIT-licensed suite of Agent Skills for writing **Chinese** web novels and vertical short dramas: **web novel → episodic script → storyboard → image / video prompts**. It includes 12 pipeline-split skills; any stage can serve as the stopping point—writing only the web novel is a complete workflow on its own.
+A source-available suite of Agent Skills (MIT with Commons Clause: free to use, including for commercial writing, but not for sale) for writing **Chinese** web novels and vertical short dramas: **web novel → episodic script → storyboard → image / video prompts**. It includes 12 pipeline-split skills; any stage can serve as the stopping point—writing only the web novel is a complete workflow on its own.
 
 The method is generalized from the actual production workflow of a serialized web novel of 600+ chapters. The author leads, while AI handles research, drafting, review, and bookkeeping.
 
@@ -174,11 +174,18 @@ The following open-source projects inspired parts of our approach. All borrowing
 | [short-drama-factory](https://github.com/lixiaoxiao9888-create/short-drama-factory) | MIT | Per-episode length and episode-count ratios, tiered paywall beats and hard rules, cold-open taboos, four-gear episode pacing, OS / VO usage rules, trimming threads and merging characters during adaptation; script shootability checks (negative pseudo-actions, consecutive pure dialogue, OS / VO quotas and no-opening rule) |
 | [short-drama](https://github.com/0xsline/short-drama) | MIT | Cliffhanger suspense patterns, ratios of key episodes and strong-hook episodes, tasks required of free episodes |
 | [shuohao-skills](https://github.com/eternityspring/shuohao-skills) | Apache-2.0 | Cold opens must carry motion, "scripts govern drama, storyboards govern shooting", one main plot plus one subplot, character tiering, batched episode writing and revision discipline; two-level "segment (single generation) → shot" storyboard structure with default durations, dialogue fitting within shots, shots claiming source script lines |
-| [drama-skills](https://github.com/zenstory-ai/drama-skills) | MIT | Adapt only owned or licensed works; staged Markdown documents as source of truth; three-layer visual asset boundary ("identity / stage state / single-shot action"); continuity lock terms with "exempt when reference image is attached"; prompt dialect cards; batch confirmation before paid generation; editing shots without renumbering |
+| [drama-skills](https://github.com/zenstory-ai/drama-skills) | MIT | Adapt only owned or licensed works; staged Markdown documents as source of truth; three-layer visual asset boundary ("identity / stage state / single-shot action"); continuity lock terms with "exempt when reference image is attached"; prompt dialect cards; batch confirmation before paid generation; editing shots without renumbering; tiered review findings (only hard and reviewed constraints can fail a draft); confrontations judged by leverage, with earned breakthroughs; a threshold and exemptions for repeated formulas across episodes; opening types chosen by genre; a per-episode hand-off state for the next episode |
 | [screenwriting-skills](https://github.com/jtydhr88/screenwriting-skills) | MIT | Action lines describe only what can be seen and heard |
 | [awesome-short-drama-skills](https://github.com/UnderleveledBuilder/awesome-short-drama-skills) | CC0-1.0 | Short-drama skill ecosystem index, used for survey reference |
 | [inkos](https://github.com/Narcooo/inkos) | AGPL-3.0 | One idea only: a static frame can only capture a single moment; no code or text copied |
 
 ## License
 
-[MIT](LICENSE)
+Starting 2026-11-23, this project is licensed under [MIT with Commons Clause v1.0](LICENSE).
+
+- Free use, modification and redistribution are permitted, including use in commercial work, subject to the license terms.
+- Novels, scripts, storyboards and prompts you write with these skills are yours; this license does not restrict them.
+- You may not sell the project or a product or service whose value derives entirely or substantially from its functionality (for example, a paid skill bundle or a paid prompt pack). This includes paid hosting, consulting or support when that condition is met.
+- When redistributing the original or modified project, retain the copyright notice, the MIT permission notice and the Commons Clause notice.
+
+This is a source-available license, not an OSI-approved open-source license. Previously released MIT versions remain under MIT; this change does not revoke existing MIT grants. The full license text controls.

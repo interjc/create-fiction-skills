@@ -77,6 +77,7 @@ export function parseAdaptationMap(text, file = 'adaptation-map.md') {
     output.add({
       episode, original, source_chapters, source_text: row.来源章, plot: cell(row.剧情点), characters: splitList(row.人物),
       foreshadow_actions: splitList(row.伏笔).map(parseAction), changes: cell(row.改动),
+      handoff: row.集末状态 === undefined ? undefined : cell(row.集末状态),
     }, line);
   });
   return output.finish();

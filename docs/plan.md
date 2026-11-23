@@ -27,7 +27,7 @@
 | D10 | 保密边界 | 外部团队可读两个仓库的全部内容 |
 | D11 | 外包范围 | 尽量外发，包括 SKILL.md 正文起草；内部负责契约、规格冻结、验收和提交 |
 | D12 | 语言 | SKILL.md 与 references 用中文；frontmatter description 中英双语；README 中英两版 |
-| D13 | 许可 | MIT（仓库已有 LICENSE） |
+| D13 | 许可 | ~~MIT~~ → MIT with Commons Clause v1.0（2026-11-23 作者改定，见 decisions D-12）；根 `LICENSE` 由 sync-shared 复制进每个 skill |
 | D14 | 完整流水线（2026-11-21 扩展） | 创意 → 网文 → 分集剧本 → 场景脚本（分镜）→ 图片 / 视频生成提示词；任一阶段都可作为终点（只写网文也完整） |
 | D15 | 新增 skill | `fiction-storyboard`（剧本 → 场景脚本 / 分镜）、`fiction-visual-prompts`（分镜 → 图 / 视频提示词，含视觉资产库与连戏锁）、`fiction-workflow`（总入口与阶段路由）；“创意”阶段并入 `fiction-planner` |
 | D16 | 开源融合 | 剧本 / 分镜 / 提示词阶段先调研开源实现（MIT / Apache-2.0），融合其做法；复用的结构与思路在 README “参考与致谢”注明来源与许可，不整段搬运 |
@@ -174,3 +174,18 @@ python3 <skill-creator>/scripts/quick_validate.py skills/<name>   # 逐个 skill
 ## 9. 待作者确认
 
 见 [docs/agent-team/progress.md](agent-team/progress.md) “Open questions”。
+
+## 10. 一期之后：借鉴 drama-skills 第二轮（2026-11-23，作者确认“就按你说的来”）
+
+来源：[drama-skills](https://github.com/zenstory-ai/drama-skills)（MIT），T9 已借鉴过一轮（见 README「参考与致谢」）。本轮只取思路，格式与措辞原创。外部通道（OpenCode / Codex / agy）在当前云端会话不可用，按 AGENTS.md「其他情况走内部」全部内部派工。
+
+| # | 内容 | 落点 | 流程 | 执行 | 验收 |
+|---|---|---|---|---|---|
+| T10.a | 审校规则分层：硬约束 / 审定约束可判「未通过」，技法默认 / 口味选项只能当建议；问题分严重度 | `fiction-review`（SKILL.md、editorial-criteria）、`fiction-short-drama` 检查清单与 drama-check-guide | designed + direct | 内部 L2 起草 | 内部 L3（≠ 起草模型）+ L1 |
+| T10.b | 对抗戏写清谁占上风、赌注是什么；破局必须来自前文已交代的证据 / 权限 / 代价 / 行动，不靠天降外援 | `fiction-short-drama/references/episode-writing.md`、`fiction-review/references/editorial-criteria.md`、两处检查清单 | 同上 | 同上 | 同上 |
+| T10.c | 跨集 / 跨章套路重复检查；故意呼应与连戏重复豁免 | `fiction-review`（步骤 6、blueprint-audit 第八步）、`fiction-short-drama`（分批写集与检查清单） | 同上 | 同上 | 同上 |
+| T11 | 难题咨询：(4) 开场钩子按题材放宽（涉及 `voiceover-open` 规则与题材包）；(5) 章集映射表加「集末状态」列（改 SB §9.2 与解析器） | 咨询结论写入 decisions.md | consult | Fable 5.2 | L1 |
+| T12 | 按 T11 结论落地：契约改动（L1）、脚本与测试、skill 正文、示例书 | 视 T11 而定 | designed + direct | 契约 L1；脚本与正文内部 | 内部 L3 + L1 |
+| T13 | README 中英「参考与致谢」drama-skills 一行补本轮借鉴项 | README.md、README.en.md | direct | L1 | — |
+
+约束：契约（`docs/spec/`）只由 L1 改；T10 不改任何机读格式与脚本行为；每项验收通过后本地提交。

@@ -138,6 +138,8 @@ export function syncShared(root, { check = false, skill } = {}) {
   const tests = assertDir(root, 'shared/tests', true);
   const fixtures = tests && assertDir(root, 'shared/tests/fixtures-shared', true)
     ? sourceTree(root, 'shared/tests/fixtures-shared') : undefined;
+  // The repository LICENSE ships inside every skill, since skills install one by one.
+  const license = read(root, 'LICENSE', true);
   const changes = [];
   const operations = [];
   const actions = check ? ['missing', 'drift', 'stale'] : ['create', 'update', 'delete'];
@@ -221,6 +223,10 @@ export function syncShared(root, { check = false, skill } = {}) {
         if (bytes) copy(`${testDir}/${test}`, bytes);
       }
       mirror(`${testDir}/fixtures-shared`, entries.length ? fixtures : undefined);
+    }
+
+    if (license && stat(path.join(root, `skills/${name}/SKILL.md`))?.isFile()) {
+      copy(`skills/${name}/LICENSE`, license);
     }
 
     if (excerpts) {

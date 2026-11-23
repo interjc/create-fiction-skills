@@ -3,7 +3,7 @@ name: fiction-continuity
 description: >-
   维护长篇故事档案：找唯一主写入口，查伏笔与支线，核对人物、时间、物品和规则，处理跨章矛盾、章后回写的复核、卷末复盘和讨论稿合并。作者说“这个设定在哪记”“帮我查伏笔”“前后矛盾了”“更新人物关系”“整理时间线”“卷完结复盘”“合并讨论稿”“伏笔是不是该收了”或要做一致性审计时就用，即使没提故事档案。写正文及写完一章时回写该章追踪表用 fiction-chapter，重排剧情用 fiction-planner，审文风用 fiction-review。
   Maintain a long serial's story bible. Use when asked where to record a fact, check or pay off a clue, resolve a contradiction, update relationships, reconcile dates, verify chapter write-back, recap a volume, merge discussion drafts, or audit continuity. Use fiction-chapter to draft prose and update tracking tables right after writing a chapter, fiction-planner to replan the story, and fiction-review for editorial review.
-license: MIT
+license: MIT with Commons Clause v1.0 (see LICENSE)
 compatibility: 遵循 Agent Skills 规范；脚本需要 Node.js 22.5+，无需数据库。
 metadata:
   version: "0.1.0"

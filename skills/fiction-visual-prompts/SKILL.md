@@ -3,7 +3,7 @@ name: fiction-visual-prompts
 description: >-
   把短剧分镜写成资产参考图、首尾帧和分段视频提示词。补全视觉资产与连戏锁，生成前列清单请作者确认。用户说“按分镜写生图词”“出首帧提示词”“写图生视频 prompt”“换提示词方言”或“确认这一批出图出片”时就用，即使没说 skill 名。改镜头交给 fiction-storyboard。本 skill 不调用生成接口。
   Turn short drama storyboards into asset references, first and last frame prompts, and video prompts with continuity locks and author approval before generation. Use for image prompts, video prompts, dialect changes, or batch approval. Send shot changes to fiction-storyboard. This skill never calls generation APIs.
-license: MIT
+license: MIT with Commons Clause v1.0 (see LICENSE)
 compatibility: Agent Skills standard. Scripts need Node.js 22.5+.
 metadata:
   version: "0.1.0"

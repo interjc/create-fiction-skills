@@ -3,7 +3,7 @@ name: fiction-publish
 description: >-
   实验性网文发布。作者说“把定稿发到番茄”“排定时发布”“查某章有没有提交”“接着上次排稿”“把某章改期”或“把审核过的简介发上去”时使用，即使没说“发布”。通过作者已登录的浏览器提交、核验，按平台字数排期并记账；只查状态时不提交。写章用 fiction-chapter，起草简介用 fiction-planner，审校用 fiction-review。
   Experimental web novel publishing. Use when asked to submit finalized chapters or an approved blurb to Fanqie, schedule or reschedule chapters, check submission status, or resume a batch. Use the author's signed-in browser, schedule using platform word counts, and verify submissions. Status checks never submit. Draft chapters with fiction-chapter, draft blurbs with fiction-planner, and review prose with fiction-review.
-license: MIT
+license: MIT with Commons Clause v1.0 (see LICENSE)
 compatibility: >-
   符合 Agent Skills 标准；线上操作需要宿主提供能操作作者已登录会话的浏览器工具，本地字数参考需要 Node.js 22.5+。
 metadata:

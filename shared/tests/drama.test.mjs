@@ -58,3 +58,13 @@ test('episode parser accepts a backslash file path without rewriting its reporte
   assert.deepEqual(result.errors, []);
   assert.deepEqual([result.items[0].episode, result.items[0].file], [4, file]);
 });
+
+test('adaptation map handoff is undefined without the column, null when blank, else trimmed text', () => {
+  const head = '| 集 | 来源章 | 剧情点 | 人物 | 伏笔 | 改动 |';
+  const bare = parseAdaptationMap(`${head}\n|---|---|---|---|---|---|\n| 1 | 原创 | 甲 | 小林 | - | - |\n`);
+  assert.equal(bare.items[0].handoff, undefined);
+  const withCol = parseAdaptationMap(`${head} 集末状态 |\n|---|---|---|---|---|---|---|\n`
+    + '| 1 | 原创 | 甲 | 小林 | - | - |  |\n| 2 | 原创 | 乙 | 小林 | - | - |  阿七握着盐盒。 |\n');
+  assert.deepEqual(withCol.errors, []);
+  assert.deepEqual(withCol.items.map(item => item.handoff), [null, '阿七握着盐盒。']);
+});

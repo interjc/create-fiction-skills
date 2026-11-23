@@ -3,7 +3,7 @@ name: fiction-storyboard
 description: >-
   竖屏短剧分镜工作流：基于已定稿且过检的分集剧本，先做防剧透简报与视觉资产最小建档，再按“段（一次视频生成）→ 镜（段内剪切）”拆解分镜，逐镜核对台词认领、动作依据、竖屏构图、单瞬起止与跨集连戏，最后跑脚本验收并交接下游提示词。作者说“画分镜”“拆镜头”“做场景脚本”“切镜”“把第几集转成分镜”“剧本改了同步分镜”时就用，即使没提“分镜”二字。写或改分集剧本（含改台词）请用 fiction-short-drama；补全资产锁定词、写图片/视频提示词或做付费生成确认请用 fiction-visual-prompts。
   Vertical short-drama storyboard workflow: turn finalized, validated episode scripts into segment-and-shot storyboards with spoiler briefs, minimal visual asset entries, continuity tracking, verbatim dialogue/action claiming, 9:16 vertical framing, single-instant start-to-end shot design, and automated storyboard validation. Use when asked to storyboard an episode, break a script into shots, cut segments, or sync storyboards after script edits. Use fiction-short-drama for writing or editing episode scripts and dialogue, and fiction-visual-prompts for full asset locks, reference-image slots, and image/video prompts.
-license: MIT
+license: MIT with Commons Clause v1.0 (see LICENSE)
 compatibility: 遵循 Agent Skills 规范；脚本需要 Node.js 22.5+。
 metadata:
   version: "0.1.0"

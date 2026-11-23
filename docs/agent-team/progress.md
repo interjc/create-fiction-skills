@@ -5,6 +5,8 @@ Back to the [board](README.md). Dates are absolute (YYYY-MM-DD). Acceptance numb
 ## Status snapshot
 
 <!-- newest first: one entry per recently accepted, committed or in-flight task -->
+- 2026-11-23: drama-skills 第二轮全部完成：T10 审校分层 / 对抗戏破局 / 套路重复；T11 Fable 咨询 → D-11；T12 开场类型、`集末状态` 可选列与 `map-handoff`、`voiceover-open` null 门控，示例书 ep001 去掉集末前史 OS 改为值班卡动作并同步分镜与提示词；T13 README 致谢。validate 0、skill 测试 149、shared 测试 126、12× quick_validate、示例书四个检查器 0 block。
+- 2026-11-23: 作者同意借鉴 drama-skills 第二轮（plan §10，606f824）。T10（审校分层 / 对抗戏破局 / 套路重复）派内部 L2 起草；T11（按题材开场、集末状态列）咨询 Fable 5.2。外部通道在云端会话不可用，全部内部。
 - 2026-11-22: 评测最小试跑通过（continuity/1，7/7）；清理 10 个 agy worktree 与 wt/agy 分支；Q3 由作者答复（看板公开），README 加 subagent-team-skills 安装说明，fiction-init 推荐安装（D-10）；推送到 origin/main。
 - 2026-11-21: 一期全部完成。T6（marketplace + README 中英）、T7（30 个任务用例 + 12 组触发评测）、T8（集成审查 11 项 + 评测反馈 8 条，Codex 修复，D-09）均已提交。validate 0 错误、301 测试通过、12 个 skill quick_validate 通过、`claude plugin validate .` 通过。未推送；评测尚未真跑（需作者用 skill-creator 运行）。
 - 2026-11-21: 12 个 skill 全部验收提交；示例书走完分镜与提示词（T5.b）；validate 0 错误、skill 测试 145 通过。进行中：T6（marketplace.json 已过 `claude plugin validate`，README 中文起草中）、T7（评测集设计中）。OpenCode 的 ChatGPT 额度约 22:25 JST 用尽，gpt-6.2-sol 工作改走 Codex。
@@ -33,6 +35,10 @@ Back to the [board](README.md). Dates are absolute (YYYY-MM-DD). Acceptance numb
 | T7 | skill-creator schema | 609d493 | 30 例 217 条断言、12×18 触发查询；prepare/diff 真跑；抽查 continuity 与 review 用例对上扫描结果和答案表 |
 | T8 | D-09 | 2ceaf01 | 集成审查 11 项 + T7 反馈 8 条 → Codex 修复 → 内部逐条审 diff；301 tests、12× quick_validate、plugin validate |
 | T7 试跑 | evals/README.md | (this commit) | Codex gpt-6.2-sol medium 跑 fiction-continuity/1（仅 with-skill）：7/7 断言通过，72 秒、约 5.3 万 token；`diff.mjs` unchanged |
+| T10 | plan §10 | e93e3a4 | 内部 L2 起草 → L3（不同模型）审 9 条 → 一轮返修 → 内部验收 |
+| T11 | D-11 | 1e9d7c7 | Fable 5.2 咨询；契约 SB §8、§9.2、scripts drama-check 由总监改 |
+| T12 | D-11 | 07f1bd3, (this commit) | 脚本 126/149 tests；正文与示例书 L3 审 10 条 → 返修；示例书四检查器 0 block，prompt-check 建议回到基线 10 |
+| T13 | plan §10 | (this commit) | README 中英致谢行补本轮五项 |
 
 ## Next-up queue
 
