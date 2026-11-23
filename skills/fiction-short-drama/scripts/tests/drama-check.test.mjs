@@ -148,3 +148,55 @@ test('new §7 rules: action-only UA patterns, run resets, and OS/VO boundaries',
   assert.ok(disabled.findings.every(f => !['dialogue-run', 'voiceover-quota', 'voiceover-open'].includes(f.rule)));
   assert.deepEqual([disabled.episodes[0].os, disabled.episodes[0].vo], [3, 2]);
 });
+
+test('voiceover-open is off only for the category whose max is null', t => {
+  const book = mkdtempSync(path.join(tmpdir(), 'fiction-drama-'));
+  t.after(() => rmSync(book, { recursive: true, force: true }));
+  cpSync(root, book, { recursive: true });
+  const file = path.join(book, 'drama/stopped-clock/episodes/ep001.md');
+  const { config } = loadConfig(book);
+  const open = () => checkSeries(book, 'stopped-clock', { config }).findings.filter(f => f.rule === 'voiceover-open').map(f => f.line);
+  const write = first => writeFileSync(file, ['# 第1集：盒底有盐', '## 场景1：钟表铺·内·晨', '人物：林砚', first, '△ 他推窗。', '<!-- hook: A -->', '<!-- paywall -->'].join('\n'));
+  write('林砚（OS）：开场。');
+  assert.deepEqual(open(), [4]);
+  config.drama.voiceover = { os_max: null, vo_max: null };
+  assert.deepEqual(open(), []);
+  config.drama.voiceover = { os_max: null, vo_max: 1 };
+  assert.deepEqual(open(), []);
+  write('旁白：开场。');
+  assert.deepEqual(open(), [4]);
+  config.drama.voiceover = { os_max: 2, vo_max: null };
+  assert.deepEqual(open(), []);
+  write('林砚（OS、VO）：开场。');
+  assert.deepEqual(open(), [4]);
+  config.drama.voiceover = { os_max: null, vo_max: 1 };
+  assert.deepEqual(open(), [4]);
+});
+
+test('map-handoff reports blank handoff only for final non-last episodes in tables with the column', t => {
+  const book = mkdtempSync(path.join(tmpdir(), 'fiction-drama-'));
+  t.after(() => rmSync(book, { recursive: true, force: true }));
+  cpSync(root, book, { recursive: true });
+  const dir = path.join(book, 'drama/stopped-clock');
+  const mapFile = path.join(dir, 'adaptation-map.md');
+  const ep1 = path.join(dir, 'episodes/ep001.md');
+  const ep2 = path.join(dir, 'episodes/ep002.md');
+  writeFileSync(ep2, '# 第2集：灯\n\n- 状态：定稿\n\n## 场景1：河边·外·夜\n△ 他点灯。\n<!-- hook: A -->\n');
+  const { config } = loadConfig(book);
+  const table = (a, b) => `# 章集映射\n\n| 集 | 来源章 | 剧情点 | 人物 | 伏笔 | 改动 | 集末状态 |\n|---|---|---|---|---|---|---|\n`
+    + `| 1 | 1-2 | 打开铁盒 | 小林、阿七 | 埋F001 | 合场 | ${a} |\n| 2 | 原创 | 点亮河灯 | 葛婶 | 收F001 | 灯影 | ${b} |\n`;
+  const hits = () => checkSeries(book, 'stopped-clock', { config }).findings.filter(f => f.rule === 'map-handoff');
+  assert.deepEqual(hits(), []);
+  writeFileSync(mapFile, table('', ''));
+  const [hit, ...rest] = hits();
+  assert.deepEqual(rest, []);
+  assert.equal(hit.level, 'suggest');
+  assert.equal(hit.file, 'drama/stopped-clock/adaptation-map.md');
+  assert.equal(hit.line, 5);
+  assert.deepEqual(checkSeries(book, 'stopped-clock', { config, ep: '2' }).findings.filter(f => f.rule === 'map-handoff').map(f => f.line), [5]);
+  writeFileSync(mapFile, table('阿七握着盐盒', ''));
+  assert.deepEqual(hits(), []);
+  writeFileSync(mapFile, table('', ''));
+  writeFileSync(ep1, readFileSync(ep1, 'utf8').replace('定稿', '初稿'));
+  assert.deepEqual(hits(), []);
+});

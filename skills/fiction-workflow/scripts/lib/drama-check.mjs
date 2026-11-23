@@ -47,7 +47,8 @@ function checkShootability(item, config, findings) {
       if (config.dialogue_run_max !== null && run - 1 === config.dialogue_run_max) {
         add('dialogue-run', row, `连续对白超过 ${config.dialogue_run_max} 行`, '考虑加入动作或镜头');
       }
-      if (scene.number === 1 && i === 0 && (row.os || row.vo)) {
+      const checked = (row.os && config.voiceover.os_max !== null) || (row.vo && config.voiceover.vo_max !== null);
+      if (scene.number === 1 && i === 0 && checked) {
         add('voiceover-open', row, '场景 1 的第一条内容是 OS 或 VO', '考虑用可见动作开场');
       }
       for (const kind of ['os', 'vo']) {
@@ -144,7 +145,11 @@ function checkMap(root, series, episodes, rows, findings, file) {
   }
   const fsEvents = new Map();
   const add = (rule, message, level, line, id = null) => findings.push(finding(rule, file, message, { level, line, id }));
+  const byEpisode = new Map(episodes.map(item => [item.episode, item]));
   for (const row of rows.toSorted((a, b) => a.episode - b.episode)) {
+    if (row.handoff === null && byEpisode.get(row.episode)?.status === 'final' && row.episode !== series.total) {
+      add('map-handoff', `第${row.episode}集已定稿，集末状态为空`, 'suggest', row.line);
+    }
     for (const name of new Set(row.characters)) {
       if (!aliases.has(name)) add('map-character', `改编映射引用未知人物：${name}`, 'suggest', row.line);
     }
