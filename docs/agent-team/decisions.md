@@ -79,3 +79,10 @@ Back to the [board](README.md). Append new decisions at the end. Never rewrite o
 - Motivation and evidence: 推荐安装必须写出 `interjc/subagent-team-skills`；把整份 init SKILL.md 放进 allow-paths 会让其余书专属词也失检，只解禁这一个词更窄。
 - Rejected options: 给 `skills/fiction-init/SKILL.md` 加 allow-path。
 - Status: 已落地（本次提交）
+
+### D-11: 按开场类型放宽开场；映射表可选列「集末状态」 (2026-11-23)
+- Decision: (1) 短剧开场按「开场类型」分：动作冲突（默认）/ 异常静止 / 反差旁白 / 生活切片，规则表放 `fiction-short-drama/references/episode-writing.md`；通则保留起床拉窗帘、超 2 秒赶路、灌输式旁白、无冲突闲聊、人物扎堆报名，新增“首拍立住一个具体的不对劲”“开场 VO 至多一条且下一条是反差动作”。`series.md` 自由小节 `## 开场类型` 记录选择（不机读）；题材包各加一行推荐开场类型。`voiceover-open` 在对应 `drama.voiceover.*_max` 为 null 时不报（SB §8、scripts §drama-check）。(2) `adaptation-map.md` 加可选列 `集末状态`（SB §9.2），写集后回写；新规则 `map-handoff`（suggest）只在有此列的项目对定稿非末集空格报；与 `visual/continuity.md` 分工：剧情 / 信息差 / 筹码 vs 视觉净变化。
+- Decided by: director, on Fable 5.2's consult (T11); author approved the direction ("就按你说的来", 2026-11-23)
+- Motivation and evidence: `voiceover-open` 不受任何配置控制，旁白主导剧每集一条必留建议；`episode-writing.md` §二禁 OS/VO 开场与 §七允许“开篇一句立人设”自相矛盾。分批写集不带上一批全文，接续只靠「剧情点」列。`parseAdaptationMap` 按列名取值、多余列忽略，加可选列不破坏旧项目。
+- Rejected options: 规则主体放题材包（fiction-craft 可选、混搭题材无法裁决）；`drama.open_type` 配置键或机读字段（脚本判不了“克制、反差”）；完全不动脚本；VO 占比上限 0.3（来源自注未实测）；集末状态必填 / 写进分集文件 / 并入 continuity.md；完全不机检。
+- Status: 契约已改（本次提交）；脚本、正文、题材包、示例书由 T12 落地

@@ -68,8 +68,8 @@ UTF-8 JSON。加载规则：与下方默认值深合并（对象递归合并，�
 | `drama.paywall.free_ratio` | [number,number] | `[0.05,0.25]` | drama-check | 免费集数 / 总集数 的允许范围 |
 | `drama.paywall.hook_min` | 钩子级别 | `"A"` | drama-check | 卡点集钩子不低于 |
 | `drama.dialogue_run_max` | int\|null | `6` | drama-check | 同一场景内连续对白行超过此数给 suggest；`null` 不查 |
-| `drama.voiceover.os_max` | int\|null | `2` | drama-check | 单集 OS（内心独白）行数上限（suggest）；`null` 不查 |
-| `drama.voiceover.vo_max` | int\|null | `1` | drama-check | 单集 VO（旁白）行数上限（suggest）；`null` 不查 |
+| `drama.voiceover.os_max` | int\|null | `2` | drama-check | 单集 OS（内心独白）行数上限（suggest）；`null` 不查（含 `voiceover-open` 的 OS 行） |
+| `drama.voiceover.vo_max` | int\|null | `1` | drama-check | 单集 VO（旁白）行数上限（suggest）；`null` 不查（含 `voiceover-open` 的 VO 行） |
 | `visual.aspect_ratio` | string | `"9:16"` | storyboard、visual-prompts | 画幅，`^\d+:\d+$`；`visual/assets.md` 的 `画幅` 可按剧覆盖 |
 | `storyboard.segment.max_seconds` | number | `15` | storyboard-check | 一段（一次视频生成）的时长上限 |
 | `storyboard.shot.seconds` | [number,number] | `[2,5]` | storyboard-check | 单镜时长的建议范围（suggest） |

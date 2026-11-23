@@ -587,8 +587,8 @@ UTF-8 JSON。加载规则：与下方默认值深合并（对象递归合并，�
 | `drama.paywall.free_ratio` | [number,number] | `[0.05,0.25]` | drama-check | 免费集数 / 总集数 的允许范围 |
 | `drama.paywall.hook_min` | 钩子级别 | `"A"` | drama-check | 卡点集钩子不低于 |
 | `drama.dialogue_run_max` | int\|null | `6` | drama-check | 同一场景内连续对白行超过此数给 suggest；`null` 不查 |
-| `drama.voiceover.os_max` | int\|null | `2` | drama-check | 单集 OS（内心独白）行数上限（suggest）；`null` 不查 |
-| `drama.voiceover.vo_max` | int\|null | `1` | drama-check | 单集 VO（旁白）行数上限（suggest）；`null` 不查 |
+| `drama.voiceover.os_max` | int\|null | `2` | drama-check | 单集 OS（内心独白）行数上限（suggest）；`null` 不查（含 `voiceover-open` 的 OS 行） |
+| `drama.voiceover.vo_max` | int\|null | `1` | drama-check | 单集 VO（旁白）行数上限（suggest）；`null` 不查（含 `voiceover-open` 的 VO 行） |
 | `visual.aspect_ratio` | string | `"9:16"` | storyboard、visual-prompts | 画幅，`^\d+:\d+$`；`visual/assets.md` 的 `画幅` 可按剧覆盖 |
 | `storyboard.segment.max_seconds` | number | `15` | storyboard-check | 一段（一次视频生成）的时长上限 |
 | `storyboard.shot.seconds` | [number,number] | `[2,5]` | storyboard-check | 单镜时长的建议范围（suggest） |
@@ -633,12 +633,13 @@ UTF-8 JSON。加载规则：与下方默认值深合并（对象递归合并，�
 
 - 短剧侧的伏笔状态由本表派生（哪集埋、哪集收），**不回写** `foreshadows.md` 的状态列；小说伏笔表只记小说。若改编改动了设定，走 canon 拍板流程。
 - 每集写完补全该行；`drama-check.mjs` 校验 F-ID 与人物存在、先埋后收、集文件与行一一对应。
+- 可选列 `集末状态`（2026-11-23 增补）：该集写完后回写，一到三个短句，记交给下一集开场的场内事实——谁知道了什么、谁握着什么筹码、关系怎么变了、停在哪半个动作、还剩什么时限，具体到人、物、时间；不写造型、伤势与道具外观（归 §9.5），道具只在它是筹码时写“在谁手里”。规划行留空。没有此列的映射表照常有效；与 §9.5 冲突时以定稿剧本为准。
 
 ```markdown
-| 集 | 来源章 | 剧情点 | 人物 | 伏笔 | 改动 |
-|---|---|---|---|---|---|
-| 1 | 1-2 | 接手停摆的钟表铺 | 林砚、唐七 | 埋F002 | 两章并一集，删搬家过程 |
-| 2 | 3 | 唐七半夜借电话 | 林砚、唐七 | 埋F001 | |
+| 集 | 来源章 | 剧情点 | 人物 | 伏笔 | 改动 | 集末状态 |
+|---|---|---|---|---|---|---|
+| 1 | 1-2 | 接手停摆的钟表铺 | 林砚、唐七 | 埋F002 | 两章并一集，删搬家过程 | 林砚收下铺子钥匙，还不知道后门另有一把；唐七说好明早再来 |
+| 2 | 3 | 唐七半夜借电话 | 林砚、唐七 | 埋F001 | | |
 ```
 
 ### 9.3 分集剧本 `episodes/ep{NNN}.md`

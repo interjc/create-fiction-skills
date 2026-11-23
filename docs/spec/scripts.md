@@ -20,7 +20,7 @@
 | `md.mjs` | `parseTables(text)`、`parseFields(lines)`、`splitList(s)`、`parseChapterRef(s)`、`parseChapterList(s)`、`sections(text, level)`、`maskComments(text)`、`parseMarkers(text)`、`HOOK_ORDER = ["S","A","B","C"]`（SB §6.1、§7.2 的通用语法） |
 | `project.mjs` | `listChapters(root) → [{chapter, volume, dir, drafts, canonical}]`、`resolveSelector(root, sel)`、`volumeOf(root, ch)`、`isFrozen(ch, config)`、`parseRanges(strings)` |
 | `bible.mjs` | `parseForeshadows`、`parseSubplots`、`parseCharacters`、`parseAppearances`、`parseDynamics`、`parseTimeline`、`parseInventory`、`parseStorylines`、`parseSources`、`parseVolumePlan`、`parseVolInfo`、`parseOutline`、`parseSettingTags`；每个返回 `{items, errors: Finding[]}`，`items` 带 `file`、`line` |
-| `drama.mjs` | `parseSeries`、`parseAdaptationMap`、`parseEpisode` |
+| `drama.mjs` | `parseSeries`、`parseAdaptationMap`、`parseEpisode`；映射条目带 `handoff`（表里没有 `集末状态` 列为 `undefined`，该格为空为 `null`） |
 | `patterns.mjs` | `DEFAULT_PATTERNS`（§4.2 表）、`loadPatterns(root, config) → {patterns, errors}` |
 | 入口模块 | `length.mjs`：`stripMarkdownForLength(md)`、`countChapterCharacters(md)`；`lint.mjs`：`lintFile(text, ctx)`；`brief.mjs`：`buildBrief(root, ch, opts)`；`foreshadow-scan.mjs`：`scan(root, at, opts)`；`drama-check.mjs`：`checkSeries(root, slug, opts)` |
 | `visual.mjs` | `parseVisualAssets`、`parseContinuity`、`parseStoryboard`、`parsePromptFile`（各返回 `{items, errors: Finding[]}`，`items` 带 `file`、`line`）；`resolveAsset(key, episode, assets, continuity)`、`usableFrom(entry, map)`；`SHOT_SIZES`、`CAMERA_MOVES`、`TRANSITIONS`、`PROMPT_STATUS`（SB §9.4–§9.9）。`md.mjs` 增加 `parseFences(lines)`、`splitHeading(s)`（SB §6.1 新增的三行） |
@@ -410,6 +410,7 @@ node scripts/drama-check.mjs <series> [--ep N|N-M] [--fail-on block|suggest] [--
 | `map-order` | block / suggest | 同一 F 的“收”所在集早于“埋”所在集为 block；只收未埋为 suggest |
 | `map-unresolved` | suggest | 已写集数 = 总集数，且映射表里埋过的 F 未收也未弃 |
 | `map-source` | suggest | `来源章` 指向没有定稿的章 |
+| `map-handoff` | suggest | 映射表有 `集末状态` 列，该集剧本 `状态` 为定稿、不是 `series.md` `总集数` 的末集，且该格为空 |
 
 ```json
 { "tool": "drama-check", "spec_version": 1, "root": "/abs/book", "ok": true, "series": "stopped-clock",
@@ -427,7 +428,7 @@ T1.b 新增四条规则，都是 suggest，默认不影响退出码：
 | `unshootable` | suggest | 动作行（`△` 之后的文字）命中下表任一模式；Finding 的 `id` 为模式 ID |
 | `dialogue-run` | suggest | `drama.dialogue_run_max` 非 null，且同一场景内连续对白行数超过它（中间没有动作行或镜头行；空行与注释不打断）。每一串只在第 `dialogue_run_max + 1` 行报一次 |
 | `voiceover-quota` | suggest | 单集 OS 行数 > `drama.voiceover.os_max`，或 VO 行数 > `drama.voiceover.vo_max`（对应值为 null 时不查）。报在超出的第一行 |
-| `voiceover-open` | suggest | 场景 1 的第一条内容行（动作行、对白行、镜头行中最先出现的）是 OS 或 VO 行 |
+| `voiceover-open` | suggest | 场景 1 的第一条内容行（动作行、对白行、镜头行中最先出现的）是 OS 或 VO 行；该行所属类别的 `drama.voiceover.os_max` / `vo_max` 为 null 时不查 |
 
 OS / VO 的识别：对白行角色名后的括号内容按 `，` `,` `、` `/` 和空白拆开，任一项等于 `OS` 或 `VO`（不分大小写）；角色名为 `旁白` 的行算 VO；`字幕` 不算。
 
