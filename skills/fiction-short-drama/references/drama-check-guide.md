@@ -71,7 +71,7 @@ node <本 skill 目录>/scripts/lint.mjs --series <series> [--fail-on block|sugg
 | `unshootable`（`UA01–UA04`、`UA11`、`UA12`） | `suggest` | 动作行命中拍不出的句式模式（`UA01–UA04` 否定伪动作、`UA11` 微表情、`UA12` 心理活动） | 改写成具体可见动作、身体姿态或听得见的声音 | 仅当近景反应特写明确拍得出来时保留 |
 | `dialogue-run` | `suggest` | 同场景连续对白行超过 `drama.dialogue_run_max`（默认 6；空行与注释不打断） | 每 2–4 句插一条动作、反应或道具变化 | 刻意设计的快口压迫交锋经核对可保留 |
 | `voiceover-quota` | `suggest` | 单集 OS 超 `os_max`（默认 2）或 VO 超 `vo_max`（默认 1）；括号按 `，` `,` `、` `/` 与空白拆词全词匹配（不分大小写），`旁白` 算 VO、`字幕` 不计 | 删减重复独白，把能演出来的转成动作与对白 | 旁白解说主导剧保留（建议同步把配置对应项设为 `null`） |
-| `voiceover-open` | `suggest` | 场景 1 第一条内容行是 OS 或 VO 行 | 一律改为带运动的可见动作开场 | 不建议保留，改为动作开场 |
+| `voiceover-open` | `suggest` | 场景 1 第一条内容行是 OS 或 VO 行；该行所属类别（OS 或 VO）的 `drama.voiceover.os_max` / `vo_max` 为 `null` 时不报 | 改为动作开场，或改成 `series.md` `## 开场类型` 所选类型的首拍 | `## 开场类型` 是反差旁白，且满足开场通则（至多一条、下一条是反差动作行、不复述画面、不灌输背景）时，记「已核对，保留：理由」 |
 
 ### 4. 系列规模与付费卡点规则（全剧）
 
@@ -91,6 +91,7 @@ node <本 skill 目录>/scripts/lint.mjs --series <series> [--fail-on block|sugg
 | 规则 | 级别 | 含义 | 修复做法 | 何时可保留 |
 | --- | --- | --- | --- | --- |
 | `map-missing` | `suggest` | 已写的分集在 `adaptation-map.md` 没有对应行 | 立即在映射表补回该集一行（[SB §9.2](formats/drama.md)） | 不可拖延到交接前 |
+| `map-handoff` | `suggest` | 映射表有可选列 `集末状态`，某集剧本 `状态` 为 `定稿`、不是 `series.md` `总集数` 的末集，且这一格为空（没有此列的映射表不查） | 按 [SB §9.2](formats/drama.md) 补写一到三个短句：谁知道了什么、谁握着什么筹码、关系怎么变了、停在哪半个动作、还剩什么时限；不写造型、伤势与道具外观 | 下一集确实另起一条与本集无交接的线（如单元切换）时，记「已核对，保留：理由」并写明作者已确认；`series.md` 未填 `总集数` 时末集也会被报，补上总集数或记「已核对，保留：末集」；其余补写 |
 | `map-foreshadow` | `block` | 映射表 `伏笔` 列引用了 `bible/foreshadows.md` 不存在的 F-ID | 核对 ID 拼写；原创剧不填 F-ID，改记 `series.md` `## 悬念账` | 不可保留 |
 | `map-character` | `suggest` | 映射表 `人物` 列出现 `bible/characters.md`（含别名）里没有的人名（注：脚本不核验 `series.md` `主要人物` 与 `范围`） | 补规范名；短剧新增角色在 `characters.md` 追加带 `范围：短剧:{series}` 的块 | 一次性标签龙套经核对可保留，核心 / 配角须建档 |
 | `map-order` | `block` / `suggest` | 同一 F-ID「收」早于「埋」为 `block`；只收未埋为 `suggest` | 调整集序或补埋设集 | `block` 不可保留；前史倒叙经核对可保留 `suggest` |
@@ -127,8 +128,8 @@ node <本 skill 目录>/scripts/lint.mjs --series <series> [--fail-on block|sugg
 | 层级 | 本 skill 里包括什么 | 处置 |
 | --- | --- | --- |
 | 硬约束 | 两个脚本的全部 `block`（格式、解析、钩子与卡点标记、映射 F-ID 与先埋后收、禁词、脱敏、精确年份、内部引用），以及 `AGENTS.md`「本书口径」里作者定的硬规则；`length` 级别取 `drama.length_level`，配成 `block` 即归此层 | 一律清零，不能写“已核对，保留”；未清不交接 |
-| 审定约束 | `[模型]` 复核里的事实、因果与连戏问题：站位、道具、在场名单、伤势前后不接，提前写出作者真相，破局或反转没有前文依据；以及关乎映射与规划一致性的 `suggest`：`map-missing`、核心或配角的 `map-character`、`map-unresolved`、`episode-total`、`paywall-plan` | 修，或经作者确认后保留；第三节表中「何时可保留」列允许保留的，按该行口径记「已核对，保留：理由」并写明作者已确认 |
-| 技法默认 | 多数写作类 `suggest`：`unshootable`、`dialogue-run`、`voiceover-quota`、`max-scenes`、`length`（默认 `suggest` 时）、`action-missing`；本 skill references 里的可调默认（四挡节奏、场数预算、对抗四步、跨批套路重复） | 逐条核对，改或记“已核对，保留：理由”；单独不构成返修理由 |
+| 审定约束 | `[模型]` 复核里的事实、因果与连戏问题：站位、道具、在场名单、伤势前后不接，提前写出作者真相，破局或反转没有前文依据；以及关乎映射与规划一致性的 `suggest`：`map-missing`、`map-handoff`、核心或配角的 `map-character`、`map-unresolved`、`episode-total`、`paywall-plan` | 修，或经作者确认后保留；第三节表中「何时可保留」列允许保留的，按该行口径记「已核对，保留：理由」并写明作者已确认 |
+| 技法默认 | 多数写作类 `suggest`：`unshootable`、`dialogue-run`、`voiceover-quota`、`voiceover-open`、`max-scenes`、`length`（默认 `suggest` 时）、`action-missing`；本 skill references 里的可调默认（四挡节奏、场数预算、对抗四步、跨批套路重复） | 逐条核对，改或记“已核对，保留：理由”；单独不构成返修理由 |
 | 口味选项 | 作者偏好的台词腔调、镜头取舍 | 只作备注 |
 
 - **严重度**沿用四档：阻断（硬约束，必须清）、重要（审定约束，须修，作者豁免除外）、次要（仅技法默认，不挡交接，不因数量多升级）、备注（技法默认或口味，拿不准的一律记备注交作者）。

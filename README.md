@@ -171,7 +171,7 @@ codex plugin add subagent-team@subagent-team-skills
 | [short-drama-factory](https://github.com/lixiaoxiao9888-create/short-drama-factory) | MIT | 单集篇幅与集数配比、分级付费卡点与卡点铁律、冷开场禁忌、单集节奏四挡、OS / VO 使用规则、改编时的砍线与并人；剧本可拍性检查（否定式伪动作、连续纯对白、OS / VO 配额与不得开场） |
 | [short-drama](https://github.com/0xsline/short-drama) | MIT | 卡点悬念套路、关键集与强钩子集的占比、免费集要完成的任务 |
 | [shuohao-skills](https://github.com/eternityspring/shuohao-skills) | Apache-2.0 | 冷开场要带运动、“剧本管戏，分镜管拍”、一条主线加一条支线、人物分层、分批写集与改稿纪律；分镜“段（一次生成）→ 镜”两级结构与默认时长、台词要装得进镜头、镜头认领剧本原文 |
-| [drama-skills](https://github.com/zenstory-ai/drama-skills) | MIT | 只改编自有或已获授权的作品；Markdown 作权威的分阶段文档；视觉资产“本体 / 阶段状态 / 单镜动作”三层边界；连戏锁定词与“已挂参考图则豁免”；提示词方言卡；付费生成前的批次确认；改镜不改号 |
+| [drama-skills](https://github.com/zenstory-ai/drama-skills) | MIT | 只改编自有或已获授权的作品；Markdown 作权威的分阶段文档；视觉资产“本体 / 阶段状态 / 单镜动作”三层边界；连戏锁定词与“已挂参考图则豁免”；提示词方言卡；付费生成前的批次确认；改镜不改号；审校问题分层（只有硬约束与审定约束能判返修）；对抗戏看筹码、破局要有前文依据；跨集套路重复的判定门槛与豁免；按题材选开场类型；每集交给下一集的集末状态 |
 | [screenwriting-skills](https://github.com/jtydhr88/screenwriting-skills) | MIT | 动作行只写看得见、听得见的内容 |
 | [awesome-short-drama-skills](https://github.com/UnderleveledBuilder/awesome-short-drama-skills) | CC0-1.0 | 短剧 skill 生态索引，用于调研参考 |
 | [inkos](https://github.com/Narcooo/inkos) | AGPL-3.0 | 仅一个想法：一帧静态画面只能捕捉单一瞬间；未复制任何代码或文字 |

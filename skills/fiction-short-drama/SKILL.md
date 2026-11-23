@@ -52,7 +52,7 @@ metadata:
 
 - **单集时长与总集数**：60–90 秒（漫剧 / AI 短集）、90–120 秒（常规，多为 60 / 80 / 100 集）、150–195 秒（长集，多为 30 / 40 / 50 集，1 集长集内容量约等于 2 集常规集）。写入 `单集时长：N-M`，对应配置 `drama.tiers`（`micro` ≤60、`short` ≤120、`standard` ≤180、`long` 无上限，[SB §8](references/formats/config.md)）。
 - **免费集数与付费卡点**：配置 `drama.paywall.first_at` 默认 `[8, 15]`、`free_ratio` 默认 `[0.05, 0.25]`。常规参考首卡点：60 集 8–11、80 集 10–15、100 集 13–19（或 8–12）。若选定首卡点落于当前配置的 `first_at` 或 `free_ratio` 之外（如 100 集选第 16–19 集，或前置卡点短剧 30–60 集选第 3–5 集），须提醒作者确认并调整配置 `[作者]`。免费 / 广告剧把 `drama.paywall.first_at` 设为 `null`（跳过 `paywall-missing` 与 `paywall-ratio`；若剧本仍留标记会给 `paywall-position` 建议，`paywall-placement` 与 `paywall-hook` 仍照常检查），`免费集数` 留空且不放 `<!-- paywall -->`。
-- **目标平台、题材、主要人物与制作形态**：`主要人物` 每人须在 `bible/characters.md` 有条目（由模型核对 `[模型]`）；制作形态（实拍 / AI 生成视频 / 漫剧）写入 `## 制作形态`。旁白解说主导剧提醒作者将 `drama.voiceover.os_max` / `vo_max` 设为 `null`。
+- **目标平台、题材、主要人物与制作形态**：`主要人物` 每人须在 `bible/characters.md` 有条目（由模型核对 `[模型]`）；制作形态（实拍 / AI 生成视频 / 漫剧）写入 `## 制作形态`。旁白解说主导剧提醒作者将 `drama.voiceover.os_max` / `vo_max` 设为 `null`。开场类型（动作冲突（默认）/ 异常静止 / 反差旁白 / 生活切片）写入 `## 开场类型`，一行类型加一句理由，由作者拍板 `[作者]`。
 - **自由小节**：按需填入 `## 人物弧`、`## 单元与节奏规划`、`## 改编口径`、`## 合规注意`；模式 B 另填 `## 原创立项核心`（情绪承诺、主角显性诉求、反派筹码）与 `## 悬念账`。
 
 ### 2. Bible 直通改编（仅模式 A）
@@ -64,7 +64,7 @@ metadata:
 
 ### 3. 分集规划 → `drama/{series}/adaptation-map.md`
 
-用 [章集映射模板](assets/adaptation-map.template.md) 按 [SB §9.2](references/formats/drama.md) 建映射表（可先写规划行，写集后补全）。单元、重点集与卡点排期写在 `series.md` 的 `## 单元与节奏规划`，不给映射表加新列。详见 [改编与分集规划指南](references/adaptation.md) 与 [付费卡点与钩子设计](references/paywall-and-hooks.md)：
+用 [章集映射模板](assets/adaptation-map.template.md) 按 [SB §9.2](references/formats/drama.md) 建映射表（可先写规划行，写集后补全）。单元、重点集与卡点排期写在 `series.md` 的 `## 单元与节奏规划`；映射表不自创列，可选列 `集末状态` 除外（规划行留空，写集后回写）。详见 [改编与分集规划指南](references/adaptation.md) 与 [付费卡点与钩子设计](references/paywall-and-hooks.md)：
 
 - **节点配比**：≤120 秒每集 1 节点（一推一挡或一铺一收）；150–195 秒每集 2 节点 + 约 50% 处中段钩子。节点不够则补冲突、造回合或下调总集数；过多则砍线或拆季；超约 200 章的长篇第一季通常取前约三分之一并收束最强约 20 场名场面。
 - **砍线 / 并人 / 改序**：1 主线 + 最多 1 副线；支线按 [SB §6.3](references/formats/bible.md) 分级（A 留并压缩；B 压成道具或一句台词并入主线，或载卡点时留；C 删，除非载有保留伏笔）。合并同功能人物（默认主角 1–5、有名配角 ≤10、功能龙套 ≤10 用标签）；删修炼、赶路、过场。由卡点布局驱动改序，不得破坏先埋后收（`map-order`）与 `timeline.md` 硬锚点，改动记入 `改动` 列。
@@ -74,9 +74,9 @@ metadata:
 
 ### 4. 分批写集 `drama/{series}/episodes/ep{NNN}.md`
 
-每批 ≤5 集；从 `adaptation-map.md`、上集结尾与相关 bible 启动，不带入上一批整套剧本全文。按 [SB §9.3](references/formats/drama.md) 与 [分集剧本模板](assets/episode.template.md) 落稿，`状态` 仅取 `初稿` / `修改` / `定稿`（新稿填 `初稿`），仅在与全剧不同时写 `目标时长`。详见 [分集写作技法](references/episode-writing.md)：
+每批 ≤5 集；从 `adaptation-map.md` 本批规划行、上一集映射行（含 `集末状态`，有此列时）、上集结尾与相关 bible 启动，不带入上一批整套剧本全文。按 [SB §9.3](references/formats/drama.md) 与 [分集剧本模板](assets/episode.template.md) 落稿，`状态` 仅取 `初稿` / `修改` / `定稿`（新稿填 `初稿`），仅在与全剧不同时写 `目标时长`。详见 [分集写作技法](references/episode-writing.md)：
 
-- **开场与接续**：场景 1 第一条内容行须是带运动的可见动作，前 3 拍亮出抓人画面；禁起床拉窗帘、超 2 秒行车、背景旁白、闲聊、慢风景、开场人物扎堆和 OS/VO 顶头（`voiceover-open`）。接住上集悬念但不立刻泄完。第 1 集前约 5 行亮明「谁要什么 + 数字或期限」，爽剧 / 逆袭 35–45 秒给出首次反击。
+- **开场与接续**：按 `## 开场类型` 写首拍（未写时按动作冲突型）。通则：首拍立住一个具体的“不对劲”；开场 VO（或主角 OS）至多一条，下一条是与之反差的动作行；禁起床拉窗帘、超 2 秒赶路、灌输背景的旁白、无冲突闲聊、开场人物扎堆。非反差旁白型不用 OS/VO 顶场景 1 第一行（`voiceover-open`）。开场在动作里接住上一集的 `集末状态`（无此列时接上集结尾），不站着复述，也不立刻泄完悬念。第 1 集前约 5 行亮明「谁要什么 + 数字或期限」；动作冲突型的爽剧 / 逆袭 35–45 秒给出首次反击。
 - **节奏与场数**：90–120 秒走四挡（0–15 秒抓人立筹码 → 15–45 秒交锋 → 45–85 秒底牌与可见结算 → 85–110 秒余波与钩子），每 15–30 秒有可见变化，不换场地重复同一争吵；150–195 秒按目标时长约 50% 切分两轮 + 中段钩子、B 轮升级。场数默认 ≤2（90–120 秒）、≤3（150–195 秒）、1–2（≤60 秒）；配置 `drama.max_scenes`（默认 5）只是上限。
 - **断章与钩子**：末拍留开放动作、未答之问或未解声响，不写总结句；末场后恰好一个 `<!-- hook: X -->`（S > A > B > C，[SB §7.2](references/formats/chapter.md)），参考卡点与单元收尾 S、常规 A、缓冲 B、避免 C。
 - **对白、动作、镜头与 OS/VO**：每 2–4 句对白（紧凑戏 2–3 句）插一条动作或反应（`dialogue_run_max` 默认 6 只是上限）；一句一口气，常规 ≤25 字、超 35 字拆句；通用对白技法查 `fiction-craft`。动作行用现在时、只写看得见听得见的事实，禁否定伪动作、微表情、气味 / 味道与心理活动，道具交代出处，AI 视频只写常见日常动作；`【镜头】` 慎用，不写镜号与提示词（剧本管戏，分镜管拍）。OS/VO 仅限五类正当用途，禁用于设定灌输、复述动作、替代交锋、连续两条和紧贴钩子（配置默认 `os_max` 2 / `vo_max` 1；常规集建议 OS ≤1）。
@@ -98,13 +98,14 @@ node <本 skill 目录>/scripts/lint.mjs --series <series>
 - `unshootable`（`UA01–UA04`、`UA11`、`UA12`）：改写为可见动作，仅当反应特写明确可拍时保留。
 - `dialogue-run`：补动作或反应打断，仅刻意快口交锋时保留。
 - `voiceover-quota`：删减或转动作，仅旁白主导剧保留（或把配置对应项设为 `null`）。
-- `voiceover-open`：一律改为动作开场。
+- `voiceover-open`：`## 开场类型` 是反差旁白且满足开场通则时，记「已核对，保留：理由」；否则改为动作开场或所选类型的首拍。对应 `drama.voiceover.*_max` 为 `null` 时脚本不报。
+- `map-handoff`（映射表有 `集末状态` 列时）：按集末状态写法补写该格。
 
 `drama-check.mjs` 无行内豁免注释，核对保留的 `suggest` 在汇报里记明「已核对，保留：理由」。`length` 估算仅按字符数 ÷ `chars_per_minute`，不等于实拍时长。
 
 ### 6. 回写与复检
 
-- 补全 `drama/{series}/adaptation-map.md` 本批各行：`人物` 按实际出场、`伏笔` 按实际动作、`改动` 写合并 / 删减 / 改序理由（[SB §9.2](references/formats/drama.md)）。
+- 补全 `drama/{series}/adaptation-map.md` 本批各行：`人物` 按实际出场、`伏笔` 按实际动作、`改动` 写合并 / 删减 / 改序理由，有 `集末状态` 列时填交给下一集的场内事实（谁知道什么、筹码在谁手里、关系、停在哪半个动作、剩余时限，具体到人、物、时间；[SB §9.2](references/formats/drama.md)）；发现本集结尾接不上下一集规划时，回到步骤 3 改映射，不在下一集硬补。
 - 模式 B 原创短剧同步按实际埋设、揭示与兑现更新 `series.md` 的 `## 悬念账`（含 `实际兑现集` 与 `状态`），并复核未泄出 `幕后真相`。
 - 新增短剧专属人物：在 `bible/characters.md` 追加块并标 `- 范围：短剧:{series}`（[SB §6.4](references/formats/bible.md)）。仅短剧生效的调整记入 `series.md` 的 `## 改编口径`。按 `fiction-continuity` 的冲突优先级（[SB §3](references/formats/project.md)），只将作者在本流程明确确认且无冲突的共享设定裁决写入 `bible/canon.md`，未确认或有冲突的交 `fiction-continuity`。
 - 绝不修改小说章节、`bible/foreshadows.md` 或已有共享人物条目。原书来源章后续修订时，列出受影响集号供作者重查。
@@ -116,7 +117,7 @@ node <本 skill 目录>/scripts/lint.mjs --series <series>
 
 ### 8. 交接 `fiction-storyboard`
 
-交接须同时满足四项（以回写和返修后的最终文件为准）：(1) 最新一次 `drama-check.mjs` 与 `lint.mjs --series` 均成功执行且**退出码均为 0**，把本剧两项结果一并交给分镜；(2) 本批目标集号全部出现在 `drama-check.mjs` 的 `episodes[]` 中；(3) `adaptation-map.md` 对应行已补齐（分镜需靠埋 / 收集防剧透）；(4) 作者已把剧本 `状态` 改为 `定稿` `[作者]`。
+交接须同时满足四项（以回写和返修后的最终文件为准）：(1) 最新一次 `drama-check.mjs` 与 `lint.mjs --series` 均成功执行且**退出码均为 0**，把本剧两项结果一并交给分镜；(2) 本批目标集号全部出现在 `drama-check.mjs` 的 `episodes[]` 中；(3) `adaptation-map.md` 对应行已补齐，有 `集末状态` 列时含这一格（分镜需靠埋 / 收集防剧透）；(4) 作者已把剧本 `状态` 改为 `定稿` `[作者]`。
 
 若已有分镜的集数日后修订剧本，按 [SB §4.2](references/formats/project.md) 把受影响集号与改动清单先交给 `fiction-storyboard` 重检并同步分镜，再交 `fiction-visual-prompts` 更新提示词，顺序不可反；本 skill 不触碰 `storyboards/` 或 `prompts/`。缺任一下游 skill 时，交付最终文件、待办与未跑检查。
 
@@ -128,11 +129,12 @@ node <本 skill 目录>/scripts/lint.mjs --series <series>
 - [ ] 时长估算与档位 `[脚本]`
 - [ ] 卡点集位置、比例、钩子下限 `[脚本]`
 - [ ] 映射表 F-ID / 人物存在、先埋后收 `[脚本]`
+- [ ] 已定稿非末集的 `集末状态` 已填（`map-handoff`，映射表有此列时） `[脚本]`
 - [ ] 拍不出的动作模式、连续对白、OS/VO 数量与开场 `[脚本]`
 - [ ] 禁用词、脱敏、精确年份、内部引用 `[脚本]`
 - [ ] `series.md` 主要人物已建档、短剧人物 `范围` 正确、映射与剧本实际出场一致、分集 `状态` 仅取合法三值 `[模型]`
 - [ ] 每集达标质变节点（常规集 1 个、长集 2 个含中段钩子；涵盖关系、权力或信息变化） `[模型]`
-- [ ] 前 3 拍抓人且带运动、接住上集 `[模型]`
+- [ ] 首拍立住不对劲、符合所选开场类型、接住上集集末状态 `[模型]`
 - [ ] 断章是开放瞬间而非总结 `[模型]`
 - [ ] 卡点前蓄压、付费首集 15 秒兑现 `[模型]`
 - [ ] 动作行看得见听得见 `[模型]`
@@ -167,6 +169,6 @@ node <本 skill 目录>/scripts/lint.mjs --series <series>
 | 从小说 bible 直通改编、模式 C 降级、拉节点表、砍线并人改序或原书修订重查 | [改编与分集规划指南](references/adaptation.md) |
 | 立项问答、时长 / 集数预设、免费或旁白剧配置、原创短剧起步 | [立项与配置指南](references/series-setup.md) |
 | 排三级付费卡点、选悬念套路、控重点集比例或长集中段钩子 | [付费卡点与钩子设计](references/paywall-and-hooks.md) |
-| 写前 3 拍开场、四挡节奏、可拍动作行、对抗戏与破局、批末回看、OS/VO 取舍与口吻检验 | [分集写作技法](references/episode-writing.md) |
-| 逐条处置 `drama-check` 与 `lint --series` 报错、解读 JSON 输出或给问题定层级与严重度 | [机检规则处置指南](references/drama-check-guide.md) |
+| 选开场类型与写开场、接住集末状态、四挡节奏、可拍动作行、对抗戏与破局、批末回看、OS/VO 取舍与口吻检验 | [分集写作技法](references/episode-writing.md) |
+| 逐条处置 `drama-check` 与 `lint --series` 报错（含 `voiceover-open` 保留口径与 `map-handoff`）、解读 JSON 输出或给问题定层级与严重度 | [机检规则处置指南](references/drama-check-guide.md) |
 | 做题材红线、肖像、版权与 AI 标识的作者自查清单 | [合规与版权核对清单](references/compliance.md) |
